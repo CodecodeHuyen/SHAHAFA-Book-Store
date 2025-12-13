@@ -3,7 +3,7 @@ package com.fu.bookshop.controller;
 import com.fu.bookshop.dto.AccountRegisterRequest;
 import com.fu.bookshop.dto.OtpValidationRequest;
 import com.fu.bookshop.enums.Gender;
-import com.fu.bookshop.exception.AppException;
+import com.fu.bookshop.exception.BusinessException;
 import com.fu.bookshop.service.AuthenticationService;
 import com.fu.bookshop.service.OtpService;
 import jakarta.validation.Valid;
@@ -63,7 +63,7 @@ public class AuthenticationController {
             // redirect sang màn verify OTP
             return "redirect:/auth/verify-otp";
 
-        } catch (AppException ex) {
+        } catch (BusinessException ex) {
             // business error: EMAIL_EXISTED, ACCOUNT_DEACTIVATED, ...
             model.addAttribute("error", ex.getMessage());
             model.addAttribute("genders", Gender.values());
@@ -107,7 +107,7 @@ public class AuthenticationController {
             authenticationService.verifyAccountAndUpdateStatus(request);
             return "redirect:/auth/login";
 
-        } catch (AppException ex) {
+        } catch (BusinessException ex) {
             model.addAttribute("error", ex.getMessage());
             return "otp";
         }
