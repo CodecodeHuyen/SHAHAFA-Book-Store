@@ -1,5 +1,6 @@
 package com.fu.bookshop.entity;
 
+import com.fu.bookshop.enums.BookStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
@@ -27,7 +28,9 @@ public class Book {
     private Double weight;
     private String description;
     private LocalDate publicationDate;
-    private String status;
+
+    @Enumerated(EnumType.STRING)
+    private BookStatus status;
 
     @ManyToMany
     @JoinTable(
@@ -35,7 +38,7 @@ public class Book {
             joinColumns = @JoinColumn(name = "book_id",nullable = false),
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
-    private List<Category> categories;
+    private List<Genre> categories;
 
     @ManyToOne
     @JoinColumn(name = "publisher_id", nullable = false)
