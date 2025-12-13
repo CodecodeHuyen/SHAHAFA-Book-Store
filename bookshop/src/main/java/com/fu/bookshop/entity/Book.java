@@ -37,7 +37,7 @@ public class Book {
             joinColumns = @JoinColumn(name = "book_id",nullable = false),
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
-    private List<Category> categories;
+    private List<Genre> categories;
 
     @ManyToOne
     @JoinColumn(name = "publisher_id", nullable = false)

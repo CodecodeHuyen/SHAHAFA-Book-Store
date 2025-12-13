@@ -1,7 +1,7 @@
 package com.fu.bookshop.controller.home;
 
 import com.fu.bookshop.dto.BookCardDTO;
-import com.fu.bookshop.entity.Category;
+import com.fu.bookshop.entity.Genre;
 import com.fu.bookshop.entity.Publisher;
 import com.fu.bookshop.service.home.HomeService;
 import lombok.RequiredArgsConstructor;
@@ -55,7 +55,7 @@ public class HomeController {
         model.addAttribute("totalElements", bookPage.getTotalElements());
         model.addAttribute("pageSize", size);
 
-        List<Category> categories = homeService.getAllCategories();
+        List<Genre> categories = homeService.getAllCategories();
         List<Publisher> publishers = homeService.getAllPublishers();
         model.addAttribute("categories", categories);
         model.addAttribute("publishers", publishers);
