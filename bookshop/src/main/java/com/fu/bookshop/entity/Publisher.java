@@ -20,7 +20,7 @@ public class Publisher {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false,columnDefinition = "NVARCHAR(50)")
+    @Column(nullable = false, unique = true,columnDefinition = "NVARCHAR(50)")
     private String name;
 
     @OneToMany(mappedBy = "publisher")
