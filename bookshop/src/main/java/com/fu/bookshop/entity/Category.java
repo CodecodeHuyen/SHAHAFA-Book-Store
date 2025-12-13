@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Genre {
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
