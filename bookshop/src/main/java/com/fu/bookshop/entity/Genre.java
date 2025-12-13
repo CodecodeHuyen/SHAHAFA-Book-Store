@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Category {
+public class Genre {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,9 +1,9 @@
 package com.fu.bookshop.repository;
 
-import com.fu.bookshop.entity.Category;
+import com.fu.bookshop.entity.Genre;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CategoryRepository extends JpaRepository<Category, Long> {
+public interface GenreRepository extends JpaRepository<Genre, Long> {
 }

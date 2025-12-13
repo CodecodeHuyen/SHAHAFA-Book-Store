@@ -2,10 +2,10 @@ package com.fu.bookshop.service.home.impl;
 
 import com.fu.bookshop.dto.BookCardDTO;
 import com.fu.bookshop.entity.Book;
-import com.fu.bookshop.entity.Category;
+import com.fu.bookshop.entity.Genre;
 import com.fu.bookshop.entity.Publisher;
 import com.fu.bookshop.repository.BookRepository;
-import com.fu.bookshop.repository.CategoryRepository;
+import com.fu.bookshop.repository.GenreRepository;
 import com.fu.bookshop.repository.PublisherRepository;
 import com.fu.bookshop.service.home.HomeService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ import java.util.List;
 public class HomeServiceImpl implements HomeService {
 
     private final BookRepository bookRepository;
-    private final CategoryRepository categoryRepository;
+    private final GenreRepository genreRepository;
     private final PublisherRepository publisherRepository;
 
 
@@ -91,8 +91,8 @@ public class HomeServiceImpl implements HomeService {
     }
 
     @Override
-    public List<Category> getAllCategories() {
-        return categoryRepository.findAll();
+    public List<Genre> getAllCategories() {
+        return genreRepository.findAll();
     }
 
     @Override
