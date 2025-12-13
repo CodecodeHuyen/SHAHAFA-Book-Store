@@ -29,9 +29,15 @@ public class Shop {
     @Column(nullable = false)
     private String logoUrl;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String description;
 
     @OneToMany(mappedBy = "shop")
     private List<Book> books;
+
+    @Column(nullable = false)
+    private String email;
+
+    @Column(length = 15)
+    private String hotline;
 }

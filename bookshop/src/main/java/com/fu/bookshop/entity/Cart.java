@@ -23,11 +23,11 @@ public class Cart {
     @JoinColumn(name = "user_id", nullable = false) //tên cột chứa khoá ngoại
     private User user;
 
-    @ManyToMany
-    @JoinTable(
-            name = "cart_book",
-            joinColumns = @JoinColumn(name = "cart_id"),       // FK theo Cart
-            inverseJoinColumns = @JoinColumn(name = "book_id") // FK theo Book
+    // 1 cart có nhiều cart_item
+    @OneToMany(
+            mappedBy = "cart",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
     )
-    private List<Book> books;
+    private List<CartItem> cartItems;
 }

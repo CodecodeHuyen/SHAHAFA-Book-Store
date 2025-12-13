@@ -25,7 +25,7 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     show-sql: true
 
   mail:
@@ -39,3 +39,11 @@ spring:
           auth: true
           starttls:
             enable: true
+
+aws:
+  access-key: ${AWS_ACCESS_KEY}
+  secret-key: ${AWS_SECRET_KEY}
+  s3:
+    bucket: xo-cua-huyen-ne
+    region: ap-southeast-1
+    folder: SHAHAFA Book Store
