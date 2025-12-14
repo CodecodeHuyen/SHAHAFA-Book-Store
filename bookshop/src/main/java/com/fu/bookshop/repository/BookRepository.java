@@ -1,17 +1,22 @@
 package com.fu.bookshop.repository;
 
 import com.fu.bookshop.entity.Book;
+import com.fu.bookshop.enums.BookStatus;
+import com.fu.bookshop.enums.OrderStatus;
 import org.springframework.boot.data.autoconfigure.web.DataWebProperties;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificationExecutor<Book> {
 
-    Page<Book> findByStatus (String status, Pageable pageable);
+    Page<Book> findByStatus (BookStatus status, Pageable pageable);
     Page<Book> findByTitleContainingIgnoreCase(String keyword, Pageable pageable);
 
     Page<Book> findByCategories_Id(Long categoryId, Pageable pageable);
@@ -25,4 +30,47 @@ public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificat
             Long publisherId,
             Pageable pageable
     );
+
+    @Query("""
+        select b from Book b 
+        join fetch b.publisher
+        join fetch b.categories
+        where b.id = :id
+""")
+    Optional<Book> findDetailById(@Param("id")Long id);
+
+    @Query("""
+    select distinct b from Book b 
+    join b.categories c 
+    where c.id in :categoryIds
+    and b.id <> :bookId
+    and b.status = :status
+""")
+    List<Book> findRelatedByCategories(
+            @Param("categoryIds") List<Long> categoryIds,
+            @Param("bookId") Long bookId,
+            @Param("status") BookStatus status,
+            Pageable pageable
+    );
+
+    List<Book> findByPublisherIdAndIdNotAndStatus(
+            Long publisherId,
+            Long bookId,
+            BookStatus status,
+            Pageable pageable
+    );
+
+    @Query("""
+    select b 
+    from OrderItem oi 
+    join oi.book b 
+    join oi.order o 
+    where o.orderStatus = :orderStatus
+    group by b
+    order by sum(oi.quantity) desc 
+""")
+    List<Book> findBestSellerBooks(
+            @Param("orderStatus")OrderStatus orderStatus,
+            Pageable pageable
+            );
 }

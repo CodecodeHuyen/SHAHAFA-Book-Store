@@ -4,6 +4,8 @@ import com.fu.bookshop.dto.BookCardDTO;
 import com.fu.bookshop.entity.Book;
 import com.fu.bookshop.entity.Genre;
 import com.fu.bookshop.entity.Publisher;
+import com.fu.bookshop.enums.BookStatus;
+import com.fu.bookshop.enums.OrderStatus;
 import com.fu.bookshop.repository.BookRepository;
 import com.fu.bookshop.repository.GenreRepository;
 import com.fu.bookshop.repository.PublisherRepository;
@@ -43,7 +45,7 @@ public class HomeServiceImpl implements HomeService {
     @Override
     public Page<BookCardDTO> getActiveBooks(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return bookRepository.findByStatus("ACTIVE", pageable)
+        return bookRepository.findByStatus(BookStatus.ACTIVE, pageable)
                 .map(this::mapToCardDTO);
     }
 
@@ -107,5 +109,16 @@ public class HomeServiceImpl implements HomeService {
         return bookRepository
                 .findDistinctByCategories_IdInAndPublisher_Id(categoryIds, publisherId, pageable)
                 .map(this::mapToCardDTO);
+    }
+
+    @Override
+    public List<BookCardDTO> getBestSellerBooks() {
+        List<Book> books = bookRepository.findBestSellerBooks(OrderStatus.COMPLETE,
+                PageRequest.of(0, 5));
+
+
+        return books.stream()
+                .map(this::mapToCardDTO)
+                .toList();
     }
 }

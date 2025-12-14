@@ -39,3 +39,12 @@ spring:
           auth: true
           starttls:
             enable: true
+
+aws:
+  access-key: dummy-access-key
+  secret-key: dummy-secret-key
+  s3:
+    bucket: xo-cua-huyen-ne
+    region: ap-southeast-1
+    folder: "SHAHAFA Book Store"
+
