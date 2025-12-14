@@ -24,7 +24,7 @@ public class HomeController {
                        @RequestParam(name = "size", defaultValue = "10") int size,
                        @RequestParam(name = "keyword", required = false) String keyword,
                        @RequestParam(name = "category", required = false)List<Long> categoryIds,
-                       @RequestParam(name = "publisherId", required = false) Long publisherId,
+                       @RequestParam(name = "publisher", required = false) Long publisherId,
                        Model model){
         Page<BookCardDTO> bookPage;
 
@@ -47,6 +47,9 @@ public class HomeController {
         }else {
             bookPage = homeService.getActiveBooks(page, size);
         }
+
+        List<BookCardDTO> bestSellerBooks = homeService.getBestSellerBooks();
+        model.addAttribute("bestSellerBooks", bestSellerBooks);
 
         model.addAttribute("books", bookPage.getContent());
         model.addAttribute("bookPage", bookPage);

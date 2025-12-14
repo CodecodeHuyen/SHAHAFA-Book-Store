@@ -1,6 +1,6 @@
 package com.fu.bookshop.enums;
 
-public enum CategoryStatus {
+public enum BookStatus {
     ACTIVE,
-    INACTIVE,
+    DELETED
 }

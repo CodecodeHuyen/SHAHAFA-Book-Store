@@ -2,7 +2,7 @@ package com.fu.bookshop.service.impl;
 
 import com.fu.bookshop.dto.OtpValidationRequest;
 import com.fu.bookshop.entity.OtpCode;
-import com.fu.bookshop.exception.AppException;
+import com.fu.bookshop.exception.BusinessException;
 import com.fu.bookshop.exception.ErrorCode;
 import com.fu.bookshop.repository.OtpCodeRepository;
 import com.fu.bookshop.service.OtpService;
@@ -69,10 +69,10 @@ public class OtpServiceImpl implements OtpService {
     @Override
     public boolean verifyOtp(OtpValidationRequest request) {
         OtpCode code = otpRepo.findByEmail(request.getEmail())
-                .orElseThrow(() -> new AppException(ErrorCode.OTP_NOT_FOUND));
+                .orElseThrow(() -> new BusinessException(ErrorCode.OTP_NOT_FOUND));
 
         if (code.isUsed() || code.getExpiresAt().isBefore(Instant.now())) {
-            throw new AppException(ErrorCode.OTP_EXPIRED);
+            throw new BusinessException(ErrorCode.OTP_EXPIRED);
         }
 
 //        if (!passwordEncoder.matches(request.getOtp(), code.getOtpHash())) {
@@ -80,7 +80,7 @@ public class OtpServiceImpl implements OtpService {
 //        }
 
         if (!code.getOtpHash().equals(request.getOtp())) {
-            throw new AppException(ErrorCode.OTP_INVALID);
+            throw new BusinessException(ErrorCode.OTP_INVALID);
         }
 
         code.setUsed(true);
