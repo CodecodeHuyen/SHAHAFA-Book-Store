@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${book.title}">Chi tiết sách</title>
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+<header class="bg-red-600 text-white py-3 shadow">
+    <div class="max-w-7xl mx-auto flex items-center justify-between px-4">
+        <h1 class="text-2xl font-bold">
+            <a th:href="@{/}" class="hover:opacity-80">
+                BookShop
+            </a>
+        </h1>
+
+
+        <!-- Search -->
+        <form class="flex-1 mx-6" method="get" th:action="@{/}">
+            <input type="text"
+                   name="keyword"
+                   th:value="${keyword}"
+                   placeholder="Tìm kiếm sách..."
+                   class="w-full p-2 rounded-lg border border-gray-300 text-black" />
+        </form>
+
+        <div class="flex gap-6 text-lg">
+            <span>Giỏ hàng</span>
+            <span>Tài khoản</span>
+        </div>
+    </div>
+</header>
+<div class="max-w-7xl mx-auto p-6 bg-white mt-6 rounded-lg shadow">
+
+    <!--BOOK DETAIL-->
+    <div class="grid grid-cols-12 gap-8">
+
+        <!-- LEFT: IMAGE -->
+        <div class="col-span-4">
+            <img th:src="${book.image}"
+                 class="w-full rounded-lg shadow"
+                 alt="Book image">
+        </div>
+
+        <!-- RIGHT: INFO -->
+        <div class="col-span-8 space-y-4">
+
+            <h1 class="text-2xl font-bold" th:text="${book.title}"></h1>
+
+            <p class="text-gray-600">
+                Tác giả:
+                <span class="font-medium" th:text="${book.authors}"></span>
+            </p>
+
+            <p class="text-gray-600">
+                Nhà xuất bản:
+                <span class="font-medium" th:text="${book.publisherName}"></span>
+            </p>
+
+            <!-- PRICE -->
+            <div class="flex items-center gap-4">
+                <span class="text-3xl text-red-600 font-bold"
+                      th:text="${#numbers.formatDecimal(book.price,0,'COMMA',0,'POINT') + ' đ'}">
+                </span>
+
+                <span th:if="${book.oldPrice != null}"
+                      class="line-through text-gray-400"
+                      th:text="${#numbers.formatDecimal(book.oldPrice,0,'COMMA',0,'POINT') + ' đ'}">
+                </span>
+            </div>
+
+            <!-- BUTTON -->
+            <div class="flex gap-4 mt-4">
+                <button class="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700">
+                    Thêm vào giỏ hàng
+                </button>
+
+                <button class="border border-red-600 text-red-600 px-6 py-3 rounded-lg hover:bg-red-50">
+                    Mua ngay
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- DESCRIPTION -->
+    <div class="mt-10">
+        <h2 class="text-xl font-bold mb-4">Mô tả sản phẩm</h2>
+        <p class="text-gray-700 leading-relaxed"
+           th:text="${book.description}">
+        </p>
+    </div>
+
+</div>
+
+<!-- RELATED BOOKS -->
+<div class="max-w-7xl mx-auto mt-10 p-6 bg-white rounded-lg shadow">
+
+    <h2 class="text-xl font-bold mb-6">
+        Sách liên quan
+    </h2>
+
+    <div class="grid grid-cols-5 gap-6">
+
+        <a th:each="b : ${relatedBooks}"
+           th:href="@{/books/{id}(id=${b.id})}"
+           class="bg-white rounded-lg p-3 shadow hover:shadow-lg transition">
+
+            <img th:src="${b.image}"
+                 class="w-full aspect-[3/4] object-cover rounded mb-3">
+
+            <p class="font-medium text-gray-800 line-clamp-2 h-12"
+               th:text="${b.title}">
+            </p>
+
+            <span class="text-red-600 font-bold block mt-2"
+                  th:text="${#numbers.formatDecimal(b.price,0,'COMMA',0,'POINT') + ' đ'}">
+            </span>
+        </a>
+
+    </div>
+
+</div>
+
+<br><br>
+
+</body>
+</html>

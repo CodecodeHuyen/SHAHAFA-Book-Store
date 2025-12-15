@@ -28,7 +28,8 @@ public class SecurityConfig {
     private final String[] PUBLIC_ENDPOINTS = {
             "/auth/**",
             "/css/**",
-            "/js/**"
+            "/js/**",
+            "/home/**"
     };
 
 
@@ -49,7 +50,7 @@ public class SecurityConfig {
                         .loginProcessingUrl("/auth/login")// POST xử lý login
                         .usernameParameter("email")
                         .passwordParameter("password")
-                        .defaultSuccessUrl("/", true)
+                        .defaultSuccessUrl("/home", true)
                         .failureHandler(customAuthenticationFailureHandler)
                         .permitAll()
                 )
