@@ -1,7 +1,7 @@
 package com.fu.bookshop.service.home;
 
-import com.fu.bookshop.dto.BookCardDTO;
-import com.fu.bookshop.dto.BookDetailDTO;
+import com.fu.bookshop.dto.home.BookCardDTO;
+import com.fu.bookshop.dto.home.BookDetailDTO;
 
 import java.util.List;
 

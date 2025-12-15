@@ -1,6 +1,6 @@
 package com.fu.bookshop.controller.home;
 
-import com.fu.bookshop.dto.BookCardDTO;
+import com.fu.bookshop.dto.home.BookCardDTO;
 import com.fu.bookshop.entity.Genre;
 import com.fu.bookshop.entity.Publisher;
 import com.fu.bookshop.service.home.HomeService;
@@ -9,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 

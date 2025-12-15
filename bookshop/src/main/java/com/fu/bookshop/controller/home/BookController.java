@@ -1,7 +1,7 @@
 package com.fu.bookshop.controller.home;
 
-import com.fu.bookshop.dto.BookCardDTO;
-import com.fu.bookshop.dto.BookDetailDTO;
+import com.fu.bookshop.dto.home.BookCardDTO;
+import com.fu.bookshop.dto.home.BookDetailDTO;
 import com.fu.bookshop.service.home.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

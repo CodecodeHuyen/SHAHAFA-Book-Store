@@ -1,7 +1,6 @@
 package com.fu.bookshop.service.home;
 
-import com.fu.bookshop.dto.BookCardDTO;
-import com.fu.bookshop.entity.Book;
+import com.fu.bookshop.dto.home.BookCardDTO;
 import com.fu.bookshop.entity.Genre;
 import com.fu.bookshop.entity.Publisher;
 import org.springframework.data.domain.Page;
