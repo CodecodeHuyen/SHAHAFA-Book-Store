@@ -6,15 +6,16 @@ import com.fu.bookshop.entity.Account;
 import com.fu.bookshop.entity.Role;
 import com.fu.bookshop.entity.User;
 import com.fu.bookshop.enums.AccountStatus;
-import com.fu.bookshop.exception.AppException;
+import com.fu.bookshop.exception.BusinessException;
 import com.fu.bookshop.exception.ErrorCode;
+import com.fu.bookshop.exception.SystemException;
 import com.fu.bookshop.repository.AccountRepository;
 import com.fu.bookshop.repository.RoleRepository;
 import com.fu.bookshop.service.AuthenticationService;
 import com.fu.bookshop.service.OtpService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-//import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +29,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
 
     private final AccountRepository accountRepository;
-//    private final PasswordEncoder encoder;
+    private final PasswordEncoder encoder;
     private final RoleRepository roleRepository;
     private final OtpService otpService;
 
@@ -43,9 +44,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             Account account = optionalAccount.get();
 
             if (account.getAccountStatus().equals(AccountStatus.ACTIVE)) {
-                throw new AppException(ErrorCode.EMAIL_EXISTED);
+                //Business exception đã đc bắt ở controller
+                throw new BusinessException(ErrorCode.EMAIL_EXISTED);
             } else if (account.getAccountStatus().equals(AccountStatus.DEACTIVATED)) {
-                throw new AppException(ErrorCode.ACCOUNT_DEACTIVATED);
+                //Business exception đã đc bắt ở controller
+                throw new BusinessException(ErrorCode.ACCOUNT_DEACTIVATED);
             }
 
             User user = account.getUser();
@@ -59,8 +62,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             user.setLoyalPoint(0);
 
             account.setUser(user);
-//            account.setPassword(encoder.encode(req.getPassword()));
-            account.setPassword(req.getPassword());
+            account.setPassword(encoder.encode(req.getPassword()));
+
 
 
             account.setAccountStatus(AccountStatus.PENDING);
@@ -72,7 +75,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
 
         Role customer = roleRepository.findByRoleName("CUSTOMER")
-                .orElseThrow(() -> new IllegalStateException("Role CUSTOMER not found"));
+                //đây ko phải là businessException(do hệ thống chưa init data), cần handle tự động trả về trang lỗi
+                .orElseThrow(() -> new SystemException(ErrorCode.ROLE_NOT_FOUND));
 
         User user = User.builder()
                 .name(req.getName())
@@ -83,8 +87,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         Account account = Account.builder()
                 .email(req.getEmail())
-//                .password(encoder.encode(req.getPassword()))
-                .password(req.getPassword())
+                .password(encoder.encode(req.getPassword()))
                 .accountStatus(AccountStatus.PENDING)
                 .roles(List.of(customer))
                 .user(user)
@@ -106,7 +109,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         if (verified) {
             Account account = accountRepository.findAccountByEmail(request.getEmail())
-                    .orElseThrow(() -> new IllegalStateException("Account not found"));
+                    .orElseThrow(() -> new SystemException(ErrorCode.ACCOUNT_NOT_FOUND));
 
             account.setAccountStatus(AccountStatus.ACTIVE);
             accountRepository.save(account);

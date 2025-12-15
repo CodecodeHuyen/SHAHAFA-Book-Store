@@ -1,5 +1,8 @@
 server:
   port: 8080
+  servlet:
+    session:
+      timeout: 30m
 
 spring:
   profiles:
@@ -39,3 +42,14 @@ spring:
           auth: true
           starttls:
             enable: true
+
+  security:
+    debug: true
+
+aws:
+  access-key: ${AWS_ACCESS_KEY}
+  secret-key: ${AWS_SECRET_KEY}
+  s3:
+    bucket: xo-cua-huyen-ne
+    region: ap-southeast-1
+    folder: SHAHAFA Book Store
