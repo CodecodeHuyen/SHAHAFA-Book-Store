@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Giỏ hàng - BookShop</title>
+    
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+<!-- HEADER -->
+<header class="bg-red-600 text-white py-3 shadow">
+    <div class="max-w-7xl mx-auto flex items-center justify-between px-4">
+        <h1 class="text-2xl font-bold">
+            <a th:href="@{/home}" class="hover:opacity-80">
+                BookShop
+            </a>
+        </h1>
+
+        <!-- Search -->
+        <form class="flex-1 mx-6" method="get" th:action="@{/home}">
+            <input type="text"
+                   name="keyword"
+                   placeholder="Tìm kiếm sách..."
+                   class="w-full p-2 rounded-lg border border-gray-300 text-black" />
+        </form>
+
+        <div class="flex gap-6 text-lg">
+            <a th:href="@{/cart}" class="hover:opacity-80">Giỏ hàng</a>
+            <span>Tài khoản</span>
+        </div>
+    </div>
+</header>
+
+<!-- MAIN CONTENT -->
+<div class="max-w-7xl mx-auto mt-6 px-4">
+
+    <!-- Success/Error Messages -->
+    <div th:if="${success}" class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
+        <span th:text="${success}"></span>
+    </div>
+    <div th:if="${error}" class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+        <span th:text="${error}"></span>
+    </div>
+
+    <!-- Cart Title -->
+    <h1 class="text-2xl font-bold mb-6">
+        GIỎ HÀNG 
+        <span th:if="${cart != null and cart.totalItems != null and cart.totalItems > 0}"
+              th:text="'(' + ${cart.totalItems} + ' sản phẩm)'">
+        </span>
+        <span th:if="${cart == null or cart.totalItems == null or cart.totalItems == 0}">
+            (0 sản phẩm)
+        </span>
+    </h1>
+
+    <!-- Empty Cart -->
+    <div th:if="${cart == null or cart.items == null or cart.items.isEmpty()}"
+         class="bg-white rounded-lg shadow p-12 text-center">
+        
+        <!-- Empty Cart Icon -->
+        <div class="flex justify-center mb-6">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-32 w-32 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+            </svg>
+        </div>
+
+        <p class="text-gray-600 text-lg mb-6">
+            Chưa có sản phẩm trong giỏ hàng của bạn.
+        </p>
+
+        <a th:href="@{/home}"
+           class="inline-block bg-red-600 text-white px-8 py-3 rounded-lg hover:bg-red-700 font-semibold">
+            MUA SẮM NGAY
+        </a>
+    </div>
+
+    <!-- Cart with Items -->
+    <div th:if="${cart != null and cart.items != null and !cart.items.isEmpty()}"
+         class="grid grid-cols-12 gap-6">
+        
+        <!-- Cart Items List -->
+        <div class="col-span-8 bg-white rounded-lg shadow p-6">
+            <table class="w-full">
+                <thead class="border-b-2 border-gray-200">
+                    <tr>
+                        <th class="text-left pb-4">
+                            <input type="checkbox" id="selectAll" onchange="toggleSelectAll(this)" class="w-4 h-4">
+                            <label for="selectAll" class="ml-2">Chọn tất cả</label>
+                        </th>
+                        <th class="text-left pb-4">Sản phẩm</th>
+                        <th class="text-center pb-4">Đơn giá</th>
+                        <th class="text-center pb-4">Số lượng</th>
+                        <th class="text-right pb-4">Thành tiền</th>
+                        <th class="text-center pb-4">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="item : ${cart.items}" class="border-b border-gray-100" th:id="'cart-item-' + ${item.id}">
+                        <td class="py-4 text-center">
+                            <input type="checkbox" 
+                                   class="item-checkbox w-4 h-4" 
+                                   th:data-item-id="${item.id}"
+                                   th:data-price="${item.subTotal}"
+                                   onchange="updateSelectedTotal()">
+                        </td>
+                        <td class="py-4">
+                            <div class="flex items-center gap-4">
+                                <a th:href="@{/books/{id}(id=${item.bookId})}">
+                                    <img th:src="${item.bookImage}" 
+                                         class="w-20 h-28 object-cover rounded"
+                                         alt="Book image">
+                                </a>
+                                <div>
+                                    <a th:href="@{/books/{id}(id=${item.bookId})}"
+                                       class="font-medium text-gray-800 hover:text-red-600"
+                                       th:text="${item.bookTitle}">
+                                    </a>
+                                    <p th:if="${item.quantity > item.availableQuantity}" 
+                                       class="text-red-600 text-sm mt-1">
+                                        Số lượng trong kho chỉ còn <span th:text="${item.availableQuantity}"></span> cuốn
+                                    </p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-center py-4">
+                            <span class="text-red-600 font-semibold item-unit-price"
+                                  th:data-item-id="${item.id}"
+                                  th:data-price="${item.bookPrice}"
+                                  th:text="${#numbers.formatDecimal(item.bookPrice, 0, 'COMMA', 0, 'POINT') + ' đ'}">
+                            </span>
+                        </td>
+                        <td class="text-center py-4">
+                            <form th:action="@{/cart/update}" method="post" class="inline-flex flex-col items-center gap-2" 
+                                  th:onsubmit="'return validateQuantityBeforeSubmit(this, ' + ${item.availableQuantity} + ')'">
+                                <input type="hidden" name="cartItemId" th:value="${item.id}">
+                                <div class="flex items-center gap-2">
+                                    <button type="button" 
+                                            onclick="decreaseQuantity(this)"
+                                            class="w-8 h-8 bg-gray-200 rounded hover:bg-gray-300">
+                                        -
+                                    </button>
+                                    <div class="flex flex-col items-center">
+                                        <input type="number" 
+                                               name="quantity" 
+                                               th:value="${item.quantity}"
+                                               th:max="${item.availableQuantity}"
+                                               min="1"
+                                               class="w-16 text-center border rounded quantity-input"
+                                               th:data-max="${item.availableQuantity}"
+                                               th:data-item-id="${item.id}"
+                                               th:classappend="${item.quantity > item.availableQuantity} ? 'border-red-500 bg-red-50' : ''"
+                                               oninput="validateQuantityInput(this); updateItemTotal(this)"
+                                               onchange="validateQuantityChange(this)">
+                                        <span class="quantity-error text-red-600 text-xs mt-1" style="display: none;"></span>
+                                    </div>
+                                    <button type="button"
+                                            th:onclick="'increaseQuantity(this, ' + ${item.availableQuantity} + ')'"
+                                            class="w-8 h-8 bg-gray-200 rounded hover:bg-gray-300">
+                                        +
+                                    </button>
+                                </div>
+                            </form>
+                        </td>
+                        <td class="text-right py-4">
+                            <span class="text-red-600 font-bold item-total"
+                                  th:data-item-id="${item.id}"
+                                  th:text="${#numbers.formatDecimal(item.subTotal, 0, 'COMMA', 0, 'POINT') + ' đ'}">
+                            </span>
+                        </td>
+                        <td class="text-center py-4">
+                            <form th:action="@{/cart/remove}" method="post" class="inline">
+                                <input type="hidden" name="cartItemId" th:value="${item.id}">
+                                <button type="submit"
+                                        class="text-red-600 hover:text-red-800 font-medium"
+                                        onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')">
+                                    Xóa
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Cart Summary -->
+        <div class="col-span-4">
+            <div class="bg-white rounded-lg shadow p-6 sticky top-4">
+                <h2 class="text-xl font-bold mb-4">Tóm tắt đơn hàng</h2>
+                
+                <div class="space-y-3 mb-6">
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Tổng số lượng:</span>
+                        <span class="font-semibold" id="selected-items-count" th:text="${cart.totalItems} + ' sản phẩm'"></span>
+                    </div>
+                    
+                    <div class="flex justify-between text-lg">
+                        <span class="font-bold">Tổng tiền:</span>
+                        <span class="text-red-600 font-bold text-xl" id="selected-total"
+                              th:text="${#numbers.formatDecimal(cart.totalPrice, 0, 'COMMA', 0, 'POINT') + ' đ'}">
+                        </span>
+                    </div>
+                </div>
+
+                <a th:href="@{/home}"
+                   class="block w-full text-center border border-red-600 text-red-600 py-3 rounded-lg hover:bg-red-50 mb-3">
+                    Tiếp tục mua sắm
+                </a>
+
+                <button class="block w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 font-semibold">
+                    Thanh toán
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br><br>
+
+<script>
+    function increaseQuantity(btn, maxQuantity) {
+        const input = btn.previousElementSibling.querySelector('.quantity-input');
+        const currentValue = parseInt(input.value) || 1;
+        if (currentValue < maxQuantity) {
+            input.value = currentValue + 1;
+            validateQuantityInput(input);
+            updateItemTotal(input);
+        } else {
+            showQuantityError(input, 'Số lượng sách trong kho chỉ còn ' + maxQuantity + ' cuốn');
+        }
+    }
+
+    function decreaseQuantity(btn) {
+        const input = btn.nextElementSibling.querySelector('.quantity-input');
+        const currentValue = parseInt(input.value) || 1;
+        if (currentValue > 1) {
+            input.value = currentValue - 1;
+            validateQuantityInput(input);
+            updateItemTotal(input);
+        }
+    }
+
+    function updateItemTotal(input) {
+        const quantity = parseInt(input.value) || 0;
+        const itemId = input.getAttribute('data-item-id');
+        
+        // Lấy giá đơn vị từ element item-unit-price
+        const unitPriceElement = document.querySelector('.item-unit-price[data-item-id="' + itemId + '"]');
+        if (!unitPriceElement) return;
+        
+        const unitPriceText = unitPriceElement.getAttribute('data-price');
+        const unitPrice = parseFloat(unitPriceText) || 0;
+        
+        // Tính tổng tiền
+        const total = unitPrice * quantity;
+        
+        // Cập nhật hiển thị giá tiền
+        const totalElement = document.querySelector('.item-total[data-item-id="' + itemId + '"]');
+        if (totalElement) {
+            totalElement.textContent = formatCurrency(total) + ' đ';
+        }
+        
+        // Cập nhật tổng tiền của các item được chọn
+        updateSelectedTotal();
+    }
+
+    function validateQuantityInput(input) {
+        const value = parseInt(input.value) || 0;
+        const maxQuantity = parseInt(input.getAttribute('data-max')) || 999999;
+        
+        if (value > maxQuantity) {
+            input.classList.add('border-red-500', 'bg-red-50');
+            showQuantityError(input, 'Số lượng tối đa là ' + maxQuantity + ' cuốn');
+            return false;
+        } else if (value < 1) {
+            input.classList.add('border-red-500', 'bg-red-50');
+            showQuantityError(input, 'Số lượng phải lớn hơn 0');
+            return false;
+        } else {
+            input.classList.remove('border-red-500', 'bg-red-50');
+            hideQuantityError(input);
+            return true;
+        }
+    }
+
+    function validateQuantityChange(input) {
+        if (validateQuantityInput(input)) {
+            // Chỉ submit nếu validation thành công
+            input.form.submit();
+        } else {
+            // Điều chỉnh về giá trị hợp lệ nếu không hợp lệ
+            const maxQuantity = parseInt(input.getAttribute('data-max')) || 999999;
+            const value = parseInt(input.value) || 1;
+            if (value > maxQuantity) {
+                input.value = maxQuantity;
+                validateQuantityInput(input);
+            } else if (value < 1) {
+                input.value = 1;
+                validateQuantityInput(input);
+            }
+        }
+    }
+
+    function validateQuantityBeforeSubmit(form, maxQuantity) {
+        const input = form.querySelector('.quantity-input');
+        const value = parseInt(input.value) || 0;
+        
+        if (value > maxQuantity) {
+            showQuantityError(input, 'Số lượng sách trong kho chỉ còn ' + maxQuantity + ' cuốn. Vui lòng chọn lại số lượng.');
+            input.value = maxQuantity;
+            validateQuantityInput(input);
+            return false;
+        } else if (value < 1) {
+            showQuantityError(input, 'Số lượng phải lớn hơn 0');
+            input.value = 1;
+            validateQuantityInput(input);
+            return false;
+        }
+        
+        hideQuantityError(input);
+        return true;
+    }
+
+    function showQuantityError(input, message) {
+        const errorSpan = input.parentElement.querySelector('.quantity-error');
+        if (errorSpan) {
+            errorSpan.textContent = message;
+            errorSpan.style.display = 'block';
+        }
+    }
+
+    function hideQuantityError(input) {
+        const errorSpan = input.parentElement.querySelector('.quantity-error');
+        if (errorSpan) {
+            errorSpan.style.display = 'none';
+            errorSpan.textContent = '';
+        }
+    }
+
+    function toggleSelectAll(checkbox) {
+        const itemCheckboxes = document.querySelectorAll('.item-checkbox');
+        itemCheckboxes.forEach(cb => {
+            cb.checked = checkbox.checked;
+        });
+        updateSelectedTotal();
+    }
+
+    function updateSelectedTotal() {
+        const selectedCheckboxes = document.querySelectorAll('.item-checkbox:checked');
+        let total = 0;
+        let itemCount = 0;
+
+        selectedCheckboxes.forEach(checkbox => {
+            const itemId = checkbox.getAttribute('data-item-id');
+            const totalElement = document.querySelector(`.item-total[data-item-id="${itemId}"]`);
+            if (totalElement) {
+                // Lấy giá trị từ text, loại bỏ " đ" và dấu phẩy
+                const priceText = totalElement.textContent.replace(/[.,]/g, '').replace(' đ', '').trim();
+                total += parseFloat(priceText) || 0;
+                
+                // Lấy số lượng từ input
+                const row = checkbox.closest('tr');
+                const quantityInput = row.querySelector('input[name="quantity"]');
+                if (quantityInput) {
+                    itemCount += parseInt(quantityInput.value) || 0;
+                }
+            }
+        });
+
+        // Cập nhật hiển thị
+        const totalElement = document.getElementById('selected-total');
+        const countElement = document.getElementById('selected-items-count');
+        
+        if (totalElement) {
+            totalElement.textContent = formatCurrency(total) + ' đ';
+        }
+        
+        if (countElement) {
+            countElement.textContent = itemCount + ' sản phẩm';
+        }
+    }
+
+    function formatCurrency(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+
+    // Khởi tạo khi trang load
+    document.addEventListener('DOMContentLoaded', function() {
+        updateSelectedTotal();
+    });
+</script>
+
+</body>
+</html>
+
