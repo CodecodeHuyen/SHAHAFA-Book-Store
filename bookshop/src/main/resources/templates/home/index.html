@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>BookShop - Home</title>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        /* Fake slider arrows */
+        .arrow-btn {
+            @apply flex items-center justify-center bg-white/70 hover:bg-white w-10 h-10 rounded-full shadow cursor-pointer;
+        }
+    </style>
+
+</head>
+<body class="bg-gray-100">
+
+<!--  HEADER -->
+<header class="bg-red-600 text-white py-3 shadow">
+    <div class="max-w-7xl mx-auto flex items-center justify-between px-4">
+        <h1 class="text-2xl font-bold">
+            <a th:href="@{/home}" class="hover:opacity-80">
+                BookShop
+            </a>
+        </h1>
+
+
+        <!-- Search -->
+        <form class="flex-1 mx-6" method="get" th:action="@{/home}">
+            <input type="text"
+                   name="keyword"
+                   th:value="${keyword}"
+                   placeholder="Tìm kiếm sách..."
+                   class="w-full p-2 rounded-lg border border-gray-300 text-black" />
+        </form>
+
+        <div class="flex gap-6 text-lg">
+            <span>Giỏ hàng</span>
+            <span>Tài khoản</span>
+        </div>
+    </div>
+</header>
+
+
+
+<!--  BANNER  -->
+<section class="max-w-7xl mx-auto mt-6 relative px-4">
+    <div class="relative">
+        <img src="https://i.pinimg.com/1200x/31/d9/cd/31d9cd7741c933fa82529bd68d27d0af.jpg" class="rounded-xl shadow w-full">
+
+        <!-- Fake arrows -->
+        <div
+                class="flex items-center justify-center bg-white/70 hover:bg-white w-10 h-10 rounded-full shadow cursor-pointer absolute top-1/2 -left-4">
+            &#10094;
+        </div>
+        <div
+                class="flex items-center justify-center bg-white/70 hover:bg-white w-10 h-10 rounded-full shadow cursor-pointer absolute top-1/2 -right-4">
+            &#10095;
+        </div>
+
+
+        <!-- Fake dots -->
+        <div class="flex gap-2 absolute bottom-4 left-1/2 -translate-x-1/2">
+            <div class="w-3 h-3 bg-white rounded-full"></div>
+            <div class="w-3 h-3 bg-gray-300 rounded-full"></div>
+            <div class="w-3 h-3 bg-gray-300 rounded-full"></div>
+        </div>
+    </div>
+</section>
+
+<section class="max-w-7xl mx-auto mt-12 px-4">
+    <h2 class="text-xl font-bold mb-4">
+        🔥 Bán chạy nhất
+    </h2>
+
+    <div th:if="${bestSellerBooks == null or bestSellerBooks.isEmpty()}"
+    class="text-gray-500 italic">
+        Chưa có dữ liệu bán chạy
+    </div>
+
+
+
+    <div th:if="${bestSellerBooks != null and !bestSellerBooks.isEmpty()}"
+            class="grid grid-cols-12 gap-6 bg-white rounded-xl shadow p-6">
+
+        <!-- left ranking -->
+        <div class="col-span-5 border-r pr-4">
+            <div th:each="b, iter : ${bestSellerBooks}"
+                 class="flex items-center gap-4 py-3 hover:bg-gray-50 cursor-pointer">
+
+                <!-- rank -->
+                <span class="text-lg font-bold w-6"
+                th:text="${iter.index + 1}"></span>
+
+                <!-- image -->
+                <img th:src="${b.image}"
+                     class="w-14 h-20 object-cover rounded"/>
+
+                <!-- infor -->
+                <div class="flex-1">
+                    <p  class="font-medium line-clamp-2"
+                    th:text="${b.title}">
+                    </p>
+
+                    <p class="text-red-600 font-semibold text-sm"
+                    th:text="${#numbers.formatDecimal(b.price, 0, 'COMMA', 0, 'POINT') + ' đ'}">
+                    </p>
+                 </div>
+            </div>
+        </div>
+
+        <!-- right preview book -->
+        <div class="col-span-7 flex gap-6">
+            <img th:src="${bestSellerBooks[0].image}"
+                 class="w-48 h-64 object-cover rounded-lg shadow"/>
+
+            <div>
+                <h3 class="text-xl font-bold mb-2"
+                th:text="${bestSellerBooks[0].title}">
+                </h3>
+
+                <p class="text-red-600 text-lg font-semibold mb-2"
+                th:text="${#numbers.formatDecimal(bestSellerBooks[0].price, 0, 'COMMA', 0, 'POINT') + ' đ'}">
+
+                </p>
+
+                <a th:href="@{/books/{id}(id=${bestSellerBooks[0].id})}"
+                   class="inline-block mt-4 px-5 py-2 bg-red-600 text-white rounded-lg">
+                    Xem chi tiết
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+</section>
+
+<!--  CATEGORY ICONS -->
+<section class="max-w-7xl mx-auto mt-8 px-4">
+    <form method="get" th:action="@{/home}">
+        <h3 class="font-semibold mb-2">Thể loại</h3>
+
+        <!-- CATEGORY: block có scroll -->
+        <div class="bg-white p-3 rounded-xl shadow max-h-64 overflow-y-auto mb-4">
+            <label th:each="cat : ${categories}"
+                   class="flex items-center gap-2 mb-2 cursor-pointer">
+
+                <input type="checkbox"
+                       name="category"
+                       th:value="${cat.id}"
+                       th:checked="${selectedCategories != null and selectedCategories.contains(cat.id)}"
+                       class="w-4 h-4" />
+
+                <span th:text="${cat.name}" class="text-sm"></span>
+            </label>
+        </div>
+
+        <!-- PUBLISHER: select gọn + có thể scoll nếu nhiều -->
+        <div class="flex items-center gap-3 mb-4">
+            <span class="font-semibold">Nhà xuất bản:</span>
+            <select name="publisher"
+                    class="p-2 border rounded-lg max-w-xs">
+                <option th:value="${null}">Tất cả</option>
+                <option th:each="pub : ${publishers}"
+                        th:value="${pub.id}"
+                        th:selected="${selectedPublisher != null and selectedPublisher == pub.id}"
+                        th:text="${pub.name}">
+                </option>
+            </select>
+        </div>
+
+        <!-- Giữ lại từ khoá search nếu đang lọc + search -->
+        <input type="hidden" name="keyword" th:value="${keyword}" />
+
+        <button type="submit"
+                class="mt-2 px-4 py-2 bg-red-600 text-white rounded-lg">
+            Lọc
+        </button>
+
+    </form>
+</section>
+
+
+
+<!--  PRODUCT LIST -->
+<section class="max-w-7xl mx-auto mt-10 px-4">
+
+    <h2 class="text-2xl font-bold mb-4">Xu Hướng Mua Sắm</h2>
+
+    <!-- Product Grid -->
+    <div class="grid grid-cols-5 gap-6">
+
+        <!-- Loop by Thymeleaf -->
+        <a th:each="book : ${books}"
+           th:href="@{/books/{id}(id=${book.id})}"
+             class="bg-white p-4 rounded-xl shadow hover:shadow-lg cursor-pointer">
+
+            <!-- IMAGE -->
+            <img th:src="${book.image}"
+                 class="w-full rounded-lg mb-3 aspect-[3/4] object-cover" />
+
+            <!-- TITLE -->
+            <p th:text="${book.title}"
+               class="font-semibold text-gray-800 line-clamp-2 h-12"></p>
+
+            <!-- PRICE -->
+            <div class="flex items-center gap-2 mt-2">
+                <span th:text="${#numbers.formatDecimal(book.price,0,'COMMA',0,'POINT') + ' đ'}"
+                      class="text-red-600 font-bold"></span>
+
+                <span th:if="${book.salePercent != null}"
+                      th:text="${'-' + book.salePercent + '%'}"
+                      class="text-sm text-white bg-red-500 px-2 py-0.5 rounded"></span>
+            </div>
+
+            <!-- OLD PRICE -->
+            <p th:if="${book.oldPrice != null}"
+               th:text="${#numbers.formatDecimal(book.oldPrice,0,'COMMA',0,'POINT') + ' đ'}"
+               class="line-through text-gray-400 text-sm"></p>
+
+
+        </a>
+
+    </div>
+</section>
+
+<div  th:if="${bookPage != null}"
+        class="flex items-center justify-center gap-2 mt-8">
+
+    <!-- Trang 1 -->
+    <a th:if="${bookPage.number > 2}"
+       th:href="@{/home(page=0,
+                    size=${pageSize},
+                    keyword=${keyword},
+                    category=${selectedCategories},
+                    publisher=${selectedPublisher})}"
+       class="px-3 py-1 border rounded hover:bg-gray-100">
+        1
+    </a>
+
+    <!-- Dấu ... trước -->
+    <span th:if="${bookPage.number > 3}" class="px-2 text-gray-500">...</span>
+
+    <!-- Các trang quanh current: current-2 .. current+2 -->
+    <span th:each="i : ${#numbers.sequence(bookPage.number - 2, bookPage.number + 2)}"
+          th:if="${i >= 0 and i < bookPage.totalPages}">
+
+        <a th:href="@{/home(page=${i},
+                        size=${pageSize},
+                        keyword=${keyword},
+                        category=${selectedCategories},
+                        publisher=${selectedPublisher})}"
+           th:text="${i + 1}"
+           th:classappend="${i == bookPage.number} ? ' bg-red-600 text-white' : ' bg-white text-gray-700'"
+           class="px-3 py-1 border rounded hover:bg-gray-100 mx-0.5">
+        </a>
+    </span>
+
+    <!-- Dấu ... sau -->
+    <span th:if="${bookPage.number < bookPage.totalPages - 3}"
+          class="px-2 text-gray-500">
+        ...
+    </span>
+
+    <!-- Trang cuối -->
+    <a th:if="${bookPage.number < bookPage.totalPages - 2}"
+       th:href="@{/home(page=${bookPage.totalPages - 1},
+                    size=${pageSize},
+                    keyword=${keyword},
+                    category=${selectedCategories},
+                    publisher=${selectedPublisher})}"
+       th:text="${bookPage.totalPages}"
+       class="px-3 py-1 border rounded hover:bg-gray-100 mx-0.5">
+    </a>
+
+</div>
+
+
+
+
+<br><br><br>
+
+
+</body>
+</html>

@@ -1,15 +1,11 @@
 package com.fu.bookshop.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fu.bookshop.enums.Gender;
 import com.fu.bookshop.validator.ValidDob;
 import com.fu.bookshop.validator.ValidPassword;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
-
-
-
 import lombok.*;
 
 @Data

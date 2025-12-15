@@ -132,9 +132,7 @@ public class AuthenticationController {
             @RequestParam(required = false) String error,
             Model model
     ) {
-        if (error != null) {
-            model.addAttribute("error", error);
-        }
+        if (error != null) { model.addAttribute("error", error); }
         return "auth/login";
     }
 
