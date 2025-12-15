@@ -7,6 +7,7 @@ import com.fu.bookshop.entity.Order;
 import com.fu.bookshop.entity.OrderItem;
 import com.fu.bookshop.entity.User;
 import com.fu.bookshop.enums.OrderStatus;
+import com.fu.bookshop.enums.PaymentStatus;
 import com.fu.bookshop.repository.OrderRepository;
 import com.fu.bookshop.repository.UserRepository;
 import com.fu.bookshop.service.user.UserService;
@@ -65,8 +66,51 @@ public class UserServiceImpl implements UserService {
             List<OrderItemDTO> itemDTOS = new ArrayList<>();
 
             for(OrderItem item : order.getOrderItems()){
+                OrderItemDTO itemDTO = OrderItemDTO.builder()
+                        .bookId(item.getBook().getId())
+                        .bookTitle(item.getBook().getTitle())
+                        .quantity(item.getQuantity())
+                        .unitPrice(item.getUnitPrice())
+                        .build();
 
+                itemDTOS.add(itemDTO);
             }
+
+            PaymentStatus paymentStatus = null;
+            String paymentMethodName = null;
+            String paymentMethodImage = null;
+
+            if(order.getPayment() != null){
+                paymentStatus = order.getPayment().getPaymentStatus();
+
+                if(order.getPayment().getPaymentMethod() != null){
+                    paymentMethodName =
+                            order.getPayment().getPaymentMethod().getMethodName();
+
+                    paymentMethodImage = order.getPayment().getPaymentMethod().getImageUrl();
+
+                }
+            }
+
+            OrderHistoryDTO orderDTO = OrderHistoryDTO.builder()
+                    .orderId(order.getId())
+                    .orderCode(order.getCode())
+                    .orderStatus(order.getOrderStatus())
+                    .totalPrice(order.getTotalPrice())
+                    .discount(order.getDiscount())
+                    .shippingFee(order.getShippingFee())
+                    .pickupAddr(order.getPickupAddr())
+                    .deliveryAddr(order.getDeliveryAddr())
+                    .paymentStatus(paymentStatus)
+                    .paymentMethodName(paymentMethodName)
+                    .paymentMethodImage(paymentMethodImage)
+                    .items(itemDTOS)
+                    .build();
+
+            result.add(orderDTO);
         }
+
+        return result;
+
     }
 }
