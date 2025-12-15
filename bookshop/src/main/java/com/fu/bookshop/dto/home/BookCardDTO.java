@@ -1,4 +1,4 @@
-package com.fu.bookshop.dto;
+package com.fu.bookshop.dto.home;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
