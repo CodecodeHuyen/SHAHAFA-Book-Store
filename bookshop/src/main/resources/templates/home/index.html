@@ -18,28 +18,71 @@
 <body class="bg-gray-100">
 
 <!--  HEADER -->
-<header class="bg-red-600 text-white py-3 shadow">
-    <div class="max-w-7xl mx-auto flex items-center justify-between px-4">
-        <h1 class="text-2xl font-bold">
-            <a th:href="@{/}" class="hover:opacity-80">
-                BookShop
-            </a>
-        </h1>
+<header class="bg-red-600 text-white shadow sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto flex items-center gap-6 px-4 py-3">
 
+        <!-- LOGO -->
+        <img th:src="${shop.logoUrl}"
+             alt="Shop Logo"
+             class="w-12 h-12 object-contain rounded bg-white p-1"/>
 
-        <!-- Search -->
-        <form class="flex-1 mx-6" method="get" th:action="@{/}">
+        <h3 class="text-xl font-bold text-white"
+            th:text="${shop.name}">
+            BookShop
+        </h3>
+
+        <!-- CATEGORY DROPDOWN -->
+        <div class="relative group shrink-0">
+            <button
+                    class="flex items-center gap-2 px-4 py-2 bg-red-700 rounded-lg hover:bg-red-800 transition">
+                ☰ Danh mục
+            </button>
+
+            <!-- Dropdown box -->
+            <div
+                    class="absolute left-0 mt-2 w-72 bg-white text-black rounded-xl shadow-lg
+                       opacity-0 invisible group-hover:opacity-100 group-hover:visible
+                       transition-all duration-200 z-50">
+
+                <!-- CATEGORY -->
+                <div class="p-4 border-b">
+                    <p class="font-semibold mb-2">Thể loại</p>
+
+                    <a th:each="cat : ${categories}"
+                       th:href="@{/home(category=${cat.id}, keyword=${keyword})}"
+                       class="block px-3 py-1 rounded hover:bg-gray-100 text-sm"
+                       th:text="${cat.name}">
+                    </a>
+                </div>
+
+                <!-- PUBLISHER -->
+                <div class="p-4">
+                    <p class="font-semibold mb-2">Nhà xuất bản</p>
+
+                    <a th:each="pub : ${publishers}"
+                       th:href="@{/home(publisher=${pub.id}, keyword=${keyword})}"
+                       class="block px-3 py-1 rounded hover:bg-gray-100 text-sm"
+                       th:text="${pub.name}">
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEARCH -->
+        <form class="flex-1" method="get" th:action="@{/home}">
             <input type="text"
                    name="keyword"
                    th:value="${keyword}"
                    placeholder="Tìm kiếm sách..."
-                   class="w-full p-2 rounded-lg border border-gray-300 text-black" />
+                   class="w-full p-2 rounded-lg border border-gray-300 text-black focus:outline-none focus:ring-2 focus:ring-red-400" />
         </form>
 
-        <div class="flex gap-6 text-lg">
-            <span>Giỏ hàng</span>
-            <span>Tài khoản</span>
+        <!-- RIGHT ACTIONS -->
+        <div class="flex items-center gap-6 shrink-0 text-lg">
+            <a href="#" class="hover:opacity-80">Giỏ hàng</a>
+            <a href="#" class="hover:opacity-80">Tài khoản</a>
         </div>
+
     </div>
 </header>
 
@@ -70,167 +113,182 @@
     </div>
 </section>
 
-<section class="max-w-7xl mx-auto mt-12 px-4">
-    <h2 class="text-xl font-bold mb-4">
-        🔥 Bán chạy nhất
-    </h2>
-
-    <div th:if="${bestSellerBooks == null or bestSellerBooks.isEmpty()}"
-    class="text-gray-500 italic">
-        Chưa có dữ liệu bán chạy
-    </div>
-
-
-
-    <div th:if="${bestSellerBooks != null and !bestSellerBooks.isEmpty()}"
-            class="grid grid-cols-12 gap-6 bg-white rounded-xl shadow p-6">
-
-        <!-- left ranking -->
-        <div class="col-span-5 border-r pr-4">
-            <div th:each="b, iter : ${bestSellerBooks}"
-                 class="flex items-center gap-4 py-3 hover:bg-gray-50 cursor-pointer">
-
-                <!-- rank -->
-                <span class="text-lg font-bold w-6"
-                th:text="${iter.index + 1}"></span>
-
-                <!-- image -->
-                <img th:src="${b.image}"
-                     class="w-14 h-20 object-cover rounded"/>
-
-                <!-- infor -->
-                <div class="flex-1">
-                    <p  class="font-medium line-clamp-2"
-                    th:text="${b.title}">
-                    </p>
-
-                    <p class="text-red-600 font-semibold text-sm"
-                    th:text="${#numbers.formatDecimal(b.price, 0, 'COMMA', 0, 'POINT') + ' đ'}">
-                    </p>
-                 </div>
-            </div>
-        </div>
-
-        <!-- right preview book -->
-        <div class="col-span-7 flex gap-6">
-            <img th:src="${bestSellerBooks[0].image}"
-                 class="w-48 h-64 object-cover rounded-lg shadow"/>
-
-            <div>
-                <h3 class="text-xl font-bold mb-2"
-                th:text="${bestSellerBooks[0].title}">
-                </h3>
-
-                <p class="text-red-600 text-lg font-semibold mb-2"
-                th:text="${#numbers.formatDecimal(bestSellerBooks[0].price, 0, 'COMMA', 0, 'POINT') + ' đ'}">
-
-                </p>
-
-                <a th:href="@{/books/{id}(id=${bestSellerBooks[0].id})}"
-                   class="inline-block mt-4 px-5 py-2 bg-red-600 text-white rounded-lg">
-                    Xem chi tiết
-                </a>
-            </div>
-
-        </div>
-    </div>
-
-</section>
-
-<!--  CATEGORY ICONS -->
-<section class="max-w-7xl mx-auto mt-8 px-4">
-    <form method="get" th:action="@{/}">
-        <h3 class="font-semibold mb-2">Thể loại</h3>
-
-        <!-- CATEGORY: block có scroll -->
-        <div class="bg-white p-3 rounded-xl shadow max-h-64 overflow-y-auto mb-4">
-            <label th:each="cat : ${categories}"
-                   class="flex items-center gap-2 mb-2 cursor-pointer">
-
-                <input type="checkbox"
-                       name="category"
-                       th:value="${cat.id}"
-                       th:checked="${selectedCategories != null and selectedCategories.contains(cat.id)}"
-                       class="w-4 h-4" />
-
-                <span th:text="${cat.name}" class="text-sm"></span>
-            </label>
-        </div>
-
-        <!-- PUBLISHER: select gọn + có thể scoll nếu nhiều -->
-        <div class="flex items-center gap-3 mb-4">
-            <span class="font-semibold">Nhà xuất bản:</span>
-            <select name="publisher"
-                    class="p-2 border rounded-lg max-w-xs">
-                <option th:value="${null}">Tất cả</option>
-                <option th:each="pub : ${publishers}"
-                        th:value="${pub.id}"
-                        th:selected="${selectedPublisher != null and selectedPublisher == pub.id}"
-                        th:text="${pub.name}">
-                </option>
-            </select>
-        </div>
-
-        <!-- Giữ lại từ khoá search nếu đang lọc + search -->
-        <input type="hidden" name="keyword" th:value="${keyword}" />
-
-        <button type="submit"
-                class="mt-2 px-4 py-2 bg-red-600 text-white rounded-lg">
-            Lọc
-        </button>
-
-    </form>
-</section>
-
-
-
-<!--  PRODUCT LIST -->
+<!-- than-->
 <section class="max-w-7xl mx-auto mt-10 px-4">
+    <div class="grid grid-cols-12 gap-6">
+        <!-- left sidebar-->
+        <aside class="col-span-3">
+            <div class="sticky top-24">
+                <!-- SIDEBAR CONTENT -->
+                <section class="max-w-7xl mx-auto mt-8 px-4">
+                    <form method="get" th:action="@{/home}">
+                        <h3 class="font-semibold mb-2">Thể loại</h3>
 
-    <h2 class="text-2xl font-bold mb-4">Xu Hướng Mua Sắm</h2>
+                        <!-- CATEGORY: block có scroll -->
+                        <div class="bg-white p-3 rounded-xl shadow max-h-64 overflow-y-auto mb-4">
+                            <label th:each="cat : ${categories}"
+                                   class="flex items-center gap-2 mb-2 cursor-pointer">
 
-    <!-- Product Grid -->
-    <div class="grid grid-cols-5 gap-6">
+                                <input type="checkbox"
+                                       name="category"
+                                       th:value="${cat.id}"
+                                       th:checked="${selectedCategories != null and selectedCategories.contains(cat.id)}"
+                                       class="w-4 h-4" />
 
-        <!-- Loop by Thymeleaf -->
-        <a th:each="book : ${books}"
-           th:href="@{/books/{id}(id=${book.id})}"
-             class="bg-white p-4 rounded-xl shadow hover:shadow-lg cursor-pointer">
+                                <span th:text="${cat.name}" class="text-sm"></span>
+                            </label>
+                        </div>
 
-            <!-- IMAGE -->
-            <img th:src="${book.image}"
-                 class="w-full rounded-lg mb-3 aspect-[3/4] object-cover" />
+                        <!-- PUBLISHER: select gọn + có thể scoll nếu nhiều -->
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="font-semibold">Nhà xuất bản:</span>
+                            <select name="publisher"
+                                    class="p-2 border rounded-lg max-w-xs">
+                                <option th:value="${null}">Tất cả</option>
+                                <option th:each="pub : ${publishers}"
+                                        th:value="${pub.id}"
+                                        th:selected="${selectedPublisher != null and selectedPublisher == pub.id}"
+                                        th:text="${pub.name}">
+                                </option>
+                            </select>
+                        </div>
 
-            <!-- TITLE -->
-            <p th:text="${book.title}"
-               class="font-semibold text-gray-800 line-clamp-2 h-12"></p>
+                        <!-- Giữ lại từ khoá search nếu đang lọc + search -->
+                        <input type="hidden" name="keyword" th:value="${keyword}" />
 
-            <!-- PRICE -->
-            <div class="flex items-center gap-2 mt-2">
+                        <button type="submit"
+                                class="mt-2 px-4 py-2 bg-red-600 text-white rounded-lg">
+                            Lọc
+                        </button>
+
+                    </form>
+                </section>
+            </div>
+
+        </aside>
+
+        <!-- right content -->
+        <main class="col-span-9 space-y-10">
+            <!--best seller -->
+            <section class="max-w-7xl mx-auto mt-12 px-4">
+                <h2 class="text-xl font-bold mb-4">
+                    🔥 Bán chạy nhất
+                </h2>
+
+                <div th:if="${bestSellerBooks == null or bestSellerBooks.isEmpty()}"
+                     class="text-gray-500 italic">
+                    Chưa có dữ liệu bán chạy
+                </div>
+
+
+
+                <div th:if="${bestSellerBooks != null and !bestSellerBooks.isEmpty()}"
+                     class="grid grid-cols-12 gap-6 bg-white rounded-xl shadow p-6">
+
+                    <!-- left ranking -->
+                    <div class="col-span-5 border-r pr-4">
+                        <div th:each="b, iter : ${bestSellerBooks}"
+                             class="flex items-center gap-4 py-3 hover:bg-gray-50 cursor-pointer">
+
+                            <!-- rank -->
+                            <span class="text-lg font-bold w-6"
+                                  th:text="${iter.index + 1}"></span>
+
+                            <!-- image -->
+                            <img th:src="${b.image}"
+                                 class="w-14 h-20 object-cover rounded"/>
+
+                            <!-- infor -->
+                            <div class="flex-1">
+                                <p  class="font-medium line-clamp-2"
+                                    th:text="${b.title}">
+                                </p>
+
+                                <p class="text-red-600 font-semibold text-sm"
+                                   th:text="${#numbers.formatDecimal(b.price, 0, 'COMMA', 0, 'POINT') + ' đ'}">
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- right preview book -->
+                    <div class="col-span-7 flex gap-6">
+                        <img th:src="${bestSellerBooks[0].image}"
+                             class="w-48 h-64 object-cover rounded-lg shadow"/>
+
+                        <div>
+                            <h3 class="text-xl font-bold mb-2"
+                                th:text="${bestSellerBooks[0].title}">
+                            </h3>
+
+                            <p class="text-red-600 text-lg font-semibold mb-2"
+                               th:text="${#numbers.formatDecimal(bestSellerBooks[0].price, 0, 'COMMA', 0, 'POINT') + ' đ'}">
+
+                            </p>
+
+                            <a th:href="@{/books/{id}(id=${bestSellerBooks[0].id})}"
+                               class="inline-block mt-4 px-5 py-2 bg-red-600 text-white rounded-lg">
+                                Xem chi tiết
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+
+            </section>
+
+            <!--Product list-->
+            <section class="max-w-7xl mx-auto mt-10 px-4">
+
+                <h2 class="text-2xl font-bold mb-4">Xu Hướng Mua Sắm</h2>
+
+                <!-- Product Grid -->
+                <div class="grid grid-cols-5 gap-6">
+
+                    <!-- Loop by Thymeleaf -->
+                    <a th:each="book : ${books}"
+                       th:href="@{/books/{id}(id=${book.id})}"
+                       class="bg-white p-4 rounded-xl shadow hover:shadow-lg cursor-pointer">
+
+                        <!-- IMAGE -->
+                        <img th:src="${book.image}"
+                             class="w-full rounded-lg mb-3 aspect-[3/4] object-cover" />
+
+                        <!-- TITLE -->
+                        <p th:text="${book.title}"
+                           class="font-semibold text-gray-800 line-clamp-2 h-12"></p>
+
+                        <!-- PRICE -->
+                        <div class="flex items-center gap-2 mt-2">
                 <span th:text="${#numbers.formatDecimal(book.price,0,'COMMA',0,'POINT') + ' đ'}"
                       class="text-red-600 font-bold"></span>
 
-                <span th:if="${book.salePercent != null}"
-                      th:text="${'-' + book.salePercent + '%'}"
-                      class="text-sm text-white bg-red-500 px-2 py-0.5 rounded"></span>
-            </div>
+                            <span th:if="${book.salePercent != null}"
+                                  th:text="${'-' + book.salePercent + '%'}"
+                                  class="text-sm text-white bg-red-500 px-2 py-0.5 rounded"></span>
+                        </div>
 
-            <!-- OLD PRICE -->
-            <p th:if="${book.oldPrice != null}"
-               th:text="${#numbers.formatDecimal(book.oldPrice,0,'COMMA',0,'POINT') + ' đ'}"
-               class="line-through text-gray-400 text-sm"></p>
+                        <!-- OLD PRICE -->
+                        <p th:if="${book.oldPrice != null}"
+                           th:text="${#numbers.formatDecimal(book.oldPrice,0,'COMMA',0,'POINT') + ' đ'}"
+                           class="line-through text-gray-400 text-sm"></p>
 
 
-        </a>
+                    </a>
 
+                </div>
+            </section>
+
+        </main>
     </div>
 </section>
+
 
 <div class="flex items-center justify-center gap-2 mt-8">
 
     <!-- Trang 1 -->
     <a th:if="${bookPage.number > 2}"
-       th:href="@{/(page=0,
+       th:href="@{/home(page=0,
                     size=${pageSize},
                     keyword=${keyword},
                     category=${selectedCategories},
@@ -246,7 +304,7 @@
     <span th:each="i : ${#numbers.sequence(bookPage.number - 2, bookPage.number + 2)}"
           th:if="${i >= 0 and i < bookPage.totalPages}">
 
-        <a th:href="@{/(page=${i},
+        <a th:href="@{/home(page=${i},
                         size=${pageSize},
                         keyword=${keyword},
                         category=${selectedCategories},
@@ -265,7 +323,7 @@
 
     <!-- Trang cuối -->
     <a th:if="${bookPage.number < bookPage.totalPages - 2}"
-       th:href="@{/(page=${bookPage.totalPages - 1},
+       th:href="@{/home(page=${bookPage.totalPages - 1},
                     size=${pageSize},
                     keyword=${keyword},
                     category=${selectedCategories},
@@ -280,6 +338,81 @@
 
 
 <br><br><br>
+
+<footer class="bg-gray-900 text-gray-300 mt-16">
+    <div class="max-w-7xl mx-auto px-4 py-12 grid grid-cols-12 gap-8">
+
+        <!-- SHOP INFO -->
+        <div class="col-span-12 md:col-span-4">
+            <div class="flex items-center gap-3 mb-4">
+                <img th:src="${shop.logoUrl}"
+                     alt="Shop Logo"
+                     class="w-12 h-12 object-contain rounded bg-white p-1"/>
+
+                <h3 class="text-xl font-bold text-white"
+                    th:text="${shop.name}">
+                    BookShop
+                </h3>
+            </div>
+
+            <p class="text-sm leading-relaxed"
+               th:text="${shop.description}">
+                Mô tả shop
+            </p>
+        </div>
+
+        <!-- CONTACT -->
+        <div class="col-span-12 md:col-span-4">
+            <h4 class="text-lg font-semibold text-white mb-4">
+                 Thông tin liên hệ
+            </h4>
+
+            <ul class="space-y-2 text-sm">
+                <li>
+                    <span class="font-semibold">Địa chỉ:</span>
+                    <span th:text="${shop.address}"></span>
+                </li>
+                <li>
+                    <span class="font-semibold">Email:</span>
+                    <a th:href="'mailto:' + ${shop.email}"
+                       class="hover:text-white underline">
+                        <span th:text="${shop.email}"></span>
+                    </a>
+                </li>
+                <li th:if="${shop.hotline != null}">
+                    <span class="font-semibold">Hotline:</span>
+                    <a th:href="'tel:' + ${shop.hotline}"
+                       class="hover:text-white underline">
+                        <span th:text="${shop.hotline}"></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- QUICK LINKS -->
+        <div class="col-span-12 md:col-span-4">
+            <h4 class="text-lg font-semibold text-white mb-4">
+                🔗 Liên kết nhanh
+            </h4>
+
+            <ul class="space-y-2 text-sm">
+                <li><a th:href="@{/home}" class="hover:text-white">Trang chủ</a></li>
+                <li><a th:href="@{/home}" class="hover:text-white">Sách bán chạy</a></li>
+                <li><a th:href="@{/home}" class="hover:text-white">Khuyến mãi</a></li>
+                <li><a th:href="@{/home}" class="hover:text-white">Liên hệ</a></li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- COPYRIGHT -->
+    <div class="border-t border-gray-700 py-4 text-center text-sm text-gray-400">
+        © <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}"></span>
+        <span th:text="${shop.name}"></span>.
+        All rights reserved.
+    </div>
+</footer>
+
 
 
 </body>
