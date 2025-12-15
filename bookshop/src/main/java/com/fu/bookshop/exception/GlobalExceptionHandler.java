@@ -17,7 +17,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public String handleUnknownException(Exception ex, Model model) {
         model.addAttribute("errorCode", 9999);
-        model.addAttribute("errorMessage", "Lỗi không xác định");
+        model.addAttribute("errorMessage", ex.getMessage());
         return "system-error";
     }
 }
