@@ -28,7 +28,7 @@ public class OrderHistoryDTO {
     private String paymentMethodName;
     private String paymentMethodImage;
 
-    private List<OrderItem> items;
+    private List<OrderItemDTO> items;
 
     public boolean isCompleted(){
         return orderStatus == OrderStatus.COMPLETE;
