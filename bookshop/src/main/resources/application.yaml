@@ -1,5 +1,8 @@
 server:
   port: 8080
+  servlet:
+    session:
+      timeout: 30m
 
 spring:
   profiles:
@@ -25,7 +28,7 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
 
   mail:
@@ -39,6 +42,9 @@ spring:
           auth: true
           starttls:
             enable: true
+
+  security:
+    debug: true
 
 aws:
   access-key: ${AWS_ACCESS_KEY}

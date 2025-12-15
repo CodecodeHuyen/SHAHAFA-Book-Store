@@ -23,7 +23,7 @@ public enum ErrorCode {
     ROLE_NOT_FOUND(1006,"Role not found"),
     INVALID_FILE_URL(1007, "File URL is invalid"),
     FILE_DELETE_FAILED(1008, "File Delete Failed"),
-    ACCOUNT_NOT_FOUND(1009, "Account not found "),
+    ACCOUNT_NOT_FOUND(1009, "Tài khoản không tồn tại trong hệ thống"),
     FILE_EMPTY(1010,"File không có ảnh nào"),
     FILE_LIMIT_EXCEEDED(1011,"Tệp file vượt quá 1000 ảnh");
 

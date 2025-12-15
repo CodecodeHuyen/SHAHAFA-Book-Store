@@ -15,7 +15,7 @@ import com.fu.bookshop.service.AuthenticationService;
 import com.fu.bookshop.service.OtpService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-//import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +29,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
 
     private final AccountRepository accountRepository;
-//    private final PasswordEncoder encoder;
+    private final PasswordEncoder encoder;
     private final RoleRepository roleRepository;
     private final OtpService otpService;
 
@@ -62,8 +62,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             user.setLoyalPoint(0);
 
             account.setUser(user);
-//            account.setPassword(encoder.encode(req.getPassword()));
-            account.setPassword(req.getPassword());
+            account.setPassword(encoder.encode(req.getPassword()));
+
 
 
             account.setAccountStatus(AccountStatus.PENDING);
@@ -87,8 +87,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         Account account = Account.builder()
                 .email(req.getEmail())
-//                .password(encoder.encode(req.getPassword()))
-                .password(req.getPassword())
+                .password(encoder.encode(req.getPassword()))
                 .accountStatus(AccountStatus.PENDING)
                 .roles(List.of(customer))
                 .user(user)
