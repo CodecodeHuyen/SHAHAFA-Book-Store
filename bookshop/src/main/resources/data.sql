@@ -3,13 +3,24 @@ VALUES
     ('CUSTOMER', 'Khách hàng sử dụng hệ thống'),
     ('MANAGER',  'Quản lý hệ thống'),
     ('ADMIN',    'Quản trị viên hệ thống');
+INSERT INTO categories (id,description,  name) VALUES
+                                                   (1, 'a','Tiểu thuyết'),
+                                                   (2, 'a', 'Truyện tranh'),
+                                                   (3, 'a', 'Kinh tế'),
+                                                   (4, 'a', 'Kỹ năng sống'),
+                                                   (5, 'a', 'Thiếu nhi');
 
-INSERT INTO categories (id, name) VALUES
-                                      (1, 'Tiểu thuyết'),
-                                      (2, 'Truyện tranh'),
-                                      (3, 'Kinh tế'),
-                                      (4, 'Kỹ năng sống'),
-                                      (5, 'Thiếu nhi');
+INSERT INTO categories (id, description, name) VALUES
+                                                   (6,  'a', 'Tâm lý học'),
+                                                   (7,  'a', 'Giáo dục'),
+                                                   (8,  'a', 'Khoa học'),
+                                                   (9,  'a', 'Lịch sử'),
+                                                   (10, 'a', 'Văn học Việt Nam'),
+                                                   (11, 'a', 'Văn học nước ngoài'),
+                                                   (12, 'a', 'Công nghệ thông tin'),
+                                                   (13, 'a', 'Ngoại ngữ'),
+                                                   (14, 'a', 'Nấu ăn'),
+                                                   (15, 'a', 'Du lịch');
 
 INSERT INTO publishers (id, name) VALUES
                                       (1, 'NXB Kim Đồng'),
@@ -18,9 +29,30 @@ INSERT INTO publishers (id, name) VALUES
                                       (4, 'NXB Lao Động'),
                                       (5, 'NXB Giáo Dục');
 
-INSERT INTO shop (address, description, logo_url, name) VALUES
-                                                            ('Hà Nội', 'Cửa hàng BookShop tại Hà Nội', '/images/logo-hn.png', 'BookShop Hà Nội'),
-                                                            ('TP. Hồ Chí Minh', 'Cửa hàng BookShop tại Sài Gòn', '/images/logo-sg.png', 'BookShop Sài Gòn');
+INSERT INTO shop (
+    hotline,
+    description,
+    address,
+    email,
+    logo_url,
+    name
+) VALUES
+      (
+          '0909123456',
+          'Cửa hàng BookShop tại Hà Nội',
+          'Hà Nội',
+          'hanoi@bookshop.vn',
+          '/images/logo-hn.png',
+          'BookShop Hà Nội'
+      ),
+      (
+          '0909987654',
+          'Cửa hàng BookShop tại TP.HCM',
+          'TP. Hồ Chí Minh',
+          'saigon@bookshop.vn',
+          '/images/logo-sg.png',
+          'BookShop Sài Gòn'
+      );
 
 
 
@@ -301,4 +333,39 @@ INSERT INTO book_category (book_id, category_id) VALUES
 -- 19,20: Sapiens & Homo Deus – Kinh tế / non-fiction
 (19, 3),
 (20, 3);
+
+INSERT INTO user (id, name, loyal_point, date_of_birth, gender, avatar_url)
+VALUES
+    (1, 'Nguyen Van A', 100, '1998-05-20', 'MALE', NULL),
+    (2, 'Tran Thi B', 50, '2000-08-15', 'FEMALE', NULL);
+
+INSERT INTO orders (
+    id, total_price, discount, shipping_fee,
+    pickup_addr, delivery_addr,
+    order_status, code, user_id
+)
+VALUES
+    (1, 500000, 0, 30000, 'Kho HN', 'Ha Noi', 'COMPLETE', 'SHAHAFA000000001', 1),
+    (2, 420000, 0, 30000, 'Kho HN', 'Ha Noi', 'COMPLETE', 'SHAHAFA000000002', 1),
+    (3, 800000, 50000, 30000, 'Kho HCM', 'HCM', 'COMPLETE', 'SHAHAFA000000003', 2),
+    (4, 300000, 0, 30000, 'Kho HCM', 'HCM', 'CANCELLED', 'SHAHAFA000000004', 2);
+
+INSERT INTO order_items (order_id, book_id, quantity, unit_price)
+VALUES
+-- Order 1
+(1, 1, 3, 35000),   -- Doraemon Tập 1
+(1, 2, 2, 35000),
+(1, 3, 1, 80000),
+
+-- Order 2
+(2, 1, 4, 35000),   -- Doraemon Tập 1 (bán rất chạy)
+(2, 4, 2, 90000),
+
+-- Order 3
+(3, 3, 5, 80000),   -- Tuổi Trẻ Đáng Giá Bao Nhiêu
+(3, 5, 3, 95000),
+(3, 1, 2, 35000),
+
+-- Order 4 (CANCELLED → ignore)
+(4, 1, 10, 35000);
 
