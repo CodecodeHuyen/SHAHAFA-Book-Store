@@ -47,9 +47,10 @@ spring:
     debug: true
 
 aws:
-  access-key: ${AWS_ACCESS_KEY}
-  secret-key: ${AWS_SECRET_KEY}
+  access-key: dummy-access-key
+  secret-key: dummy-secret-key
   s3:
     bucket: xo-cua-huyen-ne
     region: ap-southeast-1
-    folder: SHAHAFA Book Store
+    folder: "SHAHAFA Book Store"
+

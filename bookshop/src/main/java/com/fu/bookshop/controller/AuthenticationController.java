@@ -129,12 +129,7 @@ public class AuthenticationController {
 
     @GetMapping("/login")
     public String loginPage(
-            @RequestParam(required = false) String error,
-            Model model
-    ) {
-        if (error != null) {
-            model.addAttribute("error", error);
-        }
+            ) {
         return "auth/login";
     }
 
