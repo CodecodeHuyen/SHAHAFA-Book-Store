@@ -1,6 +1,5 @@
 package com.fu.bookshop.entity;
 
-import com.fu.bookshop.enums.CategoryStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,9 +22,8 @@ public class Category {
     @Column(nullable = false,columnDefinition = "NVARCHAR(50)")
     private String name;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private CategoryStatus categoryStatus;
+    @Column(nullable = false, length = 100)
+    private String description;
 
     @ManyToMany(mappedBy = "categories")
     private List<Book> books;

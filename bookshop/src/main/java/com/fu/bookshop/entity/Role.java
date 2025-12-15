@@ -28,6 +28,5 @@ public class Role {
     @ManyToMany(mappedBy = "roles")
     private List<Account> accounts;
 
-    public Role(String roleName, String description) {
-    }
+
 }
