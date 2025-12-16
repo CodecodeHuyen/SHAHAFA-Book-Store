@@ -25,7 +25,10 @@ public enum ErrorCode {
     FILE_DELETE_FAILED(1008, "File Delete Failed"),
     ACCOUNT_NOT_FOUND(1009, "Tài khoản không tồn tại trong hệ thống"),
     FILE_EMPTY(1010,"File không có ảnh nào"),
-    FILE_LIMIT_EXCEEDED(1011,"Tệp file vượt quá 1000 ảnh");
+    FILE_LIMIT_EXCEEDED(1011,"Tệp file vượt quá 1000 ảnh"),
+    ISBN_DUPLICATE(1012,"Sách đã tồn tại trong kho"),
+    PUBLISHER_NOT_FOUND(1013,"PUBLISHER_NOT_FOUND"),
+    FILE_UPLOAD_FAILED(1014,"Tải ảnh thất bại"),;
 
     private final int code;
     private final String message;

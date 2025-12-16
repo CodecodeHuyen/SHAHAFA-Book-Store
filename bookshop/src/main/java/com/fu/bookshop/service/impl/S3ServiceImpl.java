@@ -31,7 +31,9 @@ public class S3ServiceImpl {
     @Value("${aws.s3.region}") private String region;
 
 //https://xo-cua-huyen-ne.s3.ap-southeast-1.amazonaws.com/SHAHAFA+Book+Store/Spring+boot+3+road+map.png
-    public String uploadFile(MultipartFile file) throws IOException {
+    public String uploadFile(MultipartFile file){
+        try {
+
         String key = folderName + "/" + UUID.randomUUID() + "-" + file.getOriginalFilename();
 
         s3Client.putObject(PutObjectRequest.builder()
@@ -47,6 +49,9 @@ public class S3ServiceImpl {
                 region,
                 URLEncoder.encode(key, StandardCharsets.UTF_8)
         );
+        } catch (IOException e) {
+            throw new SystemException(ErrorCode.FILE_UPLOAD_FAILED);
+        }
     }
 
     public List<String> uploadFiles(List<MultipartFile> files) throws IOException {
