@@ -26,12 +26,6 @@ INSERT INTO bookshop.categories (name, description) VALUES
                                                         (N'Thể thao', N'Sách về thể thao, rèn luyện thể chất'),
                                                         (N'Truyện trinh thám', N'Trinh thám, hình sự, phá án');
 
-INSERT INTO publishers (id, name) VALUES
-                                      (1, 'NXB Kim Đồng'),
-                                      (2, 'NXB Trẻ'),
-                                      (3, 'NXB Tổng Hợp'),
-                                      (4, 'NXB Lao Động'),
-                                      (5, 'NXB Giáo Dục');
 
 INSERT INTO shop (
     hotline,
@@ -40,23 +34,12 @@ INSERT INTO shop (
     email,
     logo_url,
     name
-) VALUES
-      (
-          '0909123456',
+) VALUES ('0909123456',
           'Cửa hàng BookShop tại Hà Nội',
           'Hà Nội',
           'hanoi@bookshop.vn',
           '/images/logo-hn.png',
-          'BookShop Hà Nội'
-      ),
-      (
-          '0909987654',
-          'Cửa hàng BookShop tại TP.HCM',
-          'TP. Hồ Chí Minh',
-          'saigon@bookshop.vn',
-          '/images/logo-sg.png',
-          'BookShop Sài Gòn'
-      );
+          'BookShop Hà Nội');
 
 
 

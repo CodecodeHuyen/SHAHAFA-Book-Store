@@ -1,4 +1,4 @@
-package com.fu.bookshop.service.home.impl;
+package com.fu.bookshop.service.impl;
 
 import com.fu.bookshop.dto.BookCardDTO;
 import com.fu.bookshop.entity.Book;
@@ -7,9 +7,9 @@ import com.fu.bookshop.entity.Publisher;
 import com.fu.bookshop.enums.BookStatus;
 import com.fu.bookshop.enums.OrderStatus;
 import com.fu.bookshop.repository.BookRepository;
-import com.fu.bookshop.repository.GenreRepository;
+import com.fu.bookshop.repository.CategoryRepository;
 import com.fu.bookshop.repository.PublisherRepository;
-import com.fu.bookshop.service.home.HomeService;
+import com.fu.bookshop.service.HomeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,7 +23,7 @@ import java.util.List;
 public class HomeServiceImpl implements HomeService {
 
     private final BookRepository bookRepository;
-    private final GenreRepository genreRepository;
+    private final CategoryRepository categoryRepository;
     private final PublisherRepository publisherRepository;
 
 
@@ -94,7 +94,7 @@ public class HomeServiceImpl implements HomeService {
 
     @Override
     public List<Category> getAllCategories() {
-        return genreRepository.findAll();
+        return categoryRepository.findAll();
     }
 
     @Override
