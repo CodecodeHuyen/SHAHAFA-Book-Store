@@ -1,4 +1,4 @@
-package com.fu.bookshop.service.user.impl;
+package com.fu.bookshop.service.impl;
 
 import com.fu.bookshop.dto.user.OrderHistoryDTO;
 import com.fu.bookshop.dto.user.OrderItemDTO;
@@ -10,9 +10,8 @@ import com.fu.bookshop.enums.OrderStatus;
 import com.fu.bookshop.enums.PaymentStatus;
 import com.fu.bookshop.repository.OrderRepository;
 import com.fu.bookshop.repository.UserRepository;
-import com.fu.bookshop.service.user.UserService;
+import com.fu.bookshop.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.realm.UserDatabaseRealm;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,6 +27,9 @@ public class UserServiceImpl implements UserService {
     public UserProfileDTO getUserProfileByEmail(String email) {
         User user = userRepository.findByAccount_Email(email);
 
+        if(user==null){
+            System.out.println("Null nè");
+        }
         return  UserProfileDTO.builder()
                 .id(user.getId())
                 .name(user.getName())

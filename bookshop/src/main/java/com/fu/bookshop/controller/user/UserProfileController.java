@@ -3,16 +3,15 @@ package com.fu.bookshop.controller.user;
 import com.fu.bookshop.dto.user.OrderHistoryDTO;
 import com.fu.bookshop.dto.user.UserProfileDTO;
 import com.fu.bookshop.enums.OrderStatus;
-import com.fu.bookshop.service.AuthenticationService;
-import com.fu.bookshop.service.user.UserService;
+import com.fu.bookshop.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -25,10 +24,11 @@ public class UserProfileController {
     @GetMapping
     public String profile (
             @RequestParam(name = "status", required = false)OrderStatus status,
-            Authentication authentication,
+            Principal principal,
             Model model
             ){
-        String email = authentication.getName();
+        String email = principal.getName();
+
 
         UserProfileDTO user = userService.getUserProfileByEmail(email);
 

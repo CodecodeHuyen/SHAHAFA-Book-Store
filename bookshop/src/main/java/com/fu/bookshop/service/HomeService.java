@@ -1,7 +1,6 @@
-package com.fu.bookshop.service.home;
-
-import com.fu.bookshop.dto.home.BookCardDTO;
-import com.fu.bookshop.entity.Genre;
+package com.fu.bookshop.service;
+import com.fu.bookshop.dto.BookCardDTO;
+import com.fu.bookshop.entity.Category;
 import com.fu.bookshop.entity.Publisher;
 import org.springframework.data.domain.Page;
 
@@ -21,7 +20,7 @@ public interface HomeService {
 
     BookCardDTO getBookDetail(Long id);
 
-    List<Genre> getAllCategories();
+    List<Category> getAllCategories();
 
     List<Publisher> getAllPublishers();
 

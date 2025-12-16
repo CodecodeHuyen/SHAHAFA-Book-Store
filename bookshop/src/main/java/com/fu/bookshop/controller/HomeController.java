@@ -1,9 +1,10 @@
-package com.fu.bookshop.controller.home;
+package com.fu.bookshop.controller;
 
-import com.fu.bookshop.dto.home.BookCardDTO;
-import com.fu.bookshop.entity.Genre;
+
+import com.fu.bookshop.dto.BookCardDTO;
+import com.fu.bookshop.entity.Category;
 import com.fu.bookshop.entity.Publisher;
-import com.fu.bookshop.service.home.HomeService;
+import com.fu.bookshop.service.HomeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -21,8 +22,7 @@ import java.util.Optional;
 @RequestMapping("/home")
 public class HomeController {
     private final HomeService homeService;
-
-
+    
     @GetMapping()
     public String home(
             @RequestParam(name = "page", defaultValue = "0") int page,
@@ -40,11 +40,19 @@ public class HomeController {
                 Optional.ofNullable(homeService.getBestSellerBooks())
                         .orElse(Collections.emptyList());
 
-        List<Genre> categories =
+        List<Category> categories =
                 Optional.ofNullable(homeService.getAllCategories())
                         .orElse(Collections.emptyList());
 
-        List<Publisher> publishers =
+        if (bookPage == null) {                 // ✅ FIX 2
+            bookPage = Page.empty();
+        }
+
+
+
+        model.addAttribute("bestSellerBooks", bestSellerBooks);
+
+       List<Publisher> publishers =
                 Optional.ofNullable(homeService.getAllPublishers())
                         .orElse(Collections.emptyList());
 
@@ -54,6 +62,7 @@ public class HomeController {
         model.addAttribute("totalPages", bookPage.getTotalPages());
         model.addAttribute("totalElements", bookPage.getTotalElements());
         model.addAttribute("pageSize", size);
+
 
         model.addAttribute("bestSellerBooks", bestSellerBooks);
         model.addAttribute("hasBestSeller", !bestSellerBooks.isEmpty());

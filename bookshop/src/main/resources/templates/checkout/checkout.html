@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Checkout</title>
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+<!-- ================= HEADER ================= -->
+<header class="bg-red-600 text-white shadow sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto flex items-center gap-6 px-4 py-3">
+
+        <!-- LOGO -->
+        <a th:href="@{/home}" class="flex items-center gap-3">
+            <img th:src="${shop.logoUrl}"
+                 class="w-10 h-10 bg-white rounded p-1"/>
+            <span class="font-bold text-xl" th:text="${shop.name}">BookShop</span>
+        </a>
+
+        <a th:href="@{/cart}" class="hover:underline">Giỏ hàng</a>
+        <a th:href="@{/profile}" class="hover:underline">Tài khoản</a>
+    </div>
+</header>
+
+<!-- ================= MAIN ================= -->
+<main class="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+    <!-- ================= LEFT ================= -->
+    <div class="lg:col-span-2 space-y-6">
+
+        <!-- ===== THÔNG TIN NGƯỜI NHẬN ===== -->
+        <section class="bg-white p-6 rounded-lg shadow">
+            <h2 class="font-semibold text-lg mb-4">Thông tin nhận hàng</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <input type="text"
+                       th:value="${user.name}"
+                       readonly
+                       class="border p-3 rounded"/>
+
+                <input type="text"
+                       th:value="${user.email}"
+                       readonly
+                       class="border p-3 rounded"/>
+                <input type="text"
+                       th:value="${user.loyalpoint}"
+                       readonly
+                       class="border p-3 rounded"/>
+            </div>
+        </section>
+
+        <!-- ===== ĐỊA CHỈ GIAO HÀNG ===== -->
+        <section class="bg-white p-6 rounded-lg shadow">
+            <h2 class="font-semibold text-lg mb-4">Địa chỉ giao hàng</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <select id="province" class="border p-2 rounded">
+                    <option value="">-- Chọn Tỉnh/Thành --</option>
+                </select>
+
+                <select id="district" class="border p-2 rounded">
+                    <option value="">-- Chọn Quận/Huyện --</option>
+                </select>
+
+                <select id="ward" class="border p-2 rounded">
+                    <option value="">-- Chọn Phường/Xã --</option>
+                </select>
+            </div>
+
+            <input type="text"
+                   placeholder="Số nhà, tên đường..."
+                   class="mt-4 w-full border p-2 rounded"/>
+        </section>
+
+        <!-- ===== SẢN PHẨM ===== -->
+<!--        <section class="bg-white p-6 rounded-lg shadow">-->
+<!--            <h2 class="font-semibold text-lg mb-4">Kiểm tra đơn hàng</h2>-->
+
+<!--            <div th:each="item : ${cart.items}" class="flex gap-4 border-b py-4">-->
+<!--                <img th:src="${item.book.urlImage}"-->
+<!--                     class="w-20 h-28 object-cover rounded"/>-->
+
+<!--                <div class="flex-1">-->
+<!--                    <p class="font-semibold" th:text="${item.book.title}"></p>-->
+<!--                    <p class="text-sm text-gray-500">-->
+<!--                        SL: <span th:text="${item.quantity}"></span>-->
+<!--                    </p>-->
+<!--                </div>-->
+
+<!--                <div class="font-semibold text-red-600">-->
+<!--                    <span th:text="${item.price}"></span> đ-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </section>-->
+
+    </div>
+
+    <!-- ================= RIGHT ================= -->
+    <aside class="bg-white p-6 rounded-lg shadow h-fit">
+        <h2 class="font-semibold text-lg mb-4">Tổng thanh toán</h2>
+
+        <div class="flex justify-between mb-2">
+            <span>Tạm tính</span>
+<!--            <span th:text="${cart.totalPrice} + ' đ'"></span>-->
+            <span>100 </span>
+        </div>
+
+        <div class="flex justify-between mb-2">
+            <span>Phí vận chuyển</span>
+            <span id="shippingFee">—</span>
+        </div>
+
+        <hr class="my-4"/>
+
+        <div class="flex justify-between font-bold text-lg text-red-600">
+            <span>Tổng</span>
+<!--            <span id="totalAmount" th:text="${cart.totalPrice} + ' đ'"></span>-->
+            <span>100 </span>
+        </div>
+
+        <button
+                class="mt-6 w-full bg-red-600 text-white py-3 rounded hover:bg-red-700 transition">
+            Đặt hàng
+        </button>
+    </aside>
+
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer class="bg-gray-900 text-gray-300 mt-16">
+    <div class="max-w-7xl mx-auto px-4 py-8 text-center text-sm">
+        © <span>SHAHAFA BookStore</span>
+<!--        <span th:text="${shop.name}"></span>-->
+    </div>
+</footer>
+
+<!-- ================= GHN SCRIPT ================= -->
+<script>
+    const TOKEN = "GHN_TOKEN_CỦA_BẠN";
+    const BASE_URL = "https://dev-online-gateway.ghn.vn";
+
+    const province = document.getElementById("province");
+    const district = document.getElementById("district");
+    const ward = document.getElementById("ward");
+
+    // Load tỉnh
+    fetch(`${BASE_URL}/shiip/public-api/master-data/province`, {
+        headers: { "Token": TOKEN }
+    })
+        .then(r => r.json())
+        .then(res => {
+            res.data.forEach(p => {
+                province.innerHTML += `<option value="${p.ProvinceID}">${p.ProvinceName}</option>`;
+            });
+        });
+
+    // Load huyện
+    province.addEventListener("change", () => {
+        district.innerHTML = "<option>Đang tải...</option>";
+        ward.innerHTML = "<option>-- Chọn Phường/Xã --</option>";
+
+        fetch(`${BASE_URL}/shiip/public-api/master-data/district?province_id=${province.value}`, {
+            headers: { "Token": TOKEN }
+        })
+            .then(r => r.json())
+            .then(res => {
+                district.innerHTML = `<option value="">-- Chọn Quận/Huyện --</option>`;
+                res.data.forEach(d => {
+                    district.innerHTML += `<option value="${d.DistrictID}">${d.DistrictName}</option>`;
+                });
+            });
+    });
+
+    // Load xã
+    district.addEventListener("change", () => {
+        ward.innerHTML = "<option>Đang tải...</option>";
+
+        fetch(`${BASE_URL}/shiip/public-api/master-data/ward`, {
+            method: "POST",
+            headers: {
+                "Token": TOKEN,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ district_id: district.value })
+        })
+            .then(r => r.json())
+            .then(res => {
+                ward.innerHTML = `<option value="">-- Chọn Phường/Xã --</option>`;
+                res.data.forEach(w => {
+                    ward.innerHTML += `<option value="${w.WardCode}">${w.WardName}</option>`;
+                });
+            });
+    });
+</script>
+
+</body>
+</html>

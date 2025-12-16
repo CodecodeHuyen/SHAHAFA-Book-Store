@@ -32,7 +32,7 @@ public class AuthenticationController {
     public String showRegisterForm(Model model) {
         model.addAttribute("registerRequest", new AccountRegisterRequest());
         model.addAttribute("genders", Gender.values());
-        return "signUp";
+        return "auth/signUp";
     }
 
     @PostMapping("/sign-up")
@@ -46,14 +46,14 @@ public class AuthenticationController {
         // 1. Validate form (annotation)
         if (bindingResult.hasErrors()) {
             model.addAttribute("genders", Gender.values());
-            return "signUp";
+            return "auth/signUp";
         }
 
         // 2. Validate confirm password (business-level)
         if (!request.getPassword().equals(request.getConfirmPassword())) {
             model.addAttribute("error", "Mật khẩu xác nhận không khớp");
             model.addAttribute("genders", Gender.values());
-            return "signUp";
+            return "auth/signUp";
         }
 
         try {
@@ -67,7 +67,7 @@ public class AuthenticationController {
             // business error: EMAIL_EXISTED, ACCOUNT_DEACTIVATED, ...
             model.addAttribute("error", ex.getMessage());
             model.addAttribute("genders", Gender.values());
-            return "signUp";
+            return "auth/signUp";
         }
     }
 
@@ -88,7 +88,7 @@ public class AuthenticationController {
         req.setEmail((String) model.getAttribute("email"));
 
         model.addAttribute("otpRequest", req);
-        return "otp";
+        return "auth/otp";
     }
 
 
@@ -100,7 +100,7 @@ public class AuthenticationController {
     ) {
 
         if (bindingResult.hasErrors()) {
-            return "otp";
+            return "auth/otp";
         }
 
         try {
@@ -109,7 +109,7 @@ public class AuthenticationController {
 
         } catch (BusinessException ex) {
             model.addAttribute("error", ex.getMessage());
-            return "otp";
+            return "auth/otp";
         }
     }
 
@@ -126,4 +126,14 @@ public class AuthenticationController {
         redirectAttributes.addFlashAttribute("name", name);
         return "redirect:/auth/verify-otp";
     }
+
+    @GetMapping("/login")
+    public String loginPage(
+            @RequestParam(required = false) String error,
+            Model model
+    ) {
+        if (error != null) { model.addAttribute("error", error); }
+        return "auth/login";
+    }
+
 }
