@@ -36,6 +36,8 @@ public class User {
 
     private String avatarUrl;
 
+
+
     @OneToOne
     @JoinColumn(name = "account_id") //tên cột khoas ngoại
     private Account account;
