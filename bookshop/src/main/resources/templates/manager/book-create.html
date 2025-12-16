@@ -143,18 +143,23 @@
                 <!-- Category -->
                 <div>
                     <label class="font-medium">Thể loại</label>
+
                     <div class="border rounded p-3 h-40 overflow-y-auto mt-1 space-y-1">
                         <label th:each="c : ${categories}"
                                class="flex items-center gap-2 text-sm">
+
                             <input type="checkbox"
-                                   th:value="${c.id}"
-                                   th:field="*{categoryIds}">
+                                   name="categoryIds"
+                                   th:value="${c.id}" />
+
                             <span th:text="${c.name}"></span>
                         </label>
                     </div>
+
                     <p class="text-red-500 text-sm"
                        th:errors="*{categoryIds}"></p>
                 </div>
+
 
                 <!-- Publisher -->
                 <div>
