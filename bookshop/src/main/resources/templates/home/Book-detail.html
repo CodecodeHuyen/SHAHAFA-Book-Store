@@ -73,54 +73,60 @@
                    class="w-full p-2 rounded-lg border border-gray-300 text-black focus:outline-none focus:ring-2 focus:ring-red-400" />
         </form>
 
-        <!-- RIGHT ACTIONS -->
-        <div class="flex items-center gap-6 shrink-0 text-lg">
-            <a href="#" class="hover:opacity-80">Giỏ hàng</a>
+<!--<<<<<<< HEAD-->
+<!--        &lt;!&ndash; RIGHT ACTIONS &ndash;&gt;-->
+<!--        <div class="flex items-center gap-6 shrink-0 text-lg">-->
+<!--            <a href="#" class="hover:opacity-80">Giỏ hàng</a>-->
 
-            <a th:if="${currentUser == null}"
-               th:href="@{/auth/login}"
-               class="hover:opacity-80">
-                Tài khoản
-            </a>
-            <div th:if="${currentUser != null}"  class="relative group">
+<!--            <a th:if="${currentUser == null}"-->
+<!--               th:href="@{/auth/login}"-->
+<!--               class="hover:opacity-80">-->
+<!--                Tài khoản-->
+<!--            </a>-->
+<!--            <div th:if="${currentUser != null}"  class="relative group">-->
 
-                <a th:href="@{/profile}" class="flex items-center gap-2 hover:opacity-80">
-                    <img th:src="${currentUser.avatarUrl != null
-                            ? currentUser.avartarUrl
-                            : 'https://i.pinimg.com/736x/d7/b3/fe/d7b3fe7e2ad5d772d0bfc501d0042f5e.jpg'}"
-                         class="w-9 h-9 rounded-full object-cover border border-white"/>
+<!--                <a th:href="@{/profile}" class="flex items-center gap-2 hover:opacity-80">-->
+<!--                    <img th:src="${currentUser.avatarUrl != null-->
+<!--                            ? currentUser.avartarUrl-->
+<!--                            : 'https://i.pinimg.com/736x/d7/b3/fe/d7b3fe7e2ad5d772d0bfc501d0042f5e.jpg'}"-->
+<!--                         class="w-9 h-9 rounded-full object-cover border border-white"/>-->
 
-                    <span class="hidden md:block font-medium"
-                          th:text="${currentUser.name}">
-                    </span>
-                </a>
-
-
-                <!-- Dropdown -->
-                <div class="absolute right-0 mt-2 w-44 bg-white text-black rounded-xl shadow-lg
-                    opacity-0 invisible group-hover:opacity-100 group-hover:visible
-                    transition-all duration-200 z-50">
-
-                    <a th:href="@{/profile}"
-                       class="block px-4 py-2 hover:bg-gray-100">
-                        Hồ sơ của tôi
-                    </a>
-
-                    <a th:href="@{/profile}"
-                       class="block px-4 py-2 hover:bg-gray-100">
-                        Đơn hàng
-                    </a>
-
-                    <form th:action="@{/auth/logout}" method="post">
-                        <button type="submit"
-                                class="w-full text-left px-4 py-2 hover:bg-gray-100">
-                            Đăng xuất
-                        </button>
-                    </form>
-                </div>
+<!--                    <span class="hidden md:block font-medium"-->
+<!--                          th:text="${currentUser.name}">-->
+<!--                    </span>-->
+<!--                </a>-->
 
 
-            </div>
+<!--                &lt;!&ndash; Dropdown &ndash;&gt;-->
+<!--                <div class="absolute right-0 mt-2 w-44 bg-white text-black rounded-xl shadow-lg-->
+<!--                    opacity-0 invisible group-hover:opacity-100 group-hover:visible-->
+<!--                    transition-all duration-200 z-50">-->
+
+<!--                    <a th:href="@{/profile}"-->
+<!--                       class="block px-4 py-2 hover:bg-gray-100">-->
+<!--                        Hồ sơ của tôi-->
+<!--                    </a>-->
+
+<!--                    <a th:href="@{/profile}"-->
+<!--                       class="block px-4 py-2 hover:bg-gray-100">-->
+<!--                        Đơn hàng-->
+<!--                    </a>-->
+
+<!--                    <form th:action="@{/auth/logout}" method="post">-->
+<!--                        <button type="submit"-->
+<!--                                class="w-full text-left px-4 py-2 hover:bg-gray-100">-->
+<!--                            Đăng xuất-->
+<!--                        </button>-->
+<!--                    </form>-->
+<!--                </div>-->
+
+
+<!--            </div>-->
+<!--=======-->
+        <div class="flex gap-6 text-lg">
+            <a th:href="@{/cart}" class="hover:opacity-80">Giỏ hàng</a>
+            <span>Tài khoản</span>
+<!--&gt;>>>>>> e7c4d583cd4bb536679c102f05c998a968821ea8-->
         </div>
 
     </div>
@@ -167,13 +173,27 @@
 
             <!-- BUTTON -->
             <div class="flex gap-4 mt-4">
-                <button class="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700">
-                    Thêm vào giỏ hàng
-                </button>
+                <form id="addToCartForm" th:action="@{/cart/add}" method="post" class="inline">
+                    <input type="hidden" name="bookId" th:value="${book.id}">
+                    <input type="hidden" name="quantity" value="1">
+                    <button type="submit" class="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700">
+                        Thêm vào giỏ hàng
+                    </button>
+                </form>
 
                 <button class="border border-red-600 text-red-600 px-6 py-3 rounded-lg hover:bg-red-50">
                     Mua ngay
                 </button>
+            </div>
+
+            <!-- Toast Notification -->
+            <div id="toast" class="fixed top-4 right-4 z-50 hidden transition-all duration-300">
+                <div class="bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg flex items-center gap-3 min-w-[300px]">
+                    <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span id="toastMessage">Đã thêm sản phẩm vào giỏ hàng</span>
+                </div>
             </div>
 
         </div>

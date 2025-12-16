@@ -1,4 +1,4 @@
-package com.fu.bookshop.service.home.impl;
+package com.fu.bookshop.service.impl;
 
 import com.fu.bookshop.entity.Shop;
 import com.fu.bookshop.repository.ShopRepository;
