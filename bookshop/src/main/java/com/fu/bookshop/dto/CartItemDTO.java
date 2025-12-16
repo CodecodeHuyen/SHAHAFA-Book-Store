@@ -2,6 +2,7 @@ package com.fu.bookshop.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -20,5 +21,9 @@ public class CartItemDTO {
     private Integer quantity;
     private Integer availableQuantity; // số lượng có sẵn trong kho
     private BigDecimal subTotal; // quantity * price
+    private Long subjectId;        // hoặc null
+    private Long studyPackageId;   // hoặc null
+    private String name;           // tên hiển thị ở PayOS
+    private int price;             // VND
 }
 

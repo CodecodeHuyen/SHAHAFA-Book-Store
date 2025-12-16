@@ -17,6 +17,7 @@ import java.util.Optional;
 public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificationExecutor<Book> {
 
     Page<Book> findByStatus (BookStatus status, Pageable pageable);
+    Page<Book> findByStatus (String status, Pageable pageable);
     Page<Book> findByTitleContainingIgnoreCase(String keyword, Pageable pageable);
 
     Page<Book> findByCategories_Id(Long categoryId, Pageable pageable);
