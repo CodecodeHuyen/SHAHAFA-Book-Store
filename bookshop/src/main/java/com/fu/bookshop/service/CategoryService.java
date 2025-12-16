@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface CategoryService {
     List<Category> getAllCategories();
-    public List<CategoryDTO> getAll();
+     List<CategoryDTO> getAll();
 }

@@ -3,6 +3,13 @@ VALUES
     ('CUSTOMER', 'Khách hàng sử dụng hệ thống'),
     ('MANAGER',  'Quản lý hệ thống'),
     ('ADMIN',    'Quản trị viên hệ thống');
+INSERT INTO categories (id,description,  name) VALUES
+                                                   (1, 'a','Tiểu thuyết'),
+                                                   (2, 'a', 'Truyện tranh'),
+                                                   (3, 'a', 'Kinh tế'),
+                                                   (4, 'a', 'Kỹ năng sống'),
+                                                   (5, 'a', 'Thiếu nhi');
+
 
 INSERT INTO bookshop.categories (name, description) VALUES
                                                         (N'Văn học', N'Tiểu thuyết, truyện ngắn, thơ ca Việt Nam và thế giới'),
@@ -27,6 +34,7 @@ INSERT INTO bookshop.categories (name, description) VALUES
                                                         (N'Truyện trinh thám', N'Trinh thám, hình sự, phá án');
 
 
+
 INSERT INTO shop (
     hotline,
     description,
@@ -34,13 +42,15 @@ INSERT INTO shop (
     email,
     logo_url,
     name
-) VALUES ('0909123456',
+
+) VALUES
+      (
+          '0909123456',
           'Cửa hàng BookShop tại Hà Nội',
           'Hà Nội',
           'hanoi@bookshop.vn',
           '/images/logo-hn.png',
           'BookShop Hà Nội');
-
 
 
 INSERT INTO books (
@@ -211,5 +221,39 @@ VALUES
 (3, 25, 3, 95000),
 (3, 21, 2, 35000),
 
+
+INSERT INTO user (id, name, loyal_point, date_of_birth, gender, avatar_url)
+VALUES
+    (1, 'Nguyen Van A', 100, '1998-05-20', 'MALE', NULL),
+    (2, 'Tran Thi B', 50, '2000-08-15', 'FEMALE', NULL);
+
+INSERT INTO orders (
+    id, total_price, discount, shipping_fee,
+    pickup_addr, delivery_addr,
+    order_status, code, user_id
+)
+VALUES
+    (1, 500000, 0, 30000, 'Kho HN', 'Ha Noi', 'COMPLETE', 'SHAHAFA000000001', 1),
+    (2, 420000, 0, 30000, 'Kho HN', 'Ha Noi', 'COMPLETE', 'SHAHAFA000000002', 1),
+    (3, 800000, 50000, 30000, 'Kho HCM', 'HCM', 'COMPLETE', 'SHAHAFA000000003', 2),
+    (4, 300000, 0, 30000, 'Kho HCM', 'HCM', 'CANCELLED', 'SHAHAFA000000004', 2);
+
+INSERT INTO order_items (order_id, book_id, quantity, unit_price)
+VALUES
+-- Order 1
+(1, 1, 3, 35000),   -- Doraemon Tập 1
+(1, 2, 2, 35000),
+(1, 3, 1, 80000),
+
+-- Order 2
+(2, 1, 4, 35000),   -- Doraemon Tập 1 (bán rất chạy)
+(2, 4, 2, 90000),
+
+-- Order 3
+(3, 3, 5, 80000),   -- Tuổi Trẻ Đáng Giá Bao Nhiêu
+(3, 5, 3, 95000),
+(3, 1, 2, 35000),
+
 -- Order 4 (CANCELLED → ignore)
-(4, 21, 10, 35000);
+(4, 1, 10, 35000);
+

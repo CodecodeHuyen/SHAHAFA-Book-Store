@@ -1,5 +1,6 @@
 package com.fu.bookshop.controller;
 
+
 import com.fu.bookshop.dto.BookCardDTO;
 import com.fu.bookshop.entity.Category;
 import com.fu.bookshop.entity.Publisher;
@@ -9,54 +10,51 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/home")
 public class HomeController {
     private final HomeService homeService;
-
+    
     @GetMapping()
-    public String home(@RequestParam(name = "page", defaultValue = "0") int page,
-                       @RequestParam(name = "size", defaultValue = "10") int size,
-                       @RequestParam(name = "keyword", required = false) String keyword,
-                       @RequestParam(name = "category", required = false)List<Long> categoryIds,
-                       @RequestParam(name = "publisher", required = false) Long publisherId,
-                       Model model){
-        Page<BookCardDTO> bookPage ;
+    public String home(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size,
+            @RequestParam(name = "keyword", required = false) String keyword,
+            @RequestParam(name = "category", required = false) List<Long> categoryIds,
+            @RequestParam(name = "publisher", required = false) Long publisherId,
+            Model model
+    ) {
 
-        if(keyword != null && !keyword.isBlank()){
-            bookPage = homeService.searchBooks(keyword, page, size);
+        Page<BookCardDTO> bookPage = getBookPage(keyword, categoryIds, publisherId, page, size);
 
-        } else if (categoryIds != null && !categoryIds.isEmpty() && publisherId != null) {
 
-            bookPage = homeService.getBooksByCategoriesAndPublisher(categoryIds, publisherId, page, size);
-        }else if(categoryIds != null && !categoryIds.isEmpty()){
-            if(categoryIds.size() == 1){
-                bookPage = homeService.getBooksByCategory(categoryIds.get(0), page, size);
+        List<BookCardDTO> bestSellerBooks =
+                Optional.ofNullable(homeService.getBestSellerBooks())
+                        .orElse(Collections.emptyList());
 
-            }else {
-                bookPage = homeService.getBooksByCategories(categoryIds, page, size);
-            }
-        } else if (publisherId != null) {
-            bookPage = homeService.getBooksByPublisher(publisherId, page, size);
-
-        }else {
-            bookPage = homeService.getActiveBooks(page, size);
-        }
+        List<Category> categories =
+                Optional.ofNullable(homeService.getAllCategories())
+                        .orElse(Collections.emptyList());
 
         if (bookPage == null) {                 // ✅ FIX 2
             bookPage = Page.empty();
         }
 
 
-        List<BookCardDTO> bestSellerBooks = homeService.getBestSellerBooks();
+
         model.addAttribute("bestSellerBooks", bestSellerBooks);
+
+       List<Publisher> publishers =
+                Optional.ofNullable(homeService.getAllPublishers())
+                        .orElse(Collections.emptyList());
 
         model.addAttribute("books", bookPage.getContent());
         model.addAttribute("bookPage", bookPage);
@@ -65,24 +63,56 @@ public class HomeController {
         model.addAttribute("totalElements", bookPage.getTotalElements());
         model.addAttribute("pageSize", size);
 
-        List<Category> categories = homeService.getAllCategories();
-        List<Publisher> publishers = homeService.getAllPublishers();
+
+        model.addAttribute("bestSellerBooks", bestSellerBooks);
+        model.addAttribute("hasBestSeller", !bestSellerBooks.isEmpty());
+
         model.addAttribute("categories", categories);
         model.addAttribute("publishers", publishers);
 
-        model.addAttribute("selectedCategories", categoryIds);
+        model.addAttribute("selectedCategories",
+                categoryIds == null ? Collections.emptyList() : categoryIds);
         model.addAttribute("selectedPublisher", publisherId);
         model.addAttribute("keyword", keyword);
+
         return "home/index";
     }
 
+    private Page<BookCardDTO> getBookPage(
+            String keyword,
+            List<Long> categoryIds,
+            Long publisherId,
+            int page,
+            int size
+    ) {
 
-    @GetMapping("/book/{id}")
-    public String bookDetail(@PathVariable Long id, Model model){
-        BookCardDTO book = homeService.getBookDetail(id);
-        model.addAttribute("book", book);
+        if (keyword != null && !keyword.isBlank()) {
+            return homeService.searchBooks(keyword, page, size);
+        }
 
-        return "home/book-detail";
+        if (categoryIds != null && !categoryIds.isEmpty() && publisherId != null) {
+            return homeService.getBooksByCategoriesAndPublisher(categoryIds, publisherId, page, size);
+        }
+
+        if (categoryIds != null && !categoryIds.isEmpty()) {
+            return categoryIds.size() == 1
+                    ? homeService.getBooksByCategory(categoryIds.get(0), page, size)
+                    : homeService.getBooksByCategories(categoryIds, page, size);
+        }
+
+        if (publisherId != null) {
+            return homeService.getBooksByPublisher(publisherId, page, size);
+        }
+
+        return homeService.getActiveBooks(page, size);
     }
+
+//    @GetMapping("/book/{id}")
+//    public String bookDetail(@PathVariable Long id, Model model){
+//        BookCardDTO book = homeService.getBookDetail(id);
+//        model.addAttribute("book", book);
+//
+//        return "home/book-detail";
+//    }
 
 }
