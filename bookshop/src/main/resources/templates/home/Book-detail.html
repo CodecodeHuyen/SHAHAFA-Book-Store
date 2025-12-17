@@ -73,13 +73,54 @@
                    class="w-full p-2 rounded-lg border border-gray-300 text-black focus:outline-none focus:ring-2 focus:ring-red-400" />
         </form>
 
-        <div class="flex gap-6 text-lg">
+        <!-- RIGHT ACTIONS -->
+        <div class="flex items-center gap-6 shrink-0 text-lg">
             <a th:href="@{/cart}" class="hover:opacity-80">Giỏ hàng</a>
-            <span>Tài khoản</span>
-        </div>
+
+            <a th:if="${currentUser == null}"
+               th:href="@{/auth/login}"
+               class="hover:opacity-80">
+                Tài khoản
+            </a>
+            <div th:if="${currentUser != null}"  class="relative group">
+
+                <a th:href="@{/profile}" class="flex items-center gap-2 hover:opacity-80">
+                    <img th:src="${currentUser.avatarUrl != null
+                            ? currentUser.avatarUrl
+                            : 'https://i.pinimg.com/736x/d7/b3/fe/d7b3fe7e2ad5d772d0bfc501d0042f5e.jpg'}"
+                         class="w-9 h-9 rounded-full object-cover border border-white"/>
+
+                    <span class="hidden md:block font-medium"
+                          th:text="${currentUser.name}">
+                    </span>
+                </a>
+
+
+                <!-- Dropdown -->
+                <div class="absolute right-0 mt-2 w-44 bg-white text-black rounded-xl shadow-lg
+                    opacity-0 invisible group-hover:opacity-100 group-hover:visible
+                    transition-all duration-200 z-50">
+
+                    <a th:href="@{/profile}"
+                       class="block px-4 py-2 hover:bg-gray-100">
+                        Hồ sơ của tôi
+                    </a>
+
+                    <a th:href="@{/profile}"
+                       class="block px-4 py-2 hover:bg-gray-100">
+                        Đơn hàng
+                    </a>
+
+                    <form th:action="@{/auth/logout}" method="post">
+                        <button type="submit"
+                                class="w-full text-left px-4 py-2 hover:bg-gray-100">
+                            Đăng xuất
+                        </button>
+                    </form>
+                </div>
 
     </div>
-</header>
+
 
 <!-- SUCCESS MESSAGE -->
 <div th:if="${success}"
@@ -88,6 +129,9 @@
     <span th:text="${success}"></span>
 </div>
 
+            </div>
+        </div>
+
 <!-- ERROR MESSAGE -->
 <div th:if="${error}"
      class="mb-4 px-4 py-3 rounded border border-red-300
@@ -95,6 +139,7 @@
     <span th:text="${error}"></span>
 </div>
 
+</header>
 
 <div class="max-w-7xl mx-auto p-6 bg-white mt-6 rounded-lg shadow">
 
@@ -109,12 +154,9 @@
         </div>
 
         <!-- RIGHT: INFO -->
-        <div class="col-span-8 space-y-5">
+        <div class="col-span-8 space-y-4">
 
-            <!-- TITLE -->
-            <h1 class="text-2xl font-bold"
-                th:text="${book.title}">
-            </h1>
+            <h1 class="text-2xl font-bold" th:text="${book.title}"></h1>
 
             <!-- AUTHOR / PUBLISHER -->
             <div class="space-y-1 text-gray-600">
@@ -200,13 +242,10 @@
                         class="border border-red-600 text-red-600 px-6 py-3 rounded-lg hover:bg-red-50 transition">
                     Mua ngay
                 </button>
-
             </div>
-
 
         </div>
     </div>
-
 
     <!-- DESCRIPTION -->
     <div class="mt-10">
@@ -322,7 +361,6 @@
         All rights reserved.
     </div>
 </footer>
-
 
 
 </body>

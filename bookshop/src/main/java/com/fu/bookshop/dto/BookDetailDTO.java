@@ -17,6 +17,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class BookDetailDTO {
 
+
     private String title;
     private String image;
     private BigDecimal price;

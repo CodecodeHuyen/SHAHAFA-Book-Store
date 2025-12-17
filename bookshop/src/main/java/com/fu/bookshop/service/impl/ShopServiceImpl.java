@@ -2,7 +2,7 @@ package com.fu.bookshop.service.impl;
 
 import com.fu.bookshop.entity.Shop;
 import com.fu.bookshop.repository.ShopRepository;
-import com.fu.bookshop.service.home.ShopService;
+import com.fu.bookshop.service.ShopService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

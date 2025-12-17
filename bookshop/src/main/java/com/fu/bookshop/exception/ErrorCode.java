@@ -21,7 +21,9 @@ public enum ErrorCode {
     PUBLISHER_ALREADY_EXISTS(1015,"Nhà xuất bản này đã tồn tại"),
     BOOK_NOT_FOUND(1016,"Book not found"),
     CART_EMPTY(1017,"Giỏ hàng trống"),
-    USER_NOT_FOUND(1018,"User not found"),;
+    USER_NOT_FOUND(1018,"User not found"),
+    INVALID_FILE_TYPE(1019, "Tai avatar that bai" ),
+    FILE_TOO_LARGE(1020, "File qua lon" );
 
     private final int code;
     private final String message;
