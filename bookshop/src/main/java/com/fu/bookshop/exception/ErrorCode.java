@@ -28,7 +28,9 @@ public enum ErrorCode {
     FILE_LIMIT_EXCEEDED(1011,"Tệp file vượt quá 1000 ảnh"),
     ISBN_DUPLICATE(1012,"Sách đã tồn tại trong kho"),
     PUBLISHER_NOT_FOUND(1013,"PUBLISHER_NOT_FOUND"),
-    FILE_UPLOAD_FAILED(1014,"Tải ảnh thất bại"),;
+    FILE_UPLOAD_FAILED(1014,"Tải ảnh thất bại"),
+    INVALID_FILE_TYPE(1015, "Tai avatar that bai" ),
+    FILE_TOO_LARGE(1016, "File qua lon" );
 
     private final int code;
     private final String message;

@@ -84,7 +84,7 @@
 
                 <a th:href="@{/profile}" class="flex items-center gap-2 hover:opacity-80">
                     <img th:src="${currentUser.avatarUrl != null
-                            ? currentUser.avartarUrl
+                            ? currentUser.avatarUrl
                             : 'https://i.pinimg.com/736x/d7/b3/fe/d7b3fe7e2ad5d772d0bfc501d0042f5e.jpg'}"
                          class="w-9 h-9 rounded-full object-cover border border-white"/>
 
@@ -146,6 +146,12 @@
             Điểm tích lũy:
             <span th:text="${user.loyalPoint}"></span>
         </p>
+
+        <a th:href="@{/profile/edit}"
+           class="inline-block mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+            Chỉnh sửa hồ sơ
+        </a>
+
     </div>
 </section>
 
