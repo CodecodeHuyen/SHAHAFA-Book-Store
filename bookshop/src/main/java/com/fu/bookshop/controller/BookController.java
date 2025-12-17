@@ -25,20 +25,6 @@ public class BookController {
     private final PublisherService publisherService;
 
 
-    @GetMapping("/{id}")
-    public String bookDetail(
-            @PathVariable Long id,
-            Model model
-    ){
-        BookDetailDTO book = bookService.getBookDetail(id);
-        List<BookCardDTO> relatedBooks = bookService.getRelatedBooks(id);
-
-        model.addAttribute("book", book);
-        model.addAttribute("relatedBooks", relatedBooks);
-
-        return "home/book-detail";
-    }
-
     @GetMapping("detail/{id}")
     public String bookDetail2(
             @PathVariable Long id,

@@ -24,13 +24,17 @@ public class SecurityConfig {
     private final CustomAuthenticationFailureHandler
             customAuthenticationFailureHandler;
 
+    private final CustomSuccessHandler
+            customSuccessHandler;
+
 
     private final String[] PUBLIC_ENDPOINTS = {
             "/auth/**",
             "/css/**",
             "/js/**",
             "/home/**",
-            "/books/{id}"
+            "/images/**",
+
     };
 
 
@@ -44,6 +48,9 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
+                        // Ví dụ: chỉ manager mới đc vào trang quản lý
+                        .requestMatchers("/manager/**").hasRole("MANAGER")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -51,7 +58,7 @@ public class SecurityConfig {
                         .loginProcessingUrl("/auth/login")// POST xử lý login
                         .usernameParameter("email")
                         .passwordParameter("password")
-                        .defaultSuccessUrl("/home", true)
+                        .successHandler(customSuccessHandler)
                         .failureHandler(customAuthenticationFailureHandler)
                         .permitAll()
                 )

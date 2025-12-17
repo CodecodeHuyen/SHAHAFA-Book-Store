@@ -77,7 +77,7 @@
         <div class="flex items-center gap-6">
             <a th:href="@{/cart}">Giỏ hàng</a>
 
-            <a th:if="${currentUser == null}" th:href="@{/auth/login}">Tài khoản</a>
+            <a th:if="${currentUser == null}" th:href="@{/auth/login}">Đăng Nhập</a>
 
             <div th:if="${currentUser != null}" class="relative group">
                 <a th:href="@{/profile}" class="flex items-center gap-2">
@@ -240,7 +240,7 @@
 
                             </p>
 
-                            <a th:href="@{/books/{id}(id=${bestSellerBooks[0].id})}"
+                            <a th:href="@{/home/{id}(id=${bestSellerBooks[0].id})}"
                                class="inline-block mt-4 px-5 py-2 bg-red-600 text-white rounded-lg">
                                 Xem chi tiết
                             </a>
@@ -256,7 +256,7 @@
 
             <div class="grid grid-cols-5 gap-6">
                 <a th:each="book : ${books}"
-                   th:href="@{/books/{id}(id=${book.id})}"
+                   th:href="@{/home/{id}(id=${book.id})}"
                    class="bg-white p-4 rounded-xl shadow hover:shadow-lg">
 
                     <img th:src="${book.image}"

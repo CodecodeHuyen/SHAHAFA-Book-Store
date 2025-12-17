@@ -22,10 +22,11 @@
         </nav>
 
         <div class="mt-10">
-            <a href="/logout"
-               class="block text-red-600 px-3 py-2 border border-red-200 rounded hover:bg-red-50">
-                🚪 Logout
-            </a>
+            <form th:action="@{/auth/logout}" method="post">
+                <button  class="block text-red-600 px-3 py-2 border border-red-200 rounded hover:bg-red-50">>
+                    Đăng xuất
+                </button>
+            </form>
         </div>
     </aside>
 
