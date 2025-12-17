@@ -226,8 +226,55 @@ VALUES
     (3, 800000, 50000, 30000, 'Kho HCM', 'HCM', 'COMPLETE', 'SHAHAFA000000003', 2),
     (4, 300000, 0, 30000, 'Kho HCM', 'HCM', 'CANCELLED', 'SHAHAFA000000004', 2);
 
+INSERT INTO order_items (order_id, book_id, quantity, unit_price)
+VALUES
+-- Order 1
+(1, 21, 3, 35000),   -- Doraemon Tập 1
+(1, 22, 2, 35000),
+(1, 23, 1, 80000),
+
+-- Order 2
+(2, 21, 4, 35000),   -- Doraemon Tập 1 (bán rất chạy)
+(2, 24, 2, 90000),
+
+-- Order 3
+(3, 23, 5, 80000),   -- Tuổi Trẻ Đáng Giá Bao Nhiêu
+(3, 25, 3, 95000),
+(3, 21, 2, 35000),
+
+
 INSERT INTO user (id, name, loyal_point, date_of_birth, gender, avatar_url)
 VALUES
     (1, 'Nguyen Van A', 100, '1998-05-20', 'MALE', NULL),
     (2, 'Tran Thi B', 50, '2000-08-15', 'FEMALE', NULL);
+
+INSERT INTO orders (
+    id, total_price, discount, shipping_fee,
+    pickup_addr, delivery_addr,
+    order_status, code, user_id
+)
+VALUES
+    (1, 500000, 0, 30000, 'Kho HN', 'Ha Noi', 'COMPLETE', 'SHAHAFA000000001', 1),
+    (2, 420000, 0, 30000, 'Kho HN', 'Ha Noi', 'COMPLETE', 'SHAHAFA000000002', 1),
+    (3, 800000, 50000, 30000, 'Kho HCM', 'HCM', 'COMPLETE', 'SHAHAFA000000003', 2),
+    (4, 300000, 0, 30000, 'Kho HCM', 'HCM', 'CANCELLED', 'SHAHAFA000000004', 2);
+
+INSERT INTO order_items (order_id, book_id, quantity, unit_price)
+VALUES
+-- Order 1
+(1, 1, 3, 35000),   -- Doraemon Tập 1
+(1, 2, 2, 35000),
+(1, 3, 1, 80000),
+
+-- Order 2
+(2, 1, 4, 35000),   -- Doraemon Tập 1 (bán rất chạy)
+(2, 4, 2, 90000),
+
+-- Order 3
+(3, 3, 5, 80000),   -- Tuổi Trẻ Đáng Giá Bao Nhiêu
+(3, 5, 3, 95000),
+(3, 1, 2, 35000),
+
+-- Order 4 (CANCELLED → ignore)
+(4, 1, 10, 35000);
 

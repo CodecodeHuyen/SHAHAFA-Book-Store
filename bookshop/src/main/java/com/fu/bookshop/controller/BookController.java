@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @Controller
-@RequestMapping("/books")
+@RequestMapping("/manager")
 @RequiredArgsConstructor
 public class BookController {
 
@@ -119,7 +119,7 @@ public class BookController {
             return "manager/book-create";
         }
 
-        return "redirect:/books";
+        return "redirect:/manager";
     }
 
     @GetMapping("/create")
@@ -132,7 +132,7 @@ public class BookController {
         return "manager/book-create";
     }
 
-    @PostMapping("/{id}/edit")
+    @PostMapping("manager/{id}/edit")
     public String updateBook(
             @PathVariable Long id,
             @Valid @ModelAttribute("bookUpdate") BookUpdateRequest request,
@@ -148,7 +148,7 @@ public class BookController {
 
         bookService.updateBook(id, request, image);
 
-        return "redirect:/books/detail/" + id;
+        return "redirect:/manager/detail/" + id;
     }
 
 

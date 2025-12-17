@@ -18,6 +18,8 @@ public interface HomeService {
 
     Page<BookCardDTO> getBooksByPublisher(Long publisherId, int page, int size);
 
+    BookCardDTO getBookDetail(Long id);
+
     List<Category> getAllCategories();
 
     List<Publisher> getAllPublishers();

@@ -1,6 +1,7 @@
 package com.fu.bookshop.controller;
 
 import com.fu.bookshop.dto.ApiResponse;
+import com.fu.bookshop.dto.DeleteFileRequest;
 import com.fu.bookshop.exception.BusinessException;
 import com.fu.bookshop.exception.ErrorCode;
 import com.fu.bookshop.service.impl.S3ServiceImpl;

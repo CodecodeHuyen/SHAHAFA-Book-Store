@@ -22,6 +22,10 @@ public enum ErrorCode {
     BOOK_NOT_FOUND(1016,"Book not found"),
     CART_EMPTY(1017,"Giỏ hàng trống"),
     USER_NOT_FOUND(1018,"User not found"),
+    INVALID_FILE_TYPE(1019, "Tai avatar that bai" ),
+    FILE_TOO_LARGE(1020, "File qua lon" ),
+    ADMIN_ACCOUNT_CANNOT_DELETE(1030, "Không thể xoá Role Admin");
+    USER_NOT_FOUND(1018,"User not found"),
     ORDER_NOT_FOUND(1019,"Order not found");
 
     private final int code;

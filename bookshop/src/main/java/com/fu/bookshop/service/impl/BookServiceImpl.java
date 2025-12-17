@@ -202,7 +202,6 @@ public class BookServiceImpl implements BookService {
         Publisher publisher = publisherRepository.findById(req.getPublisherId())
                 .orElseThrow(() -> new SystemException(ErrorCode.PUBLISHER_NOT_FOUND));
 
-
         // 5. Build Book
         Book book = Book.builder()
                 .title(req.getTitle())

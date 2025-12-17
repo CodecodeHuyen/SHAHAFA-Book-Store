@@ -21,7 +21,7 @@
         <p class="text-xs text-gray-500 mb-6">Business Manager Panel</p>
 
         <nav class="space-y-2 text-sm">
-            <a href="/books"
+            <a href="/manager"
                class="block px-3 py-2 rounded bg-sky-100 text-sky-700 font-medium">
                 📚 Quản lý Sách
             </a>
@@ -50,7 +50,7 @@
             </div>
 
             <!-- ===== FORM ===== -->
-            <form th:action="@{/books/create}"
+            <form th:action="@{/manager/create}"
                   th:object="${book}"
                   method="post"
                   enctype="multipart/form-data"
@@ -146,11 +146,9 @@
                 <!-- Category -->
                 <div>
                     <label class="font-medium">Thể loại</label>
-
                     <div class="border rounded p-3 h-40 overflow-y-auto mt-1 space-y-1">
                         <label th:each="c : ${categories}"
                                class="flex items-center gap-2 text-sm">
-
                             <input type="checkbox"
                                    name="categoryIds"
                                    th:value="${c.id}" />
@@ -232,11 +230,9 @@
                     </p>
                 </div>
 
-
-
                 <!-- Submit -->
                 <div class="flex justify-end gap-3 pt-4">
-                    <a href="/books"
+                    <a href="/manager"
                        class="px-4 py-2 border rounded hover:bg-gray-100">
                         Huỷ
                     </a>
@@ -367,7 +363,6 @@
         }
     });
 </script>
-
 
 </body>
 </html>

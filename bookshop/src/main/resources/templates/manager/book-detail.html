@@ -16,7 +16,7 @@
         <p class="text-xs text-gray-500 mb-6">Business Manager Panel</p>
 
         <nav class="space-y-2 text-sm">
-            <a href="/books"
+            <a href="/manager"
                class="block px-3 py-2 rounded hover:bg-gray-100">
                 📚 Quản lý Sách
             </a>
@@ -129,7 +129,7 @@
             <div class="border-t pt-6">
                 <h2 class="text-lg font-semibold mb-4">Chỉnh sửa thông tin</h2>
 
-                <form th:action="@{/books/{id}/edit(id=${book.id})}"
+                <form th:action="@{/manager/{id}/edit(id=${book.id})}"
                       th:object="${bookUpdate}"
                       method="post"
                       enctype="multipart/form-data"
@@ -196,7 +196,7 @@
 
                     <!-- ACTION -->
                     <div class="col-span-3 flex justify-end gap-3 pt-4">
-                        <a href="/books"
+                        <a href="/manager"
                            class="px-4 py-2 border rounded hover:bg-gray-100">
                             Quay lại
                         </a>

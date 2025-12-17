@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý tài khoản</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-50 min-h-screen">
+<div class="flex min-h-screen">
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="w-64 bg-white border-r p-4">
+        <div class="mb-6">
+            <h2 class="text-lg font-bold text-blue-600">BookShop Admin</h2>
+        </div>
+
+            <a href="/admin/account"
+               class="block px-3 py-2 rounded bg-blue-100 text-blue-700 font-medium">
+                👥 Quản Lý Tài Khoản
+            </a>
+        </nav>
+
+        <div class="mt-10">
+            <a href="/logout"
+               class="block text-red-600 px-3 py-2 border border-red-200 rounded hover:bg-red-50">
+                🚪 Logout
+            </a>
+        </div>
+    </aside>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="flex-1 p-6">
+        <div class="flex justify-between items-start mb-4">
+            <div>
+                <h1 class="text-xl font-semibold text-gray-800">Quản lý tài khoản</h1>
+                <p class="text-sm text-gray-500">Xem danh sách tài khoản, email và trạng thái</p>
+            </div>
+        </div>
+
+        <!-- ===== FLASH MESSAGES ===== -->
+        <div th:if="${error}" class="mb-4 rounded-lg bg-red-100 border border-red-300 text-red-700 px-4 py-2 text-sm"
+             th:text="${error}"></div>
+        <div th:if="${success}" class="mb-4 rounded-lg bg-green-100 border border-green-300 text-green-700 px-4 py-2 text-sm"
+             th:text="${success}"></div>
+
+        <!-- ===== CREATE ACCOUNT ===== -->
+        <div class="bg-white border rounded-xl shadow-sm p-4 mb-6">
+            <h2 class="text-base font-semibold text-gray-800 mb-3">Tạo mới tài khoản</h2>
+            <form th:action="@{/admin/account}" th:object="${accountCreateRequest}" method="post" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-sm text-gray-600 mb-1">Email</label>
+                    <input type="email" th:field="*{email}" class="w-full border rounded px-3 py-2" placeholder="email@example.com" required/>
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-600 mb-1">Họ tên</label>
+                    <input type="text" th:field="*{name}" class="w-full border rounded px-3 py-2" placeholder="Nguyễn Văn A" required/>
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-600 mb-1">Mật khẩu</label>
+                    <input type="password" th:field="*{password}" class="w-full border rounded px-3 py-2" placeholder="******" required/>
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-600 mb-1">Ngày sinh</label>
+                    <input type="date" th:field="*{dateOfBirth}" class="w-full border rounded px-3 py-2" required/>
+                    <p class="text-xs text-red-500 mt-1" th:errors="*{dateOfBirth}"></p>
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-600 mb-1">Giới tính</label>
+                    <select th:field="*{gender}" class="w-full border rounded px-3 py-2" required>
+                        <text value="">Chọn</text>
+                        <option value="MALE">MALE</option>
+                        <option value="FEMALE">FEMALE</option>
+                        <option value="OTHER">OTHER</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-600 mb-1">Vai trò</label>
+                    <select th:field="*{roleName}" class="w-full border rounded px-3 py-2" required>
+                        <text value="">Chọn vai trò</text>
+                        <option value="CUSTOMER">Customer</option>
+                        <option value="MANAGER">Manager</option>
+
+                    </select>
+                </div>
+                <div class="md:col-span-3 flex justify-end">
+                    <button type="submit" class="bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-700">Tạo tài khoản</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- ===== FILTERS ===== -->
+        <form method="get" class="flex flex-wrap gap-4 mb-6 items-end">
+            <div>
+                <label class="block text-sm text-gray-600 mb-1">Trạng thái</label>
+                <select name="status" class="border rounded px-3 py-2 min-w-[200px]">
+                    <option value="" th:selected="${status == null or status == ''}">Tất cả</option>
+                    <option th:each="s : ${accountStatuses}"
+                            th:value="${s.name()}"
+                            th:text="${s.name()}"
+                            th:selected="${status == s.name()}"></option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-sm text-gray-600 mb-1">Tìm kiếm</label>
+                <input type="text"
+                       name="keyword"
+                       placeholder="Tên hoặc email..."
+                       th:value="${keyword}"
+                       class="border rounded px-3 py-2 w-72"/>
+            </div>
+
+            <div>
+                <button type="submit"
+                        class="bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-700">
+                    Lọc
+                </button>
+            </div>
+        </form>
+
+        <!-- ===== TABLE ===== -->
+        <div class="bg-white border rounded-xl shadow-sm overflow-hidden">
+            <table class="w-full text-sm border-collapse">
+                <thead>
+                <tr class="bg-gray-100 text-left text-gray-700">
+                    <th class="p-3">#</th>
+                    <th class="p-3">Tên</th>
+                    <th class="p-3">Email</th>
+                    <th class="p-3">Vai trò</th>
+                    <th class="p-3">Trạng thái</th>
+                    <th class="p-3 text-right">Hành động</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${accounts == null or accounts.isEmpty()}" class="border-t">
+                    <td colspan="6" class="p-4 text-center text-gray-500">Không có tài khoản phù hợp</td>
+                </tr>
+
+                <tr th:each="a, idx : ${accounts}" class="border-t hover:bg-gray-50">
+                    <td class="p-3" th:text="${idx.index + 1 + accounts.number * accounts.size}"></td>
+                    <td class="p-3 font-medium" th:text="${a.fullName}">Nguyễn Văn A</td>
+                    <td class="p-3" th:text="${a.email}">user@example.com</td>
+                    <td class="p-3" th:text="${a.role}">ADMIN</td>
+                    <td class="p-3">
+                        <span th:switch="${a.status.name()}">
+                            <span th:case="'ACTIVE'" class="px-2 py-1 rounded text-xs bg-green-100 text-green-700">ACTIVE</span>
+                            <span th:case="'PENDING'" class="px-2 py-1 rounded text-xs bg-amber-100 text-amber-700">PENDING</span>
+                            <span th:case="'DEACTIVATED'" class="px-2 py-1 rounded text-xs bg-red-100 text-red-700">DEACTIVATED</span>
+                            <span th:case="*"
+                                  class="px-2 py-1 rounded text-xs bg-gray-100 text-gray-700"
+                                  th:text="${a.status}">UNKNOWN</span>
+                        </span>
+                    </td>
+                    <td class="p-3 text-right space-x-2">
+                        <!-- Xóa tài khoản (không cho ADMIN) -->
+                        <span th:if="${a.role == 'ADMIN'}"
+                              class="text-xs text-gray-400 italic">
+                            Không thể xóa ADMIN
+                        </span>
+
+                        <form th:if="${a.role != 'ADMIN'}"
+                              th:action="@{/admin/account/delete}"
+                              method="post"
+                              th:object="${a}"
+                              class="inline-block"
+                              onsubmit="return confirm('Bạn có chắc chắn muốn xóa tài khoản này không?');">
+                            <input type="hidden" name="id" th:value="${a.id}"/>
+                            <button type="submit" class="text-red-600 hover:underline text-sm">Xóa</button>
+                        </form>
+
+                        <!-- Nút đổi trạng thái (chỉ cho ACTIVE / DEACTIVATED) -->
+                        <form th:if="${a.status.name() == 'ACTIVE' or a.status.name() == 'DEACTIVATED'}"
+                              th:action="@{/admin/account/toggle-status}"
+                              method="post"
+                              th:object="${a}"
+                              class="inline-block"
+                              onsubmit="return confirm('Bạn có chắc chắn muốn thay đổi trạng thái tài khoản này không?');">
+                            <input type="hidden" name="id" th:value="${a.id}"/>
+                            <button type="submit"
+                                    class="text-sm font-medium"
+                                    th:classappend="${a.status.name() == 'ACTIVE'} ? ' text-amber-600 hover:underline' : ' text-green-600 hover:underline'"
+                                    th:text="${a.status.name() == 'ACTIVE'} ? 'Khoá' : 'Kích hoạt'">
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ===== PAGINATION ===== -->
+        <div class="flex justify-between items-center mt-4 text-sm" th:if="${accounts != null}">
+            <div class="text-gray-600">
+                <span th:text="${accounts.number + 1}"></span> /
+                <span th:text="${accounts.totalPages == 0 ? 1 : accounts.totalPages}"></span> trang —
+                <span th:text="${accounts.totalElements}"></span> tài khoản
+            </div>
+
+            <div class="space-x-2">
+                <a th:if="${accounts.hasPrevious()}"
+                   th:href="@{/admin/account(page=${accounts.number - 1}, size=${accounts.size}, status=${status}, keyword=${keyword})}"
+                   class="px-3 py-1 border rounded hover:bg-gray-50">Trước</a>
+                <span th:if="${!accounts.hasPrevious()}" class="px-3 py-1 border rounded text-gray-400">Trước</span>
+
+                <a th:if="${accounts.hasNext()}"
+                   th:href="@{/admin/account(page=${accounts.number + 1}, size=${accounts.size}, status=${status}, keyword=${keyword})}"
+                   class="px-3 py-1 border rounded hover:bg-gray-50">Sau</a>
+                <span th:if="${!accounts.hasNext()}" class="px-3 py-1 border rounded text-gray-400">Sau</span>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+</html>
+

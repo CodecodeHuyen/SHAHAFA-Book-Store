@@ -32,21 +32,4 @@ public class OrderItem {
     @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal unitPrice;   // giá book lúc mua
 
-//    @Column(nullable = false)
-//    private Integer weight;
-//
-//    // --- Lifecycle Callbacks ---
-//
-//    @PrePersist
-//    @PreUpdate
-//    private void calculateWeight() {
-//        if (this.book != null && this.quantity != null) {
-//            // Lấy weight của book nhân với số lượng
-//            // Giả định weight trong Book không được null, nếu có thể null hãy thêm check
-//            Integer bookWeight = this.book.getWeight() != null ? this.book.getWeight() : 0;
-//            this.weight = bookWeight * this.quantity;
-//        } else {
-//            this.weight = 0;
-//        }
-//    }
 }

@@ -70,6 +70,65 @@ public class S3ServiceImpl {
         return urls;
     }
 
+
+    private static final List<String> ALLOWED_EXTENSIONS =
+            List.of("jpg", "jpeg", "png", "webp");
+
+
+    public  String uploadAvatar(MultipartFile file){
+        if(file == null || file.isEmpty()){
+            throw new BusinessException(ErrorCode.FILE_EMPTY);
+        }
+
+        String contentType = file.getContentType();
+
+        if(contentType == null || !contentType.startsWith("image/")){
+            throw new BusinessException(ErrorCode.INVALID_FILE_TYPE);
+        }
+
+        String originalName = file.getOriginalFilename();
+        if (originalName == null || !originalName.contains(".")) {
+            throw new BusinessException(ErrorCode.INVALID_FILE_TYPE);
+        }
+
+        String ext = originalName.substring(originalName.lastIndexOf('.') + 1)
+                .toLowerCase();
+
+        if (!ALLOWED_EXTENSIONS.contains(ext)) {
+            throw new BusinessException(ErrorCode.INVALID_FILE_TYPE);
+        }
+
+
+        if (file.getSize() > 5 * 1024 * 1024) {
+            throw new BusinessException(ErrorCode.FILE_TOO_LARGE);
+        }
+
+        try {
+            String key = folderName + "/avatar/"
+                    + UUID.randomUUID() + "-"
+                    + file.getOriginalFilename();
+
+            s3Client.putObject(
+                    PutObjectRequest.builder()
+                            .bucket(bucket)
+                            .key(key)
+                            .contentType(contentType)
+                            .build(),
+                    RequestBody.fromBytes(file.getBytes())
+            );
+
+            return String.format(
+                    "https://%s.s3.%s.amazonaws.com/%s",
+                    bucket,
+                    region,
+                    URLEncoder.encode(key, StandardCharsets.UTF_8)
+            );
+        } catch (IOException e) {
+            throw new SystemException(ErrorCode.FILE_UPLOAD_FAILED);
+        }
+    }
+
+
     public void delete(String fileUrl) {
         if (fileUrl == null || fileUrl.isBlank()) {
             return; // không có ảnh thì thôi
@@ -105,7 +164,6 @@ public class S3ServiceImpl {
             throw new SystemException(ErrorCode.FILE_DELETE_FAILED);
         }
     }
-
 
 
 
