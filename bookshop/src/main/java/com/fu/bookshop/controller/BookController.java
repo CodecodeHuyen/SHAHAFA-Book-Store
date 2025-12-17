@@ -132,7 +132,7 @@ public class BookController {
         return "manager/book-create";
     }
 
-    @PostMapping("/{id}/edit")
+    @PostMapping("manager/{id}/edit")
     public String updateBook(
             @PathVariable Long id,
             @Valid @ModelAttribute("bookUpdate") BookUpdateRequest request,
