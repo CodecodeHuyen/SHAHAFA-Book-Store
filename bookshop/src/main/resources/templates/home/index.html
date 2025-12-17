@@ -130,72 +130,7 @@
     </div>
 </section>
 
-<section class="max-w-7xl mx-auto mt-12 px-4">
-    <h2 class="text-xl font-bold mb-4">
-        🔥 Bán chạy nhất
-    </h2>
 
-    <div th:if="${bestSellerBooks == null or bestSellerBooks.isEmpty()}"
-         class="text-gray-500 italic">
-        Chưa có dữ liệu bán chạy
-    </div>
-
-
-
-    <div th:if="${bestSellerBooks != null and !bestSellerBooks.isEmpty()}"
-         class="grid grid-cols-12 gap-6 bg-white rounded-xl shadow p-6">
-
-        <!-- left ranking -->
-        <div class="col-span-5 border-r pr-4">
-            <div th:each="b, iter : ${bestSellerBooks}"
-                 class="flex items-center gap-4 py-3 hover:bg-gray-50 cursor-pointer">
-
-                <!-- rank -->
-                <span class="text-lg font-bold w-6"
-                      th:text="${iter.index + 1}"></span>
-
-                <!-- image -->
-                <img th:src="${b.image}"
-                     class="w-14 h-20 object-cover rounded"/>
-
-                <!-- infor -->
-                <div class="flex-1">
-                    <p  class="font-medium line-clamp-2"
-                        th:text="${b.title}">
-                    </p>
-
-                    <p class="text-red-600 font-semibold text-sm"
-                       th:text="${#numbers.formatDecimal(b.price, 0, 'COMMA', 0, 'POINT') + ' đ'}">
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <!-- right preview book -->
-        <div class="col-span-7 flex gap-6">
-            <img th:src="${bestSellerBooks[0].image}"
-                 class="w-48 h-64 object-cover rounded-lg shadow"/>
-
-            <div>
-                <h3 class="text-xl font-bold mb-2"
-                    th:text="${bestSellerBooks[0].title}">
-                </h3>
-
-                <p class="text-red-600 text-lg font-semibold mb-2"
-                   th:text="${#numbers.formatDecimal(bestSellerBooks[0].price, 0, 'COMMA', 0, 'POINT') + ' đ'}">
-
-                </p>
-
-                <a th:href="@{/books/{id}(id=${bestSellerBooks[0].id})}"
-                   class="inline-block mt-4 px-5 py-2 bg-red-600 text-white rounded-lg">
-                    Xem chi tiết
-                </a>
-            </div>
-
-        </div>
-    </div>
-
-</section>
 
 
 
@@ -248,6 +183,73 @@
 
         <!-- CONTENT -->
         <main class="col-span-9">
+
+            <section class="max-w-7xl mx-auto mt-12 px-4">
+                <h2 class="text-xl font-bold mb-4">
+                    🔥 Bán chạy nhất
+                </h2>
+
+                <div th:if="${bestSellerBooks == null or bestSellerBooks.isEmpty()}"
+                     class="text-gray-500 italic">
+                    Chưa có dữ liệu bán chạy
+                </div>
+
+
+
+                <div th:if="${bestSellerBooks != null and !bestSellerBooks.isEmpty()}"
+                     class="grid grid-cols-12 gap-6 bg-white rounded-xl shadow p-6">
+
+                    <!-- left ranking -->
+                    <div class="col-span-5 border-r pr-4">
+                        <div th:each="b, iter : ${bestSellerBooks}"
+                             class="flex items-center gap-4 py-3 hover:bg-gray-50 cursor-pointer">
+
+                            <!-- rank -->
+                            <span class="text-lg font-bold w-6"
+                                  th:text="${iter.index + 1}"></span>
+
+                            <!-- image -->
+                            <img th:src="${b.image}"
+                                 class="w-14 h-20 object-cover rounded"/>
+
+                            <!-- infor -->
+                            <div class="flex-1">
+                                <p  class="font-medium line-clamp-2"
+                                    th:text="${b.title}">
+                                </p>
+
+                                <p class="text-red-600 font-semibold text-sm"
+                                   th:text="${#numbers.formatDecimal(b.price, 0, 'COMMA', 0, 'POINT') + ' đ'}">
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- right preview book -->
+                    <div class="col-span-7 flex gap-6">
+                        <img th:src="${bestSellerBooks[0].image}"
+                             class="w-48 h-64 object-cover rounded-lg shadow"/>
+
+                        <div>
+                            <h3 class="text-xl font-bold mb-2"
+                                th:text="${bestSellerBooks[0].title}">
+                            </h3>
+
+                            <p class="text-red-600 text-lg font-semibold mb-2"
+                               th:text="${#numbers.formatDecimal(bestSellerBooks[0].price, 0, 'COMMA', 0, 'POINT') + ' đ'}">
+
+                            </p>
+
+                            <a th:href="@{/books/{id}(id=${bestSellerBooks[0].id})}"
+                               class="inline-block mt-4 px-5 py-2 bg-red-600 text-white rounded-lg">
+                                Xem chi tiết
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+
+            </section>
 
             <!-- PRODUCT LIST -->
             <h2 class="text-2xl font-bold mb-4">Xu hướng mua sắm</h2>
