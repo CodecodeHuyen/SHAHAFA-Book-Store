@@ -30,7 +30,7 @@ public class SecurityConfig {
             "/css/**",
             "/js/**",
             "/home/**",
-            "/books/**"
+            "/books/{id}"
     };
 
 

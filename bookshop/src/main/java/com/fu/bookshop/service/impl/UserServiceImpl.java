@@ -6,6 +6,7 @@ import com.fu.bookshop.dto.user.UserProfileDTO;
 import com.fu.bookshop.entity.Order;
 import com.fu.bookshop.entity.OrderItem;
 import com.fu.bookshop.entity.User;
+import com.fu.bookshop.enums.Gender;
 import com.fu.bookshop.enums.OrderStatus;
 import com.fu.bookshop.enums.PaymentStatus;
 import com.fu.bookshop.exception.BusinessException;
@@ -15,8 +16,11 @@ import com.fu.bookshop.repository.OrderRepository;
 import com.fu.bookshop.repository.UserRepository;
 import com.fu.bookshop.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,11 +30,17 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
 
+    @Autowired
+    private S3ServiceImpl s3Service;
+
     @Override
     public UserProfileDTO getUserProfileByEmail(String email) {
         User user = userRepository.findByAccount_Email(email)
-                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new SystemException(ErrorCode.USER_NOT_FOUND));
 
+        if(user==null){
+            System.out.println("Null nè");
+        }
         return  UserProfileDTO.builder()
                 .id(user.getId())
                 .name(user.getName())
@@ -76,6 +86,31 @@ public class UserServiceImpl implements UserService {
                 .loyalPoint(user.getLoyalPoint())
                 .build();
     }
+
+    @Override
+    public void updateProfile(String email, String name, LocalDate dateOfBirth, Gender gender, MultipartFile avatar) {
+        User user = userRepository.findByAccount_Email(email)
+                .orElseThrow(() -> new SystemException(ErrorCode.USER_NOT_FOUND));
+
+        user.setName(name);
+        user.setDateOfBirth(dateOfBirth);
+        user.setGender(gender);
+
+        if(avatar != null && !avatar.isEmpty()){
+
+            //xoa avatar cu neu co
+            if(user.getAvatarUrl()!= null){
+                s3Service.delete(user.getAvatarUrl());
+            }
+
+            String avatarUrl = s3Service.uploadAvatar(avatar);
+            user.setAvatarUrl(avatarUrl);
+        }
+
+        userRepository.save(user);
+    }
+
+
 
 
     private List<OrderHistoryDTO> mapOrders(List<Order> orders){
