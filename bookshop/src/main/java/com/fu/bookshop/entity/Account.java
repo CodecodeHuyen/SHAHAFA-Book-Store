@@ -12,10 +12,10 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "account")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor @Builder
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Account implements UserDetails {
 
     @Id

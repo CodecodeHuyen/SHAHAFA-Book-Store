@@ -1,10 +1,10 @@
-INSERT IGNORE INTO bookshop.role (role_name, description)
+INSERT IGNORE INTO BookShop.role (role_name, description)
 VALUES
     ('CUSTOMER', 'Khách hàng sử dụng hệ thống'),
     ('MANAGER',  'Quản lý hệ thống'),
     ('ADMIN',    'Quản trị viên hệ thống');
 
-INSERT INTO bookshop.categories (name, description) VALUES
+INSERT INTO BookShop.categories (name, description) VALUES
                                                         (N'Văn học', N'Tiểu thuyết, truyện ngắn, thơ ca Việt Nam và thế giới'),
                                                         (N'Kinh tế', N'Sách về kinh doanh, tài chính, quản trị'),
                                                         (N'Tâm lý – Kỹ năng sống', N'Phát triển bản thân, tư duy, kỹ năng mềm'),

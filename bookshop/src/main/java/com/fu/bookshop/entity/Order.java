@@ -35,7 +35,7 @@ public class Order {
     @Column(nullable = false,columnDefinition = "NVARCHAR(255)")
     private String deliveryAddr;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 

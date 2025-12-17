@@ -4,8 +4,6 @@ import com.fu.bookshop.dto.PaymentRequestDto;
 import com.fu.bookshop.entity.Order;
 import com.fu.bookshop.service.OrderService;
 import com.fu.bookshop.service.PaymentService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +11,7 @@ import vn.payos.model.webhooks.Webhook;
 import vn.payos.model.webhooks.WebhookData;
 
 @RestController
-@RequestMapping("/api/payment")
+@RequestMapping("/api/v1/payment")
 public class PaymentController {
 
     private final PaymentService paymentService;
@@ -25,9 +23,9 @@ public class PaymentController {
         this.orderService = orderService;
     }
 
-    @PostMapping("/create")
-    public String createPayment(@RequestBody PaymentRequestDto dto) {
-        System.out.println(">>> /api/payment/create CALLED, dto = " + dto);
+    @PostMapping("/create-link")
+    public String createPaymentLink(@RequestBody PaymentRequestDto dto) {
+        System.out.println(">>> /api/v1/payment/create-link CALLED, dto = " + dto);
         try {
             long orderId = System.currentTimeMillis();
             return paymentService.createPaymentLink(orderId, dto.getAmount(),
@@ -37,9 +35,6 @@ public class PaymentController {
             return "Lỗi tạo link: " + e.getMessage();
         }
     }
-
-
-
 
     @PostMapping("/payos-hook")
     public ResponseEntity<String> handlePayOSWebhook(@RequestBody Webhook webhook) {
