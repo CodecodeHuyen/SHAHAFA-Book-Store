@@ -243,10 +243,10 @@ VALUES
 (3, 21, 2, 35000),
 
 
-INSERT INTO user (id, name, loyal_point, date_of_birth, gender, avatar_url)
+    INSERT INTO user (name, loyal_point, date_of_birth, gender, avatar_url)
 VALUES
-    (1, 'Nguyen Van A', 100, '1998-05-20', 'MALE', NULL),
-    (2, 'Tran Thi B', 50, '2000-08-15', 'FEMALE', NULL);
+    ('Nguyen Van A', 100, '1998-05-20', 'MALE', NULL),
+    ('Tran Thi B', 50, '2000-08-15', 'FEMALE', NULL);
 
 INSERT INTO orders (
     id, total_price, discount, shipping_fee,

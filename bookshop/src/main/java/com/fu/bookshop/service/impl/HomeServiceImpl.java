@@ -39,7 +39,6 @@ public class HomeServiceImpl implements HomeService {
                 .price(book.getPrice())
                 .build();
     }
-//pass
     @Override
     public Page<BookCardDTO> getActiveBooks(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -47,7 +46,6 @@ public class HomeServiceImpl implements HomeService {
                 .map(this::mapToCardDTO);
     }
 
-//pass
     @Override
     public Page<BookCardDTO> searchBooks(String keyword, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -75,7 +73,6 @@ public class HomeServiceImpl implements HomeService {
         return bookRepository.findDistinctByCategories_IdIn(categoryIds, pageable)
                 .map(this::mapToCardDTO);
     }
-//pass
     @Override
     public Page<BookCardDTO> getBooksByPublisher(Long publisherId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -83,13 +80,18 @@ public class HomeServiceImpl implements HomeService {
         return bookRepository.findByPublisher_Id(publisherId, pageable)
                 .map(this::mapToCardDTO);
     }
-//pass
+
+    @Override
+    public BookCardDTO getBookDetail(Long id) {
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Book not found"));
+        return mapToCardDTO(book);
+    }
 
     @Override
     public List<Category> getAllCategories() {
         return categoryRepository.findAll();
     }
-//pass
 
     @Override
     public List<Publisher> getAllPublishers() {

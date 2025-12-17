@@ -3,7 +3,7 @@ package com.fu.bookshop.controller;
 
 import com.fu.bookshop.dto.user.UserProfileDTO;
 import com.fu.bookshop.service.HomeService;
-import com.fu.bookshop.service.home.ShopService;
+import com.fu.bookshop.service.ShopService;
 import com.fu.bookshop.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.Banner;

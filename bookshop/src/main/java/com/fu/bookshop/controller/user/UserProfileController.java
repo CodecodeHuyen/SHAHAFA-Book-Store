@@ -34,7 +34,7 @@ public class UserProfileController {
             @RequestParam(name = "status", required = false)OrderStatus status,
             Principal principal,
             Model model
-    ){
+            ){
         String email = principal.getName();
 
 
@@ -76,7 +76,7 @@ public class UserProfileController {
             BindingResult bindingResult,
             @RequestParam(required = false)MultipartFile avatar,
             Model model
-    ){
+            ){
         if (bindingResult.hasErrors()) {
             model.addAttribute("genders", Gender.values());
             return "user/edit-profile";
