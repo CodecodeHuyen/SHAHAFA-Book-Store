@@ -196,10 +196,14 @@
 
 
                 <!-- Mua ngay (tuỳ bạn xử lý giống Add Cart) -->
-                <button
-                        class="border border-red-600 text-red-600 px-6 py-3 rounded-lg hover:bg-red-50 transition">
-                    Mua ngay
-                </button>
+                <form th:action="@{/checkout/buy-now}" method="post">
+                    <input type="hidden" name="bookId" th:value="${book.id}" />
+                    <input type="hidden" name="quantity" value="1" />
+                    <button type="submit"
+                            class="border border-red-600 text-red-600 px-6 py-3 rounded-lg hover:bg-red-50 transition">
+                        Mua ngay
+                    </button>
+                </form>
 
             </div>
 

@@ -19,7 +19,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public String createPaymentLink(long orderId, int amount, String productName) throws Exception {
-        System.out.println(">>> createPaymentLink() CALLED, orderId=" + orderId + ", amount=" + amount);
+        System.out.println(">>> createPaymentLink() CALLED, orderCode=" + orderId + ", amount=" + amount);
 
         // 1. Lấy mô tả gốc (từ controller truyền xuống)
         String desc = (productName != null && !productName.isBlank())

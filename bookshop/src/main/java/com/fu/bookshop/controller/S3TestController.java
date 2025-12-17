@@ -1,7 +1,6 @@
 package com.fu.bookshop.controller;
 
 import com.fu.bookshop.dto.ApiResponse;
-import com.fu.bookshop.dto.DeleteFileRequest;
 import com.fu.bookshop.exception.BusinessException;
 import com.fu.bookshop.exception.ErrorCode;
 import com.fu.bookshop.service.impl.S3ServiceImpl;
@@ -30,7 +29,7 @@ public class S3TestController {
      *  - file: (choose file)
      */
     @PostMapping("/upload")
-    public ResponseEntity<?> uploadMultiple(
+    public ResponseEntity<ApiResponse<List<String>>> uploadMultiple(
             @RequestParam("files") List<MultipartFile> files
     ) throws Exception {
 
@@ -45,11 +44,12 @@ public class S3TestController {
         List<String> urls = s3Service.uploadFiles(files);
 
         return ResponseEntity.ok(
-                new ApiResponse(
-                        "UPLOAD_SUCCESS",
-                        "Upload thành công " + urls.size() + " ảnh",
-                        urls
-                )
+                ApiResponse.<List<String>>builder()
+                        .success(true)
+                        .code(200)
+                        .message("Upload thành công " + urls.size() + " ảnh")
+                        .data(urls)
+                        .build()
         );
     }
 
@@ -65,16 +65,16 @@ public class S3TestController {
      * }
      */
     @DeleteMapping("/delete")
-    public ResponseEntity<?> delete(@RequestParam("fileUrl") String fileUrl) {
+    public ResponseEntity<ApiResponse<Void>> delete(@RequestParam("fileUrl") String fileUrl) {
 
         s3Service.delete(fileUrl);
 
         return ResponseEntity.ok(
-                new ApiResponse(
-                        "DELETE_SUCCESS",
-                        "Xóa file thành công",
-                        null
-                )
+                ApiResponse.<Void>builder()
+                        .success(true)
+                        .code(200)
+                        .message("Xóa file thành công")
+                        .build()
         );
     }
 }

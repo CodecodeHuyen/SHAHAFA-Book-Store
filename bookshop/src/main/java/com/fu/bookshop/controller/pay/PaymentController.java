@@ -2,37 +2,43 @@ package com.fu.bookshop.controller.pay;
 
 import com.fu.bookshop.dto.PaymentRequestDto;
 import com.fu.bookshop.entity.Order;
+import com.fu.bookshop.exception.BusinessException;
+import com.fu.bookshop.exception.ErrorCode;
 import com.fu.bookshop.service.OrderService;
 import com.fu.bookshop.service.PaymentService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import vn.payos.model.webhooks.Webhook;
 import vn.payos.model.webhooks.WebhookData;
 
-@RestController
+@Controller
 @RequestMapping("/api/v1/payment")
+@RequiredArgsConstructor
 public class PaymentController {
 
     private final PaymentService paymentService;
     private final OrderService orderService;
 
-    @Autowired
-    public PaymentController(PaymentService paymentService, OrderService orderService) {
-        this.paymentService = paymentService;
-        this.orderService = orderService;
-    }
-
     @PostMapping("/create-link")
     public String createPaymentLink(@RequestBody PaymentRequestDto dto) {
-        System.out.println(">>> /api/v1/payment/create-link CALLED, dto = " + dto);
         try {
-            long orderId = System.currentTimeMillis();
-            return paymentService.createPaymentLink(orderId, dto.getAmount(),
-                    dto.getDescription() != null ? dto.getDescription() : "Đơn hàng Bookshop");
+            Order order = orderService.getOrderByCode(dto.getOrderCode());
+            if (order == null) {
+                throw new BusinessException(ErrorCode.ORDER_NOT_FOUND);
+            }
+
+            int amount = order.getTotalPrice().add(order.getShippingFee()).intValue();
+            String description = "Thanh toan don hang " + order.getCode();
+            String paymentUrl = paymentService.createPaymentLink(order.getId(), amount, description);
+
+            return "redirect:" + paymentUrl;
         } catch (Exception e) {
             e.printStackTrace();
-            return "Lỗi tạo link: " + e.getMessage();
+            return "redirect:/error";
         }
     }
 

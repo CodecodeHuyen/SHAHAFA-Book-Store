@@ -148,10 +148,15 @@
                   th:text="${#numbers.formatDecimal(order.total,0,'COMMA',0,'POINT')} + ' đ'"></span>
         </div>
 
-        <button
-                class="mt-6 w-full bg-red-600 text-white py-3 rounded hover:bg-red-700 transition">
-            Đặt hàng
-        </button>
+        <form th:action="@{/checkout/process-payment}" method="post">
+            <input type="hidden" name="orderCode" th:value="${order.id}" />
+            <input type="hidden" name="amount" th:value="${order.total.intValue()}" />
+            <input type="hidden" name="description" th:value="'Đơn ' + ${order.code}" />
+
+            <button type="submit" class="mt-6 w-full bg-red-600 text-white py-3 rounded hover:bg-red-700 transition">
+                Đặt hàng
+            </button>
+        </form>
     </aside>
 
 </main>

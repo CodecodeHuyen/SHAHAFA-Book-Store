@@ -18,19 +18,19 @@ public class PaymentRedirectController {
     }
 
     @GetMapping("/success")
-    public String paymentSuccess(@RequestParam("orderCode") String orderCode) {
-        Order order = orderService.getOrderByCode(orderCode);
+    public String paymentSuccess(@RequestParam("orderCode") long orderCode) {
+        Order order = orderService.getOrderById(orderCode);
         if (order != null) {
-            orderService.updateOrderStatus(order, "COMPLETE");
+            orderService.processSuccessfulOrder(order.getId());
         }
         return "success";
     }
 
     @GetMapping("/cancel")
-    public String paymentCancel(@RequestParam("orderCode") String orderCode) {
-        Order order = orderService.getOrderByCode(orderCode);
+    public String paymentCancel(@RequestParam("orderCode") long orderCode) {
+        Order order = orderService.getOrderById(orderCode);
         if (order != null) {
-            orderService.updateOrderStatus(order, "CANCELED");
+            orderService.updateOrderStatus(order, "CANCELLED");
         }
         return "cancel";
     }

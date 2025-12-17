@@ -21,7 +21,8 @@ public enum ErrorCode {
     PUBLISHER_ALREADY_EXISTS(1015,"Nhà xuất bản này đã tồn tại"),
     BOOK_NOT_FOUND(1016,"Book not found"),
     CART_EMPTY(1017,"Giỏ hàng trống"),
-    USER_NOT_FOUND(1018,"User not found"),;
+    USER_NOT_FOUND(1018,"User not found"),
+    ORDER_NOT_FOUND(1019,"Order not found");
 
     private final int code;
     private final String message;
