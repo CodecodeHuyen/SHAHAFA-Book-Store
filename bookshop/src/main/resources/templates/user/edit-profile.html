@@ -6,6 +6,124 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100">
+
+<header class="bg-red-600 text-white shadow sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto flex items-center gap-6 px-4 py-3">
+
+        <!-- LOGO -->
+        <a th:href="@{/home}"
+           class="flex items-center gap-3 hover:opacity-80">
+            <!-- LOGO -->
+            <img th:src="${shop.logoUrl}"
+                 alt="Shop Logo"
+                 class="w-12 h-12 object-contain rounded bg-white p-1"/>
+
+            <h3 class="text-xl font-bold text-white"
+                th:text="${shop.name}">
+                BookShop
+            </h3>
+        </a>
+
+        <!-- CATEGORY DROPDOWN -->
+        <div class="relative group shrink-0">
+            <button
+                    class="flex items-center gap-2 px-4 py-2 bg-red-700 rounded-lg hover:bg-red-800 transition">
+                ☰ Danh mục
+            </button>
+
+            <!-- Dropdown box -->
+            <div
+                    class="absolute left-0 mt-2 w-72 bg-white text-black rounded-xl shadow-lg
+                       opacity-0 invisible group-hover:opacity-100 group-hover:visible
+                       transition-all duration-200 z-50">
+
+                <!-- CATEGORY -->
+                <div class="p-4 border-b">
+                    <p class="font-semibold mb-2">Thể loại</p>
+
+                    <a th:each="cat : ${categories}"
+                       th:href="@{/home(category=${cat.id}, keyword=${keyword})}"
+                       class="block px-3 py-1 rounded hover:bg-gray-100 text-sm"
+                       th:text="${cat.name}">
+                    </a>
+                </div>
+
+                <!-- PUBLISHER -->
+                <div class="p-4">
+                    <p class="font-semibold mb-2">Nhà xuất bản</p>
+
+                    <a th:each="pub : ${publishers}"
+                       th:href="@{/home(publisher=${pub.id}, keyword=${keyword})}"
+                       class="block px-3 py-1 rounded hover:bg-gray-100 text-sm"
+                       th:text="${pub.name}">
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEARCH -->
+        <form class="flex-1" method="get" th:action="@{/home}">
+            <input type="text"
+                   name="keyword"
+                   th:value="${keyword}"
+                   placeholder="Tìm kiếm sách..."
+                   class="w-full p-2 rounded-lg border border-gray-300 text-black focus:outline-none focus:ring-2 focus:ring-red-400" />
+        </form>
+
+        <!-- RIGHT ACTIONS -->
+        <div class="flex items-center gap-6 shrink-0 text-lg">
+            <a href="#" class="hover:opacity-80">Giỏ hàng</a>
+
+            <a th:if="${currentUser == null}"
+               th:href="@{/auth/login}"
+               class="hover:opacity-80">
+                Tài khoản
+            </a>
+            <div th:if="${currentUser != null}"  class="relative group">
+
+                <a th:href="@{/profile}" class="flex items-center gap-2 hover:opacity-80">
+                    <img th:src="${currentUser.avatarUrl != null
+                            ? currentUser.avatarUrl
+                            : 'https://i.pinimg.com/736x/d7/b3/fe/d7b3fe7e2ad5d772d0bfc501d0042f5e.jpg'}"
+                         class="w-9 h-9 rounded-full object-cover border border-white"/>
+
+                    <span class="hidden md:block font-medium"
+                          th:text="${currentUser.name}">
+                    </span>
+                </a>
+
+
+                <!-- Dropdown -->
+                <div class="absolute right-0 mt-2 w-44 bg-white text-black rounded-xl shadow-lg
+                    opacity-0 invisible group-hover:opacity-100 group-hover:visible
+                    transition-all duration-200 z-50">
+
+                    <a th:href="@{/profile}"
+                       class="block px-4 py-2 hover:bg-gray-100">
+                        Hồ sơ của tôi
+                    </a>
+
+                    <a th:href="@{/profile}"
+                       class="block px-4 py-2 hover:bg-gray-100">
+                        Đơn hàng
+                    </a>
+
+                    <form th:action="@{/auth/logout}" method="post">
+                        <button type="submit"
+                                class="w-full text-left px-4 py-2 hover:bg-gray-100">
+                            Đăng xuất
+                        </button>
+                    </form>
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+</header>
+
+
     <section class="max-w-xl mx-auto mt-10 bg-white rounded-xl shadow p-6">
         <form th:action="@{/profile/edit}" th:object="${user}" method="post" enctype="multipart/form-data"
               class="space-y-4">
@@ -73,5 +191,83 @@
 
         </form>
     </section>
+
+
+<br><br><br>
+
+<footer class="bg-gray-900 text-gray-300 mt-16">
+    <div class="max-w-7xl mx-auto px-4 py-12 grid grid-cols-12 gap-8">
+
+        <!-- SHOP INFO -->
+        <div class="col-span-12 md:col-span-4">
+            <div class="flex items-center gap-3 mb-4">
+                <img th:src="${shop.logoUrl}"
+                     alt="Shop Logo"
+                     class="w-12 h-12 object-contain rounded bg-white p-1"/>
+
+                <h3 class="text-xl font-bold text-white"
+                    th:text="${shop.name}">
+                    BookShop
+                </h3>
+            </div>
+
+            <p class="text-sm leading-relaxed"
+               th:text="${shop.description}">
+                Mô tả shop
+            </p>
+        </div>
+
+        <!-- CONTACT -->
+        <div class="col-span-12 md:col-span-4">
+            <h4 class="text-lg font-semibold text-white mb-4">
+                Thông tin liên hệ
+            </h4>
+
+            <ul class="space-y-2 text-sm">
+                <li>
+                    <span class="font-semibold">Địa chỉ:</span>
+                    <span th:text="${shop.address}"></span>
+                </li>
+                <li>
+                    <span class="font-semibold">Email:</span>
+                    <a th:href="'mailto:' + ${shop.email}"
+                       class="hover:text-white underline">
+                        <span th:text="${shop.email}"></span>
+                    </a>
+                </li>
+                <li th:if="${shop.hotline != null}">
+                    <span class="font-semibold">Hotline:</span>
+                    <a th:href="'tel:' + ${shop.hotline}"
+                       class="hover:text-white underline">
+                        <span th:text="${shop.hotline}"></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- QUICK LINKS -->
+        <div class="col-span-12 md:col-span-4">
+            <h4 class="text-lg font-semibold text-white mb-4">
+                🔗 Liên kết nhanh
+            </h4>
+
+            <ul class="space-y-2 text-sm">
+                <li><a th:href="@{/home}" class="hover:text-white">Trang chủ</a></li>
+                <li><a th:href="@{/home}" class="hover:text-white">Sách bán chạy</a></li>
+                <li><a th:href="@{/home}" class="hover:text-white">Khuyến mãi</a></li>
+                <li><a th:href="@{/home}" class="hover:text-white">Liên hệ</a></li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- COPYRIGHT -->
+    <div class="border-t border-gray-700 py-4 text-center text-sm text-gray-400">
+        © <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}"></span>
+        <span th:text="${shop.name}"></span>.
+        All rights reserved.
+    </div>
+</footer>
+
 </body>
 </html>

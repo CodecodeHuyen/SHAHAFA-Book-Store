@@ -139,7 +139,7 @@ public class S3ServiceImpl {
         }
 
         try {
-            String key = folderName + "/avatar"
+            String key = folderName + "/avatar/"
                     + UUID.randomUUID() + "-"
                     + file.getOriginalFilename();
 
