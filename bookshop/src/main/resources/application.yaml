@@ -64,6 +64,12 @@ aws:
     region: ap-southeast-1
     folder: "SHAHAFA Book Store"
 
+ghn:
+  token: ${GHN_TOKEN}
+  shop-id: ${GHN_SHOP_ID}
+  base-url: https://dev-online-gateway.ghn.vn
+
+
 admin: { email_default: "admin@test.com", password_default: "00000000" }
 customer-account-test: { email: "customer@test.com", password: "00000000" }
 manager-account-test: { email: "manager@test.com", password: "00000000" }

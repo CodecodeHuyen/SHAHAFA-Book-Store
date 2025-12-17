@@ -16,6 +16,7 @@ public class UserProfileDTO {
     private Integer loyalPoint;
     private LocalDate dateOfBirth;
     private Gender gender;
+    private String email;
 
 
 }

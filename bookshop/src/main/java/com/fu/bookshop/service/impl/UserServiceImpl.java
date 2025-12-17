@@ -8,6 +8,9 @@ import com.fu.bookshop.entity.OrderItem;
 import com.fu.bookshop.entity.User;
 import com.fu.bookshop.enums.OrderStatus;
 import com.fu.bookshop.enums.PaymentStatus;
+import com.fu.bookshop.exception.BusinessException;
+import com.fu.bookshop.exception.ErrorCode;
+import com.fu.bookshop.exception.SystemException;
 import com.fu.bookshop.repository.OrderRepository;
 import com.fu.bookshop.repository.UserRepository;
 import com.fu.bookshop.service.UserService;
@@ -25,11 +28,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserProfileDTO getUserProfileByEmail(String email) {
-        User user = userRepository.findByAccount_Email(email);
+        User user = userRepository.findByAccount_Email(email)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
-        if(user==null){
-            System.out.println("Null nè");
-        }
         return  UserProfileDTO.builder()
                 .id(user.getId())
                 .name(user.getName())
@@ -43,7 +44,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<OrderHistoryDTO> getOrderHistory(String email) {
-        User user = userRepository.findByAccount_Email(email);
+        User user = userRepository.findByAccount_Email(email)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
         return mapOrders(
                 orderRepository.findByUser_IdOrderByIdDesc(user.getId())
@@ -52,7 +54,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<OrderHistoryDTO> getOrderHistoryByStatus(String email, OrderStatus status) {
-        User user = userRepository.findByAccount_Email(email);
+        User user = userRepository.findByAccount_Email(email)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
         return mapOrders(
                 orderRepository.findByUser_IdAndOrderStatus(
@@ -60,6 +63,20 @@ public class UserServiceImpl implements UserService {
                 )
         );
     }
+
+    @Override
+    public UserProfileDTO getByEmail(String email) {
+        User user = userRepository.findByAccount_Email(email)
+                .orElseThrow(() -> new SystemException(ErrorCode.USER_NOT_FOUND));
+
+        return UserProfileDTO.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .email(user.getAccount().getEmail())
+                .loyalPoint(user.getLoyalPoint())
+                .build();
+    }
+
 
     private List<OrderHistoryDTO> mapOrders(List<Order> orders){
         List<OrderHistoryDTO> result = new ArrayList<>();
