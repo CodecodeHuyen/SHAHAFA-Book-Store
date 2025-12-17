@@ -57,8 +57,8 @@ spring:
     debug: true
 
 aws:
-  access-key: dummy-access-key
-  secret-key: dummy-secret-key
+  access-key: ${AWS_ACCESS_KEY}
+  secret-key: ${AWS_SECRET_KEY}
   s3:
     bucket: xo-cua-huyen-ne
     region: ap-southeast-1
