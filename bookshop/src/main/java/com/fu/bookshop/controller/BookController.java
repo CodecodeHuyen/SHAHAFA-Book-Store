@@ -13,12 +13,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 import java.util.List;
 
 @Controller
-@RequestMapping("/books")
+@RequestMapping("/manager")
 @RequiredArgsConstructor
 public class BookController {
 
@@ -121,7 +119,7 @@ public class BookController {
             return "manager/book-create";
         }
 
-        return "redirect:/books";
+        return "redirect:/manager";
     }
 
     @GetMapping("/create")
@@ -150,7 +148,7 @@ public class BookController {
 
         bookService.updateBook(id, request, image);
 
-        return "redirect:/books/detail/" + id;
+        return "redirect:/manager/detail/" + id;
     }
 
 

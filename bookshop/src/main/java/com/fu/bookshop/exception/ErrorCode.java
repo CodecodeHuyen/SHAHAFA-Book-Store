@@ -23,7 +23,8 @@ public enum ErrorCode {
     CART_EMPTY(1017,"Giỏ hàng trống"),
     USER_NOT_FOUND(1018,"User not found"),
     INVALID_FILE_TYPE(1019, "Tai avatar that bai" ),
-    FILE_TOO_LARGE(1020, "File qua lon" );
+    FILE_TOO_LARGE(1020, "File qua lon" ),
+    ADMIN_ACCOUNT_CANNOT_DELETE(1030, "Không thể xoá Role Admin");
 
     private final int code;
     private final String message;

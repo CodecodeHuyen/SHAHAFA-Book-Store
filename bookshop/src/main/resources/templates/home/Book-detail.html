@@ -218,7 +218,7 @@
     <div class="grid grid-cols-5 gap-6">
 
         <a th:each="b : ${relatedBooks}"
-           th:href="@{/books/{id}(id=${b.id})}"
+           th:href="@{/{id}(id=${b.id})}"
            class="bg-white rounded-lg p-3 shadow hover:shadow-lg transition">
 
             <img th:src="${b.image}"

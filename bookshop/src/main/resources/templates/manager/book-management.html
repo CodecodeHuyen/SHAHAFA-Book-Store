@@ -25,7 +25,7 @@
         <nav class="space-y-2 text-sm">
 
 
-            <a href="/books"
+            <a href="/manager"
                class="block px-3 py-2 rounded bg-blue-100 text-blue-700 font-medium">
                  Quản lý Sách
             </a>
@@ -57,7 +57,7 @@
             <p class="text-sm text-gray-500">Quản lý tất cả sách trong hệ thống</p>
         </div>
 
-        <a href="/books/create"
+        <a href="/manager/create"
            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
             + Thêm sách
         </a>
@@ -217,17 +217,17 @@
                 <!-- Actions -->
                 <td class="p-3">
                     <div class="flex justify-center gap-3 text-lg">
-                        <a th:href="@{/books/detail/{id}(id=${b.id})}"
+                        <a th:href="@{/manager/detail/{id}(id=${b.id})}"
                            title="Xem chi tiết">
                             👁
                         </a>
 
-                        <a th:href="@{/books/detail/{id}(id=${b.id})}"
+                        <a th:href="@{/manager/detail/{id}(id=${b.id})}"
                            title="Chỉnh sửa">
                             ✏️
                         </a>
 
-                        <a th:href="@{/manager/books/delete/{id}(id=${b.id})}"
+                        <a th:href="@{/manager/manager/delete/{id}(id=${b.id})}"
                            onclick="return confirm('Bạn có chắc muốn xoá sách này?')"
                            title="Xoá">
                             🗑
@@ -265,7 +265,7 @@
 
                 <!-- Previous -->
                 <a th:if="${currentPage > 0}"
-                   th:href="@{/books(
+                   th:href="@{/manager(
                 page=${currentPage - 1},
                 bookStatus=${bookStatus},
                 publisherId=${publisherId},
@@ -277,7 +277,7 @@
 
                 <!-- Next -->
                 <a th:if="${currentPage + 1 < totalPages}"
-                   th:href="@{/books(
+                   th:href="@{/manager(
                 page=${currentPage + 1},
                 bookStatus=${bookStatus},
                 publisherId=${publisherId},
