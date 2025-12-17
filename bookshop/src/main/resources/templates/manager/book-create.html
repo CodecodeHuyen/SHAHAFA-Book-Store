@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+    <title>Thêm sách</title>
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-50 min-h-screen">
+
+<div class="flex min-h-screen">
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="w-64 bg-white border-r p-4">
+        <h2 class="text-lg font-bold text-sky-600">BookShop Admin</h2>
+        <p class="text-xs text-gray-500 mb-6">Business Manager Panel</p>
+
+        <nav class="space-y-2 text-sm">
+            <a href="/books"
+               class="block px-3 py-2 rounded bg-sky-100 text-sky-700 font-medium">
+                📚 Quản lý Sách
+            </a>
+
+            <a href="/manager/orders"
+               class="block px-3 py-2 rounded hover:bg-gray-100">
+                🧾 Quản lý Đơn Hàng
+            </a>
+        </nav>
+
+        <a href="/logout"
+           class="block mt-10 text-red-600 px-3 py-2 border border-red-200 rounded hover:bg-red-50">
+            🚪 Logout
+        </a>
+    </aside>
+
+    <!-- ===== MAIN ===== -->
+    <main class="flex-1 p-6">
+
+        <div class="max-w-4xl bg-white border rounded-xl shadow-sm p-6">
+
+            <!-- Header -->
+            <div class="mb-6">
+                <h1 class="text-xl font-semibold text-slate-800">Thêm sách mới</h1>
+                <p class="text-sm text-gray-500">Nhập thông tin sách vào hệ thống</p>
+            </div>
+
+            <!-- ===== FORM ===== -->
+            <form th:action="@{/books/create}"
+                  th:object="${book}"
+                  method="post"
+                  enctype="multipart/form-data"
+                  class="space-y-5">
+
+                <!-- Title -->
+                <div>
+                    <label class="font-medium">Tên sách</label>
+                    <input type="text"
+                           th:field="*{title}"
+                           class="border rounded w-full px-3 py-2 mt-1">
+                    <p class="text-red-500 text-sm"
+                       th:errors="*{title}"></p>
+                </div>
+
+                <!-- Authors -->
+                <div>
+                    <label class="font-medium">Tác giả</label>
+                    <input type="text"
+                           th:field="*{authors}"
+                           placeholder="VD: James Clear, Robin Sharma"
+                           class="border rounded w-full px-3 py-2 mt-1">
+                    <p class="text-xs text-gray-500 mt-1">
+                        * Mỗi tác giả cách nhau bằng dấu phẩy (,)
+                    </p>
+                    <p class="text-red-500 text-sm"
+                       th:errors="*{authors}"></p>
+                </div>
+
+                <!-- ISBN -->
+                <div>
+                    <label class="font-medium">ISBN</label>
+                    <input type="text"
+                           th:field="*{isbn}"
+                           class="border rounded w-full px-3 py-2 mt-1">
+                    <p class="text-red-500 text-sm"
+                       th:errors="*{isbn}"></p>
+                </div>
+
+                <!-- Price + Quantity -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="font-medium">Giá (VNĐ)</label>
+                        <input  type="number" min="0" max="100000000"
+                               th:field="*{price}"
+                               class="border rounded w-full px-3 py-2 mt-1">
+                        <p class="text-red-500 text-sm"
+                           th:errors="*{price}"></p>
+                    </div>
+
+                    <div>
+                        <label class="font-medium">Số lượng</label>
+                        <input type="number"  min="0" max="10000"
+                               th:field="*{quantity}"
+                               class="border rounded w-full px-3 py-2 mt-1">
+                        <p class="text-red-500 text-sm"
+                           th:errors="*{quantity}"></p>
+                    </div>
+                </div>
+
+                <!-- Weight + Publication Date -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="font-medium">Khối lượng (gram)</label>
+                        <input type="number" min="0" max="10000"
+                               th:field="*{weight}"
+                               placeholder="Tối đa 10000g"
+                               class="border rounded w-full px-3 py-2 mt-1">
+                        <p class="text-red-500 text-sm"
+                           th:errors="*{weight}"></p>
+                    </div>
+
+                    <div>
+                        <label class="font-medium">Ngày xuất bản</label>
+                        <input  type="date" max="[[${#dates.format(#dates.createNow(),'yyyy-MM-dd')}]]"
+                               th:field="*{publicationDate}"
+                               class="border rounded w-full px-3 py-2 mt-1">
+                        <p class="text-red-500 text-sm"
+                           th:errors="*{publicationDate}"></p>
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div>
+                    <label class="font-medium">Mô tả</label>
+                    <textarea th:field="*{description}"
+                              rows="3"
+                              class="border rounded w-full px-3 py-2 mt-1"></textarea>
+                    <p class="text-red-500 text-sm"
+                       th:errors="*{description}"></p>
+                </div>
+
+                <!-- Category -->
+                <div>
+                    <label class="font-medium">Thể loại</label>
+
+                    <div class="border rounded p-3 h-40 overflow-y-auto mt-1 space-y-1">
+                        <label th:each="c : ${categories}"
+                               class="flex items-center gap-2 text-sm">
+
+                            <input type="checkbox"
+                                   name="categoryIds"
+                                   th:value="${c.id}" />
+
+                            <span th:text="${c.name}"></span>
+                        </label>
+                    </div>
+
+                    <p class="text-red-500 text-sm"
+                       th:errors="*{categoryIds}"></p>
+                </div>
+
+
+                <!-- Publisher -->
+                <div>
+                    <label class="font-medium">Nhà xuất bản</label>
+
+                    <select id="publisherSelect"
+                            th:field="*{publisherId}"
+                            class="border rounded w-full px-3 py-2 mt-1">
+                        <option value="">-- Chọn NXB --</option>
+                        <option th:each="p : ${publishers}"
+                                th:value="${p.id}"
+                                th:text="${p.name}">
+                        </option>
+                    </select>
+
+                    <button type="button"
+                            onclick="togglePublisherForm()"
+                            class="text-sky-600 text-sm mt-1">
+                        + Thêm Publisher
+                    </button>
+                </div>
+
+                <!-- Hidden Publisher UI -->
+                <div id="publisherForm"
+                     class="hidden border rounded p-3 bg-slate-50 space-y-2">
+
+                    <input id="publisherNameInput"
+                           type="text"
+                           placeholder="Tên nhà xuất bản"
+                           class="border rounded w-full px-3 py-2">
+
+                    <p id="publisherError"
+                       class="text-red-500 text-sm hidden"></p>
+
+                    <button type="button"
+                            onclick="savePublisher()"
+                            class="bg-green-500 text-white px-3 py-1 rounded">
+                        Lưu Publisher
+                    </button>
+                </div>
+
+                <!-- IMAGE -->
+                <img id="preview"
+                     class="w-full h-72 object-cover rounded border"/>
+
+                <div class="col-span-1 space-y-2">
+                    <label class="font-medium">Ảnh sách</label>
+
+                    <!-- FILE -->
+                    <input type="file"
+                           name="image"
+                           id="imageFile"
+                           accept="image/*"
+                           onchange="onFileChange(this)"
+                           class="block w-full text-sm">
+
+                    <!-- URL -->
+                    <input type="text"
+                           name="imageUrl"
+                           id="imageUrl"
+                           placeholder="Hoặc dán URL ảnh tại đây"
+                           oninput="onUrlChange(this)"
+                           class="border rounded w-full px-3 py-2 text-sm">
+
+                    <p class="text-xs text-gray-500">
+                        * Chỉ chọn 1 ảnh (upload hoặc URL)
+                    </p>
+                </div>
+
+
+
+                <!-- Submit -->
+                <div class="flex justify-end gap-3 pt-4">
+                    <a href="/books"
+                       class="px-4 py-2 border rounded hover:bg-gray-100">
+                        Huỷ
+                    </a>
+                    <button type="submit"
+                            class="bg-sky-500 text-white px-5 py-2 rounded hover:bg-sky-600">
+                        Lưu sách
+                    </button>
+                </div>
+
+            </form>
+        </div>
+
+    </main>
+</div>
+
+<script>
+    function togglePublisherForm() {
+        document.getElementById("publisherForm").classList.toggle("hidden");
+    }
+
+    function savePublisher() {
+
+        const token = document.querySelector('meta[name="_csrf"]').content;
+        const header = document.querySelector('meta[name="_csrf_header"]').content;
+
+        const nameInput = document.getElementById("publisherNameInput");
+        const errorEl = document.getElementById("publisherError");
+        const publisherSelect = document.getElementById("publisherSelect");
+
+        const name = nameInput.value.trim();
+
+        if (!name) {
+            errorEl.textContent = "Tên publisher không được để trống";
+            errorEl.classList.remove("hidden");
+            return;
+        }
+
+        fetch("/publishers", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                [header]: token
+            },
+            body: JSON.stringify({ name })
+        })
+            .then(res => res.json())
+            .then(res => {
+
+                if (!res.success) {
+                    throw res;
+                }
+
+                // SUCCESS
+                const option = document.createElement("option");
+                option.value = res.data.id;
+                option.textContent = res.data.name;
+                option.selected = true;
+
+                publisherSelect.appendChild(option);
+
+                nameInput.value = "";
+                errorEl.classList.add("hidden");
+                document.getElementById("publisherForm").classList.add("hidden");
+
+            })
+            .catch(err => {
+                errorEl.textContent = err.message ;
+                errorEl.classList.remove("hidden");
+            });
+    }
+
+    const preview = document.getElementById("preview");
+    const fileInput = document.getElementById("imageFile");
+    const urlInput = document.getElementById("imageUrl");
+
+    /* ===== Khi chọn FILE ===== */
+    function onFileChange(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = e => preview.src = e.target.result;
+            reader.readAsDataURL(input.files[0]);
+
+            // clear URL
+            urlInput.value = "";
+        }
+    }
+
+    /* ===== Khi nhập URL ===== */
+    async function onUrlChange(input) {
+        const url = input.value.trim();
+        if (!url.startsWith("http")) return;
+
+        try {
+            // 1. fetch ảnh từ URL
+            const response = await fetch(url);
+            const blob = await response.blob();
+
+            // 2. tạo File từ Blob
+            const file = new File(
+                [blob],
+                "image-from-url." + blob.type.split("/")[1],
+                { type: blob.type }
+            );
+
+            // 3. gán File vào input type=file
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            fileInput.files = dataTransfer.files;
+
+            // 4. preview
+            preview.src = URL.createObjectURL(blob);
+
+        } catch (err) {
+            alert("Không tải được ảnh từ URL");
+            input.value = "";
+        }
+    }
+
+    /* ===== Drag & Drop ảnh online ===== */
+    preview.addEventListener("dragover", e => e.preventDefault());
+
+    preview.addEventListener("drop", async e => {
+        e.preventDefault();
+        const url = e.dataTransfer.getData("text/plain");
+        if (url && url.startsWith("http")) {
+            document.getElementById("imageUrl").value = url;
+            await onUrlChange(document.getElementById("imageUrl"));
+        }
+    });
+</script>
+
+
+</body>
+</html>

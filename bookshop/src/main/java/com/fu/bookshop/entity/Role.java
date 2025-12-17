@@ -1,5 +1,9 @@
 package com.fu.bookshop.entity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.*;
 
 import java.util.List;
@@ -22,7 +26,7 @@ public class Role {
     @Column(nullable = false,  columnDefinition = "NVARCHAR(50)")
     private String roleName;
 
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "roles")
     private List<Account> accounts;
 
 

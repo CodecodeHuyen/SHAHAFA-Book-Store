@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý sách</title>
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+<div class="flex min-h-screen">
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="w-64 bg-white border-r p-4">
+
+        <!-- Logo -->
+        <div class="mb-6">
+            <h2 class="text-lg font-bold text-blue-600">BookShop Manager</h2>
+            <p class="text-xs text-gray-500">Business Manager Panel</p>
+        </div>
+
+        <!-- Menu -->
+        <nav class="space-y-2 text-sm">
+
+
+            <a href="/books"
+               class="block px-3 py-2 rounded bg-blue-100 text-blue-700 font-medium">
+                 Quản lý Sách
+            </a>
+
+            <a href="/manager/orders"
+               class="block px-3 py-2 rounded hover:bg-gray-100">
+                Quản Lý Đơn Hàng
+            </a>
+
+        </nav>
+
+        <!-- Logout -->
+        <div class="mt-10">
+            <a href="/logout"
+               class="block text-red-600 px-3 py-2 border border-red-200 rounded hover:bg-red-50">
+                🚪 Logout
+            </a>
+        </div>
+    </aside>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="flex-1 p-5 bg-slate-50">
+
+
+    <!-- ===== HEADER ===== -->
+    <div class="flex justify-between items-center mb-6">
+        <div>
+            <h1 class="text-xl font-semibold text-gray-800">Danh sách sách</h1>
+            <p class="text-sm text-gray-500">Quản lý tất cả sách trong hệ thống</p>
+        </div>
+
+        <a href="/books/create"
+           class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+            + Thêm sách
+        </a>
+    </div>
+
+    <!-- ===== FILTER + SEARCH ===== -->
+    <form method="get" class="flex flex-wrap gap-4 mb-6 items-end">
+
+        <!-- Book Status -->
+        <div>
+            <label class="block text-sm text-gray-600 mb-1">Trạng thái</label>
+            <select name="bookStatus"
+                    class="border rounded px-3 py-2 min-w-[160px]">
+                <option value="ALL"
+                        th:selected="${bookStatus == null || bookStatus == 'ALL'}">
+                    Tất cả
+                </option>
+                <option value="ACTIVE"
+                        th:selected="${bookStatus == 'ACTIVE'}">
+                    Còn hàng
+                </option>
+                <option value="OUT_OF_STOCK"
+                        th:selected="${bookStatus == 'OUT_OF_STOCK'}">
+                    Hết hàng
+                </option>
+            </select>
+        </div>
+
+            <!-- Category (Checkbox list) -->
+        <div>
+            <label class="block text-sm text-gray-600 mb-1">Thể loại</label>
+
+            <div class="border rounded px-3 py-2 w-[220px] h-[160px] overflow-y-auto space-y-1">
+
+                <!-- Tất cả -->
+                <label class="flex items-center gap-2 text-sm">
+                    <input type="checkbox"
+                           name="categoryIds"
+                           value="0"
+                           th:checked="${categoryIds == null or categoryIds.contains(0)}"/>
+                    <span>Tất cả</span>
+                </label>
+
+                <!-- Category list -->
+                <label th:each="c : ${categories}"
+                       class="flex items-center gap-2 text-sm">
+                    <input type="checkbox"
+                           name="categoryIds"
+                           th:value="${c.id}"
+                           th:checked="${categoryIds != null and categoryIds.contains(c.id)}"/>
+                    <span th:text="${c.name}"></span>
+                </label>
+
+            </div>
+        </div>
+
+
+
+        <!-- Publisher -->
+        <div>
+            <label class="block text-sm text-gray-600 mb-1">Nhà xuất bản</label>
+            <select name="publisherId"
+                    class="border rounded px-3 py-2 min-w-[220px]">
+
+                <option value="0"
+                        th:selected="${publisherId == null or publisherId == 0}">
+                    Tất cả
+                </option>
+
+                <option th:each="p : ${publishers}"
+                        th:value="${p.id}"
+                        th:text="${p.name}"
+                        th:selected="${publisherId == p.id}">
+                </option>
+            </select>
+
+
+
+        </div>
+
+        <!-- Search -->
+        <div>
+            <label class="block text-sm text-gray-600 mb-1">Tìm kiếm</label>
+            <input type="text"
+                   name="keyword"
+                   placeholder="Tên sách hoặc NXB..."
+                   th:value="${keyword}"
+                   class="border rounded px-3 py-2 w-72"/>
+        </div>
+
+        <!-- Submit -->
+        <div>
+            <button type="submit"
+                    class="bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-700">
+                Tìm
+            </button>
+        </div>
+
+    </form>
+
+    <!-- ===== TABLE ===== -->
+    <div class="overflow-x-auto">
+        <table class="w-full border-collapse text-[13px] [&_td]:py-1.5 [&_td]:leading-tight">
+
+        <thead>
+            <tr class="bg-gray-100 text-left text-gray-700">
+                <th class="p-3">ID</th>
+                <th class="p-3">Ảnh</th>
+                <th class="p-3">Tên sách</th>
+                <th class="p-3">Tác giả</th>
+                <th class="p-3">ISBN</th>
+                <th class="p-3">Thể loại</th>
+                <th class="p-3">NXB</th>
+                <th class="p-3">Giá</th>
+                <th class="p-3">Số lượng</th>
+                <th class="p-3">Trạng thái</th>
+                <th class="p-3 text-center">Hành động</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="b : ${books}"
+                class="border-b hover:bg-gray-50">
+
+                <td class="p-3" th:text="${b.id}"></td>
+
+                <td class="p-3">
+                    <img th:src="${b.urlImage}"
+                         alt="book"
+                         class="w-12 h-16 object-cover rounded"/>
+                </td>
+
+                <td class="p-3 font-medium" th:text="${b.title}"></td>
+                <td class="p-3" th:text="${b.authors}"></td>
+                <td class="p-3" th:text="${b.isbn}"></td>
+                <td class="p-3" th:text="${b.categoryNames}"></td>
+                <td class="p-3" th:text="${b.publisherName}"></td>
+
+                <td class="p-3"
+                    th:text="${#numbers.formatDecimal(b.price, 0, 'COMMA', 0, 'POINT')} + ' đ'">
+                </td>
+
+                <td class="p-3" th:text="${b.quantity}"></td>
+
+                <td class="p-3">
+                    <span th:if="${b.status.name() == 'ACTIVE'}"
+                          class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs">
+                        Còn hàng
+                    </span>
+
+                    <span th:if="${b.status.name() == 'OUT_OF_STOCK'}"
+                          class="px-2 py-1 bg-red-100 text-red-700 rounded text-xs">
+                        Hết hàng
+                    </span>
+                </td>
+
+                <!-- Actions -->
+                <td class="p-3">
+                    <div class="flex justify-center gap-3 text-lg">
+                        <a th:href="@{/books/detail/{id}(id=${b.id})}"
+                           title="Xem chi tiết">
+                            👁
+                        </a>
+
+                        <a th:href="@{/books/detail/{id}(id=${b.id})}"
+                           title="Chỉnh sửa">
+                            ✏️
+                        </a>
+
+                        <a th:href="@{/manager/books/delete/{id}(id=${b.id})}"
+                           onclick="return confirm('Bạn có chắc muốn xoá sách này?')"
+                           title="Xoá">
+                            🗑
+                        </a>
+                    </div>
+                </td>
+            </tr>
+
+            <tr th:if="${books.isEmpty()}">
+                <td colspan="11" class="text-center text-gray-500 p-6">
+                    Không có dữ liệu
+                </td>
+            </tr>
+
+
+        </table>
+
+        <!-- ===== PAGINATION ===== -->
+        <div class="flex justify-between items-center mt-6 text-sm">
+
+            <!-- LEFT -->
+            <div class="text-gray-600">
+                Trang
+                <span th:text="${currentPage + 1}"></span>
+                /
+                <span th:text="${totalPages}"></span>
+                —
+                Tổng:
+                <span th:text="${totalElements}"></span>
+                sản phẩm
+            </div>
+
+            <!-- RIGHT -->
+            <div class="flex gap-2">
+
+                <!-- Previous -->
+                <a th:if="${currentPage > 0}"
+                   th:href="@{/books(
+                page=${currentPage - 1},
+                bookStatus=${bookStatus},
+                publisherId=${publisherId},
+                keyword=${keyword}
+           )}"
+                   class="px-3 py-1 border rounded hover:bg-gray-100">
+                    ← Trước
+                </a>
+
+                <!-- Next -->
+                <a th:if="${currentPage + 1 < totalPages}"
+                   th:href="@{/books(
+                page=${currentPage + 1},
+                bookStatus=${bookStatus},
+                publisherId=${publisherId},
+                keyword=${keyword}
+           )}"
+                   class="px-3 py-1 border rounded hover:bg-gray-100">
+                    Sau →
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    </main>
+</div>
+
+</body>
+</html>

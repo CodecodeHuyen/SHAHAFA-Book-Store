@@ -74,4 +74,30 @@ public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificat
             @Param("orderStatus")OrderStatus orderStatus,
             Pageable pageable
             );
+
+    @Query("""
+        SELECT DISTINCT b
+        FROM Book b
+        LEFT JOIN b.publisher p
+        LEFT JOIN b.categories c
+        WHERE b.status <> com.fu.bookshop.enums.BookStatus.DELETED
+          AND (:bookStatus IS NULL OR b.status = :bookStatus)
+          AND (:publisherId IS NULL OR p.id = :publisherId)
+          AND (:categoryIds IS NULL OR c.id IN :categoryIds)
+          AND (
+                :keyword IS NULL OR
+                LOWER(b.title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
+                LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%'))
+          )
+    """)
+    Page<Book> findFilteredBooks(
+            @Param("bookStatus") BookStatus bookStatus,
+            @Param("publisherId") Long publisherId,
+            @Param("categoryIds") List<Long> categoryIds,
+            @Param("keyword") String keyword,
+            Pageable pageable
+    );
+
+    Boolean existsByIsbn(String isbn);
+
 }
