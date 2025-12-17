@@ -4,6 +4,7 @@ package com.fu.bookshop.service;
 import com.fu.bookshop.dto.CheckoutDTO;
 import com.fu.bookshop.dto.user.OrderHistoryDTO;
 import com.fu.bookshop.dto.user.UserProfileDTO;
+import com.fu.bookshop.entity.User;
 import com.fu.bookshop.enums.OrderStatus;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +17,8 @@ public interface UserService {
 
     List<OrderHistoryDTO> getOrderHistoryByStatus(String email, OrderStatus status);
 
-//    CheckoutDTO getCheckoutImfor(String email);
+    UserProfileDTO getByEmail(String email);
+
 
 
 

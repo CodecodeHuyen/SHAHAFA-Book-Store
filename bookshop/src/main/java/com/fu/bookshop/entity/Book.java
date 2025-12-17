@@ -25,7 +25,7 @@ public class Book {
     private String authors;
     private Integer quantity;
     private String urlImage;
-    private Double weight;
+    private Integer weight;
 
     @Lob
     @Column(columnDefinition = "TEXT")

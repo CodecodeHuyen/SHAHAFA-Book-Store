@@ -210,7 +210,7 @@ public class BookServiceImpl implements BookService {
                 .isbn(req.getIsbn())
                 .price(req.getPrice())
                 .quantity(req.getQuantity())
-                .weight(req.getWeight().doubleValue())
+                .weight(req.getWeight())
                 .description(req.getDescription())
                 .publicationDate(req.getPublicationDate())
                 .urlImage(imageUrl)
