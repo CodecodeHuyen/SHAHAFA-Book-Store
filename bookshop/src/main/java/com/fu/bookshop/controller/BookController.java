@@ -1,9 +1,6 @@
 package com.fu.bookshop.controller;
 
-import com.fu.bookshop.dto.BookCardDTO;
-import com.fu.bookshop.dto.BookCreateRequest;
-import com.fu.bookshop.dto.BookDetailDTO;
-import com.fu.bookshop.dto.BookListDTO;
+import com.fu.bookshop.dto.*;
 import com.fu.bookshop.exception.BusinessException;
 import com.fu.bookshop.service.BookService;
 import com.fu.bookshop.service.CategoryService;
@@ -16,8 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -44,6 +39,24 @@ public class BookController {
         return "home/book-detail";
     }
 
+    @GetMapping("detail/{id}")
+    public String bookDetail2(
+            @PathVariable Long id,
+            Model model
+    ) {
+        BookDetailDTO book = bookService.getBookDetail(id);
+
+        model.addAttribute("book", book);
+        model.addAttribute("bookUpdate", new BookUpdateRequest(
+                book.getPrice(),
+                book.getStock(),
+                book.getDescription()
+        ));
+
+        return "manager/book-detail";
+    }
+
+
     @GetMapping
     public String bookManagement(
             @RequestParam(required = false) String bookStatus,
@@ -68,6 +81,7 @@ public class BookController {
         model.addAttribute("books", bookPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", bookPage.getTotalPages());
+        model.addAttribute("totalElements", bookPage.getTotalElements());
 
         // filter data
         model.addAttribute("categories", categoryService.getAll());
@@ -117,6 +131,26 @@ public class BookController {
 
         return "manager/book-create";
     }
+
+    @PostMapping("/{id}/edit")
+    public String updateBook(
+            @PathVariable Long id,
+            @Valid @ModelAttribute("bookUpdate") BookUpdateRequest request,
+            BindingResult result,
+            @RequestParam(required = false) MultipartFile image,
+            Model model
+    ) {
+        if (result.hasErrors()) {
+            BookDetailDTO book = bookService.getBookDetail(id);
+            model.addAttribute("book", book);
+            return "manager/book-detail";
+        }
+
+        bookService.updateBook(id, request, image);
+
+        return "redirect:/books/detail/" + id;
+    }
+
 
 
 

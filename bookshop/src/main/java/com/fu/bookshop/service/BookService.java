@@ -1,9 +1,6 @@
 package com.fu.bookshop.service;
 
-import com.fu.bookshop.dto.BookCardDTO;
-import com.fu.bookshop.dto.BookCreateRequest;
-import com.fu.bookshop.dto.BookDetailDTO;
-import com.fu.bookshop.dto.BookListDTO;
+import com.fu.bookshop.dto.*;
 import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,4 +26,11 @@ public interface BookService {
             BookCreateRequest req,
             MultipartFile image
     ) ;
+
+    @Transactional
+    void updateBook(
+            Long bookId,
+            BookUpdateRequest req,
+            MultipartFile image
+    );
 }

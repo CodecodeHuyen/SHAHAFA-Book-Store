@@ -26,7 +26,11 @@ public class Book {
     private Integer quantity;
     private String urlImage;
     private Double weight;
+
+    @Lob
+    @Column(columnDefinition = "TEXT")
     private String description;
+
     private LocalDate publicationDate;
 
     @Enumerated(EnumType.STRING)
@@ -44,9 +48,9 @@ public class Book {
     @JoinColumn(name = "publisher_id", nullable = false)
     private Publisher publisher;
 
-    @ManyToOne
-    @JoinColumn(name = "shop_id", nullable = false)
-    private Shop shop;
+//    @ManyToOne
+//    @JoinColumn(name = "shop_id", nullable = false)
+//    private Shop shop;
 
     @OneToMany(mappedBy = "book")
     private List<CartItem> cartItems;

@@ -76,25 +76,25 @@
         </section>
 
         <!-- ===== SẢN PHẨM ===== -->
-<!--        <section class="bg-white p-6 rounded-lg shadow">-->
-<!--            <h2 class="font-semibold text-lg mb-4">Kiểm tra đơn hàng</h2>-->
+        <section class="bg-white p-6 rounded-lg shadow">
+            <h2 class="font-semibold text-lg mb-4">Kiểm tra đơn hàng</h2>
 
-<!--            <div th:each="item : ${cart.items}" class="flex gap-4 border-b py-4">-->
-<!--                <img th:src="${item.book.urlImage}"-->
-<!--                     class="w-20 h-28 object-cover rounded"/>-->
+            <div th:each="item : ${cart.items}" class="flex gap-4 border-b py-4">
+                <img th:src="${item.book.urlImage}"
+                     class="w-20 h-28 object-cover rounded"/>
 
-<!--                <div class="flex-1">-->
-<!--                    <p class="font-semibold" th:text="${item.book.title}"></p>-->
-<!--                    <p class="text-sm text-gray-500">-->
-<!--                        SL: <span th:text="${item.quantity}"></span>-->
-<!--                    </p>-->
-<!--                </div>-->
+                <div class="flex-1">
+                    <p class="font-semibold" th:text="${item.book.title}"></p>
+                    <p class="text-sm text-gray-500">
+                        SL: <span th:text="${item.quantity}"></span>
+                    </p>
+                </div>
 
-<!--                <div class="font-semibold text-red-600">-->
-<!--                    <span th:text="${item.price}"></span> đ-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </section>-->
+                <div class="font-semibold text-red-600">
+                    <span th:text="${item.price}"></span> đ
+                </div>
+            </div>
+        </section>
 
     </div>
 

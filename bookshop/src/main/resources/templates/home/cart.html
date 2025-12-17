@@ -291,26 +291,6 @@
         }
     }
 
-    function validateQuantityBeforeSubmit(form, maxQuantity) {
-        const input = form.querySelector('.quantity-input');
-        const value = parseInt(input.value) || 0;
-        
-        if (value > maxQuantity) {
-            showQuantityError(input, 'Số lượng sách trong kho chỉ còn ' + maxQuantity + ' cuốn. Vui lòng chọn lại số lượng.');
-            input.value = maxQuantity;
-            validateQuantityInput(input);
-            return false;
-        } else if (value < 1) {
-            showQuantityError(input, 'Số lượng phải lớn hơn 0');
-            input.value = 1;
-            validateQuantityInput(input);
-            return false;
-        }
-        
-        hideQuantityError(input);
-        return true;
-    }
-
     function showQuantityError(input, message) {
         const errorSpan = input.parentElement.querySelector('.quantity-error');
         if (errorSpan) {

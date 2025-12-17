@@ -1,5 +1,8 @@
 package com.fu.bookshop.dto;
 
+import com.fu.bookshop.enums.BookStatus;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,21 +17,20 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class BookDetailDTO {
 
-    private Long id;
     private String title;
     private String image;
     private BigDecimal price;
-    private BigDecimal oldPrice;
-    private Integer salePercent;
-
     private String description;
     private String authors;
-
     private String publisherName;
     private LocalDate publicationDate;
-    private String language;
-    private Integer pages;
     private Integer weight;
-    private String size;
+    private String isbn;
+    private String categoryNames;
+
+    private Long id;
+    @Enumerated(EnumType.STRING)
+    private BookStatus status;
+    private Integer stock;
 
 }

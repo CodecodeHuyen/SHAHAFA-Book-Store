@@ -1,4 +1,4 @@
-package com.fu.bookshop.service.home;
+package com.fu.bookshop.service;
 
 import com.fu.bookshop.dto.CartDTO;
 import com.fu.bookshop.entity.Account;

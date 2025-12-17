@@ -39,7 +39,7 @@ spring:
     database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: false
 
   mail:
     host: smtp.gmail.com
@@ -63,4 +63,9 @@ aws:
     bucket: xo-cua-huyen-ne
     region: ap-southeast-1
     folder: "SHAHAFA Book Store"
+
+admin: { email_default: "admin@test.com", password_default: "00000000" }
+customer-account-test: { email: "customer@test.com", password: "00000000" }
+manager-account-test: { email: "manager@test.com", password: "00000000" }
+
 

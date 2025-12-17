@@ -35,7 +35,7 @@ public class BookCreateRequest {
     @Max(value = 10000, message = "Khối lượng không quá 10kg (10000g)")
     private Integer weight;
 
-    @Size(max = 255, message = "Mô tả không quá 255 ký tự")
+    @Size(max = 2000, message = "Mô tả không quá 2000 ký tự")
     private String description;
 
     @NotNull(message = "Ngày xuất bản không được để trống")
@@ -48,7 +48,6 @@ public class BookCreateRequest {
     @NotNull(message = "Phải chọn nhà xuất bản")
     private Long publisherId;
 
-//    @Size(max = 1000, message = "URL ảnh quá dài")
-//    private String imageUrl;
+
 
 }

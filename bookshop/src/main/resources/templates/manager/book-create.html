@@ -2,6 +2,9 @@
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
     <title>Thêm sách</title>
 
     <!-- Tailwind CDN -->
@@ -184,24 +187,52 @@
 
                 <!-- Hidden Publisher UI -->
                 <div id="publisherForm"
-                     class="hidden border rounded p-3 bg-slate-50">
-                    <input type="text"
+                     class="hidden border rounded p-3 bg-slate-50 space-y-2">
+
+                    <input id="publisherNameInput"
+                           type="text"
                            placeholder="Tên nhà xuất bản"
                            class="border rounded w-full px-3 py-2">
+
+                    <p id="publisherError"
+                       class="text-red-500 text-sm hidden"></p>
+
                     <button type="button"
-                            class="bg-green-500 text-white px-3 py-1 mt-2 rounded">
+                            onclick="savePublisher()"
+                            class="bg-green-500 text-white px-3 py-1 rounded">
                         Lưu Publisher
                     </button>
                 </div>
 
-                <!-- Image -->
-                <div>
-                    <label class="font-medium">Ảnh bìa</label>
+                <!-- IMAGE -->
+                <img id="preview"
+                     class="w-full h-72 object-cover rounded border"/>
+
+                <div class="col-span-1 space-y-2">
+                    <label class="font-medium">Ảnh sách</label>
+
+                    <!-- FILE -->
                     <input type="file"
                            name="image"
+                           id="imageFile"
                            accept="image/*"
-                           class="mt-1">
+                           onchange="onFileChange(this)"
+                           class="block w-full text-sm">
+
+                    <!-- URL -->
+                    <input type="text"
+                           name="imageUrl"
+                           id="imageUrl"
+                           placeholder="Hoặc dán URL ảnh tại đây"
+                           oninput="onUrlChange(this)"
+                           class="border rounded w-full px-3 py-2 text-sm">
+
+                    <p class="text-xs text-gray-500">
+                        * Chỉ chọn 1 ảnh (upload hoặc URL)
+                    </p>
                 </div>
+
+
 
                 <!-- Submit -->
                 <div class="flex justify-end gap-3 pt-4">
@@ -225,7 +256,118 @@
     function togglePublisherForm() {
         document.getElementById("publisherForm").classList.toggle("hidden");
     }
+
+    function savePublisher() {
+
+        const token = document.querySelector('meta[name="_csrf"]').content;
+        const header = document.querySelector('meta[name="_csrf_header"]').content;
+
+        const nameInput = document.getElementById("publisherNameInput");
+        const errorEl = document.getElementById("publisherError");
+        const publisherSelect = document.getElementById("publisherSelect");
+
+        const name = nameInput.value.trim();
+
+        if (!name) {
+            errorEl.textContent = "Tên publisher không được để trống";
+            errorEl.classList.remove("hidden");
+            return;
+        }
+
+        fetch("/publishers", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                [header]: token
+            },
+            body: JSON.stringify({ name })
+        })
+            .then(res => res.json())
+            .then(res => {
+
+                if (!res.success) {
+                    throw res;
+                }
+
+                // SUCCESS
+                const option = document.createElement("option");
+                option.value = res.data.id;
+                option.textContent = res.data.name;
+                option.selected = true;
+
+                publisherSelect.appendChild(option);
+
+                nameInput.value = "";
+                errorEl.classList.add("hidden");
+                document.getElementById("publisherForm").classList.add("hidden");
+
+            })
+            .catch(err => {
+                errorEl.textContent = err.message ;
+                errorEl.classList.remove("hidden");
+            });
+    }
+
+    const preview = document.getElementById("preview");
+    const fileInput = document.getElementById("imageFile");
+    const urlInput = document.getElementById("imageUrl");
+
+    /* ===== Khi chọn FILE ===== */
+    function onFileChange(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = e => preview.src = e.target.result;
+            reader.readAsDataURL(input.files[0]);
+
+            // clear URL
+            urlInput.value = "";
+        }
+    }
+
+    /* ===== Khi nhập URL ===== */
+    async function onUrlChange(input) {
+        const url = input.value.trim();
+        if (!url.startsWith("http")) return;
+
+        try {
+            // 1. fetch ảnh từ URL
+            const response = await fetch(url);
+            const blob = await response.blob();
+
+            // 2. tạo File từ Blob
+            const file = new File(
+                [blob],
+                "image-from-url." + blob.type.split("/")[1],
+                { type: blob.type }
+            );
+
+            // 3. gán File vào input type=file
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            fileInput.files = dataTransfer.files;
+
+            // 4. preview
+            preview.src = URL.createObjectURL(blob);
+
+        } catch (err) {
+            alert("Không tải được ảnh từ URL");
+            input.value = "";
+        }
+    }
+
+    /* ===== Drag & Drop ảnh online ===== */
+    preview.addEventListener("dragover", e => e.preventDefault());
+
+    preview.addEventListener("drop", async e => {
+        e.preventDefault();
+        const url = e.dataTransfer.getData("text/plain");
+        if (url && url.startsWith("http")) {
+            document.getElementById("imageUrl").value = url;
+            await onUrlChange(document.getElementById("imageUrl"));
+        }
+    });
 </script>
+
 
 </body>
 </html>

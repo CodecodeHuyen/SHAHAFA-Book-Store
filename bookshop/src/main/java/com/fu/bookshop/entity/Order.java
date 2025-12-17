@@ -24,15 +24,15 @@ public class Order {
     @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal totalPrice;
 
-    @Column(nullable = false, precision = 12, scale = 2)
+    @Column( precision = 12, scale = 2)
     private BigDecimal discount;
 
-    @Column(nullable = false, precision = 12, scale = 2)
+    @Column( precision = 12, scale = 2)
     private BigDecimal shippingFee;
 
-    @Column(nullable = false,columnDefinition = "NVARCHAR(255)")
+    @Column(columnDefinition = "NVARCHAR(255)")
     private String pickupAddr;
-    @Column(nullable = false,columnDefinition = "NVARCHAR(255)")
+    @Column(columnDefinition = "NVARCHAR(255)")
     private String deliveryAddr;
 
     @Column(nullable = false)

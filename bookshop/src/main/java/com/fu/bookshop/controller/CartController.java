@@ -2,7 +2,7 @@ package com.fu.bookshop.controller;
 
 import com.fu.bookshop.dto.CartDTO;
 import com.fu.bookshop.entity.Account;
-import com.fu.bookshop.service.home.CartService;
+import com.fu.bookshop.service.CartService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,9 +20,6 @@ public class CartController {
 
     @GetMapping
     public String viewCart(@AuthenticationPrincipal Account account, Model model) {
-        if (account == null) {
-            return "redirect:/auth/login";
-        }
 
         CartDTO cart = cartService.getCartByAccount(account);
         model.addAttribute("cart", cart);
@@ -37,9 +34,6 @@ public class CartController {
             HttpServletRequest request,
             RedirectAttributes redirectAttributes
     ) {
-        if (account == null) {
-            return "redirect:/auth/login";
-        }
 
         try {
             cartService.addToCart(account, bookId, quantity);
@@ -67,9 +61,7 @@ public class CartController {
             @RequestParam Integer quantity,
             RedirectAttributes redirectAttributes
     ) {
-        if (account == null) {
-            return "redirect:/auth/login";
-        }
+
 
         try {
             cartService.updateCartItemQuantity(account, cartItemId, quantity);
@@ -87,9 +79,7 @@ public class CartController {
             @RequestParam Long cartItemId,
             RedirectAttributes redirectAttributes
     ) {
-        if (account == null) {
-            return "redirect:/auth/login";
-        }
+
 
         try {
             cartService.removeCartItem(account, cartItemId);

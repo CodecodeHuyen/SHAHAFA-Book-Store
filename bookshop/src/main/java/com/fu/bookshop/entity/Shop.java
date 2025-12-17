@@ -32,8 +32,8 @@ public class Shop {
     @Column(nullable = false, length = 100)
     private String description;
 
-    @OneToMany(mappedBy = "shop")
-    private List<Book> books;
+//    @OneToMany(mappedBy = "shop")
+//    private List<Book> books;
 
     @Column(nullable = false)
     private String email;

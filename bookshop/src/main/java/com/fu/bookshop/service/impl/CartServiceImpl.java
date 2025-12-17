@@ -11,7 +11,7 @@ import com.fu.bookshop.repository.BookRepository;
 import com.fu.bookshop.repository.CartItemRepository;
 import com.fu.bookshop.repository.CartRepository;
 import com.fu.bookshop.repository.UserRepository;
-import com.fu.bookshop.service.home.CartService;
+import com.fu.bookshop.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -103,11 +103,6 @@ public class CartServiceImpl implements CartService {
         int totalQuantity = quantity;
         if (existingItem != null) {
             totalQuantity = existingItem.getQuantity() + quantity;
-        }
-
-        // Kiểm tra tổng số lượng có vượt quá tồn kho không
-        if (totalQuantity > book.getQuantity()) {
-            throw new RuntimeException("Số lượng sách trong kho chỉ còn " + book.getQuantity() + " cuốn");
         }
 
         if (existingItem != null) {

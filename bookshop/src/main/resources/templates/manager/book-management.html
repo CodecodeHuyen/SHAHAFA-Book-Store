@@ -217,12 +217,12 @@
                 <!-- Actions -->
                 <td class="p-3">
                     <div class="flex justify-center gap-3 text-lg">
-                        <a th:href="@{/manager/books/{id}(id=${b.id})}"
+                        <a th:href="@{/books/detail/{id}(id=${b.id})}"
                            title="Xem chi tiết">
                             👁
                         </a>
 
-                        <a th:href="@{/manager/books/edit/{id}(id=${b.id})}"
+                        <a th:href="@{/books/detail/{id}(id=${b.id})}"
                            title="Chỉnh sửa">
                             ✏️
                         </a>
@@ -248,12 +248,19 @@
         <!-- ===== PAGINATION ===== -->
         <div class="flex justify-between items-center mt-6 text-sm">
 
+            <!-- LEFT -->
             <div class="text-gray-600">
-                Trang <span th:text="${currentPage + 1}"></span>
+                Trang
+                <span th:text="${currentPage + 1}"></span>
                 /
                 <span th:text="${totalPages}"></span>
+                —
+                Tổng:
+                <span th:text="${totalElements}"></span>
+                sản phẩm
             </div>
 
+            <!-- RIGHT -->
             <div class="flex gap-2">
 
                 <!-- Previous -->
@@ -281,6 +288,7 @@
                 </a>
             </div>
         </div>
+
     </div>
 
     </main>
