@@ -5,6 +5,7 @@ import com.fu.bookshop.dto.CheckoutDTO;
 import com.fu.bookshop.dto.user.OrderHistoryDTO;
 import com.fu.bookshop.dto.user.UserProfileDTO;
 import com.fu.bookshop.enums.Gender;
+import com.fu.bookshop.entity.User;
 import com.fu.bookshop.enums.OrderStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,8 +22,6 @@ public interface UserService {
 
     void updateProfile(String email, String name, LocalDate dateOfBirth, Gender gender, MultipartFile avatar);
 
-//    CheckoutDTO getCheckoutImfor(String email);
 
-
-
+    UserProfileDTO getByEmail(String email);
 }

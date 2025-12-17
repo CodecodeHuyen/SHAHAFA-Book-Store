@@ -46,10 +46,21 @@
                        readonly
                        class="border p-3 rounded"/>
                 <input type="text"
-                       th:value="${user.loyalpoint}"
+                       th:value="${user.loyalPoint}"
                        readonly
                        class="border p-3 rounded"/>
             </div>
+
+                <input id="loyalInput"
+                       type="number"
+                       min="0"
+                       th:max="${user.loyalPoint}"
+                       placeholder="Nhập point muốn dùng"
+                       class="mt4 border p-3 rounded"/>
+
+
+                <span id="pointError" class="text-red-500 text-sm md:col-span-2"></span>
+
         </section>
 
         <!-- ===== ĐỊA CHỈ GIAO HÀNG ===== -->
@@ -70,31 +81,47 @@
                 </select>
             </div>
 
-            <input type="text"
-                   placeholder="Số nhà, tên đường..."
-                   class="mt-4 w-full border p-2 rounded"/>
+            <div class="grid grid-cols-2 gap-4 mt-4">
+                <input id="street"
+                       type="text"
+                       placeholder="Số nhà, tên đường..."
+                       class="border p-2 rounded"/>
+
+
+                <button id="confirmAddressBtn"
+                        class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
+                    Xác nhận địa chỉ & tính phí ship
+                </button>
+            </div>
+
+
+            <input type="hidden" id="provinceId">
+            <input type="hidden" id="districtId">
+            <input type="hidden" id="wardCode">
+            <input type="hidden" id="orderWeight" th:value="${order.totalWeight}">
+
+
         </section>
 
         <!-- ===== SẢN PHẨM ===== -->
-<!--        <section class="bg-white p-6 rounded-lg shadow">-->
-<!--            <h2 class="font-semibold text-lg mb-4">Kiểm tra đơn hàng</h2>-->
+        <section class="bg-white p-6 rounded-lg shadow">
+            <h2 class="font-semibold text-lg mb-4">Kiểm tra đơn hàng</h2>
 
-<!--            <div th:each="item : ${cart.items}" class="flex gap-4 border-b py-4">-->
-<!--                <img th:src="${item.book.urlImage}"-->
-<!--                     class="w-20 h-28 object-cover rounded"/>-->
+            <div th:each="item : ${order.items}" class="flex gap-4 border-b py-4">
+                <img th:src="${item.bookImage}" class="w-20 h-28 object-cover rounded"/>
 
-<!--                <div class="flex-1">-->
-<!--                    <p class="font-semibold" th:text="${item.book.title}"></p>-->
-<!--                    <p class="text-sm text-gray-500">-->
-<!--                        SL: <span th:text="${item.quantity}"></span>-->
-<!--                    </p>-->
-<!--                </div>-->
+                <div class="flex-1">
+                    <p class="font-semibold" th:text="${item.bookTitle}"></p>
+                    <p class="text-sm text-gray-500">
+                        SL: <span th:text="${item.quantity}"></span>
+                    </p>
+                </div>
 
-<!--                <div class="font-semibold text-red-600">-->
-<!--                    <span th:text="${item.price}"></span> đ-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </section>-->
+                <div class="font-semibold text-red-600">
+                    <span th:text="${#numbers.formatDecimal(item.unitPrice,0,'COMMA',0,'POINT')}"></span> đ
+                </div>
+            </div>
+        </section>
 
     </div>
 
@@ -104,21 +131,21 @@
 
         <div class="flex justify-between mb-2">
             <span>Tạm tính</span>
-<!--            <span th:text="${cart.totalPrice} + ' đ'"></span>-->
-            <span>100 </span>
+            <span th:text="${#numbers.formatDecimal(order.subTotal,0,'COMMA',0,'POINT')} + ' đ'"></span>
         </div>
 
         <div class="flex justify-between mb-2">
             <span>Phí vận chuyển</span>
-            <span id="shippingFee">—</span>
+            <span id="shippingFeeText"
+                    th:text="${#numbers.formatDecimal(order.shippingFee,0,'COMMA',0,'POINT')} + ' đ'"></span>
         </div>
 
         <hr class="my-4"/>
 
         <div class="flex justify-between font-bold text-lg text-red-600">
             <span>Tổng</span>
-<!--            <span id="totalAmount" th:text="${cart.totalPrice} + ' đ'"></span>-->
-            <span>100 </span>
+            <span id="totalText"
+                  th:text="${#numbers.formatDecimal(order.total,0,'COMMA',0,'POINT')} + ' đ'"></span>
         </div>
 
         <button
@@ -139,61 +166,125 @@
 
 <!-- ================= GHN SCRIPT ================= -->
 <script>
-    const TOKEN = "GHN_TOKEN_CỦA_BẠN";
-    const BASE_URL = "https://dev-online-gateway.ghn.vn";
+    const provinceId = document.getElementById("provinceId");
+    const districtId = document.getElementById("districtId");
+    const wardCode = document.getElementById("wardCode");
 
-    const province = document.getElementById("province");
-    const district = document.getElementById("district");
-    const ward = document.getElementById("ward");
-
-    // Load tỉnh
-    fetch(`${BASE_URL}/shiip/public-api/master-data/province`, {
-        headers: { "Token": TOKEN }
-    })
+    fetch("/api/ghn/provinces")
         .then(r => r.json())
         .then(res => {
+            if (!res.data) return;
             res.data.forEach(p => {
-                province.innerHTML += `<option value="${p.ProvinceID}">${p.ProvinceName}</option>`;
+                province.innerHTML +=
+                    `<option value="${p.ProvinceID}">${p.ProvinceName}</option>`;
             });
         });
 
-    // Load huyện
     province.addEventListener("change", () => {
+        provinceId.value = province.value;
+        districtId.value = "";
+        wardCode.value = "";
+
         district.innerHTML = "<option>Đang tải...</option>";
         ward.innerHTML = "<option>-- Chọn Phường/Xã --</option>";
 
-        fetch(`${BASE_URL}/shiip/public-api/master-data/district?province_id=${province.value}`, {
-            headers: { "Token": TOKEN }
-        })
+        fetch(`/api/ghn/districts?provinceId=${province.value}`)
             .then(r => r.json())
             .then(res => {
+                if (!res.data) return;
                 district.innerHTML = `<option value="">-- Chọn Quận/Huyện --</option>`;
                 res.data.forEach(d => {
-                    district.innerHTML += `<option value="${d.DistrictID}">${d.DistrictName}</option>`;
+                    district.innerHTML +=
+                        `<option value="${d.DistrictID}">${d.DistrictName}</option>`;
                 });
             });
     });
 
-    // Load xã
     district.addEventListener("change", () => {
+        districtId.value = district.value;
+        wardCode.value = "";
+
         ward.innerHTML = "<option>Đang tải...</option>";
 
-        fetch(`${BASE_URL}/shiip/public-api/master-data/ward`, {
-            method: "POST",
-            headers: {
-                "Token": TOKEN,
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ district_id: district.value })
-        })
+        fetch(`/api/ghn/wards?districtId=${district.value}`)
             .then(r => r.json())
             .then(res => {
+                if (!res.data) return;
+
                 ward.innerHTML = `<option value="">-- Chọn Phường/Xã --</option>`;
                 res.data.forEach(w => {
-                    ward.innerHTML += `<option value="${w.WardCode}">${w.WardName}</option>`;
+                    ward.innerHTML +=
+                        `<option value="${w.WardCode}">${w.WardName}</option>`;
                 });
             });
     });
+
+    ward.addEventListener("change", () => {
+        wardCode.value = ward.value;
+    });
+
+
+    confirmAddressBtn.addEventListener("click", async () => {
+        // 1. Lấy dữ liệu từ các input
+        const street = document.getElementById("street").value.trim();
+        const weightVal = parseInt(document.getElementById("orderWeight").value) || 1000;
+        const dId = district.value;
+        const wCode = ward.value;
+
+        // 2. Kiểm tra input hợp lệ
+        if (!province.value || !dId || !wCode || !street) {
+            alert("Vui lòng chọn đầy đủ Tỉnh/Huyện/Xã và nhập số nhà!");
+            return;
+        }
+
+        // 3. Tạo Query String để gửi GET request
+        // URL sẽ có dạng: /api/ghn/fee?districtId=123&wardCode=456&weight=1000
+        const params = new URLSearchParams({
+            districtId: dId,
+            wardCode: wCode,
+            weight: weightVal
+        });
+
+        try {
+            // 4. Thực hiện fetch với method GET
+            const res = await fetch(`/api/ghn/fee?${params.toString()}`, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+
+            if (!res.ok) {
+                throw new Error("Không thể kết nối đến server hoặc lỗi 403/500");
+            }
+
+            const result = await res.json();
+
+            // 5. Xử lý kết quả trả về từ GHN
+            if (result.data) {
+                const shippingFee = result.data.total;
+
+                // Cập nhật phí ship lên giao diện
+                const feeText = document.getElementById("shippingFeeText");
+                if (feeText) {
+                    feeText.innerText = shippingFee.toLocaleString("vi-VN") + " đ";
+                }
+
+                // Cập nhật tổng tiền (Giả sử bạn cần tính lại Total)
+                // Lưu ý: total = subTotal + shippingFee
+                console.log("Phí ship mới:", shippingFee);
+                alert("Đã tính phí vận chuyển thành công!");
+            } else {
+                alert("Dữ liệu trả về không hợp lệ: " + (result.message || ""));
+            }
+
+        } catch (error) {
+            console.error("Lỗi khi tính phí ship:", error);
+            alert("Có lỗi xảy ra: " + error.message);
+        }
+    });
+
+
 </script>
 
 </body>

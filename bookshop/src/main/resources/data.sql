@@ -1,14 +1,10 @@
-INSERT IGNORE INTO bookshop.role (role_name, description)
-VALUES
-    ('CUSTOMER', 'Khách hàng sử dụng hệ thống'),
-    ('MANAGER',  'Quản lý hệ thống'),
-    ('ADMIN',    'Quản trị viên hệ thống');
-INSERT INTO categories (id,description,  name) VALUES
-                                                   (1, 'a','Tiểu thuyết'),
-                                                   (2, 'a', 'Truyện tranh'),
-                                                   (3, 'a', 'Kinh tế'),
-                                                   (4, 'a', 'Kỹ năng sống'),
-                                                   (5, 'a', 'Thiếu nhi');
+
+INSERT INTO categories (description,  name) VALUES
+                                                   ( 'a','Tiểu thuyết'),
+                                                   ( 'a', 'Truyện tranh'),
+                                                   ( 'a', 'Kinh tế'),
+                                                   ( 'a', 'Kỹ năng sống');
+
 
 
 INSERT INTO bookshop.categories (name, description) VALUES
@@ -53,139 +49,164 @@ INSERT INTO shop (
           'BookShop Hà Nội');
 
 
-INSERT INTO books (
-    id, title, price, isbn, authors, quantity,
-    url_image, weight, description,
-    publication_date, status, publisher_id, shop_id
-) VALUES
-      (21, 'Atomic Habits', 135000, 'ISBN-AH-001', 'James Clear', 80,
-       'https://i.pinimg.com/736x/f0/c0/d5/f0c0d51e4e7d58f5b8b12ed78fe63c19.jpg', 0.45,
-       'Thói quen nhỏ tạo nên thay đổi lớn.', '2018-10-16', 'ACTIVE', 4, 1),
+INSERT INTO publishers (name) VALUES
+                                  (N'NXB Kim Đồng'),
+                                  (N'NXB Trẻ'),
+                                  (N'NXB Giáo Dục Việt Nam'),
+                                  (N'NXB Lao Động'),
+                                  (N'NXB Văn Học'),
+                                  (N'NXB Tổng Hợp TP.HCM'),
+                                  (N'NXB Phụ Nữ Việt Nam'),
+                                  (N'NXB Thế Giới'),
+                                  (N'NXB Đại Học Quốc Gia Hà Nội'),
+                                  (N'NXB Hội Nhà Văn');
 
-      (22, 'Deep Work', 150000, 'ISBN-DW-001', 'Cal Newport', 60,
-       'https://i.pinimg.com/736x/92/7c/88/927c887a74c1fd68f86c0f88f69d6b0a.jpg', 0.5,
-       'Nghệ thuật làm việc sâu trong thế giới xao nhãng.', '2016-01-05', 'ACTIVE', 4, 1),
 
-      (23, 'Thần Đồng Đất Việt Tập 1', 28000, 'ISBN-TDDV-001', 'Lê Linh', 150,
-       'https://i.pinimg.com/736x/69/5a/0a/695a0a2f7cc0f38a9e3e9aa9bdfec66f.jpg', 0.15,
-       'Truyện tranh Việt Nam được yêu thích.', '2002-03-01', 'ACTIVE', 1, 2),
+INSERT INTO books
+(price, publication_date, quantity, weight, publisher_id,
+ authors, isbn, title, url_image, description, status)
+VALUES
+    (130000.00,'2018-10-16',120,0.45,4,'James Clear','ISBN-AH-001','Atomic Habits',
+     'https://xo-cua-huyen-ne.s3.ap-southeast-1.amazonaws.com/SHAHAFA+Book+Store%2Ffa3e48fc-bc81-4df8-9ade-0c7d1fa85ded-9780593189641.webp',
+     'Thói quen nhỏ tạo nên thay đổi lớn.','ACTIVE'),
 
-      (24, 'Thần Đồng Đất Việt Tập 2', 28000, 'ISBN-TDDV-002', 'Lê Linh', 140,
-       'https://i.pinimg.com/736x/0d/f7/e9/0df7e959f8c2b4585e92b5c1cbff1e38.jpg', 0.15,
-       'Tiếp tục những câu chuyện hài hước của Tí, Sửu, Dần, Mẹo.', '2002-06-01', 'ACTIVE', 1, 2),
+    (150000.00,'2016-01-05',60,0.5,4,'Cal Newport','ISBN-DW-001','Deep Work',
+     'https://xo-cua-huyen-ne.s3.ap-southeast-1.amazonaws.com/SHAHAFA+Book+Store%2F4345ce32-6841-4c20-8bf4-68e8bb56bbf0-9781455563869.webp',
+     'Nghệ thuật làm việc sâu trong thế giới xao nhãng.','ACTIVE'),
 
-      (25, 'Nhà Lãnh Đạo Không Chức Danh', 115000, 'ISBN-LD-001', 'Robin Sharma', 70,
-       'https://i.pinimg.com/736x/97/1b/7c/971b7c7e1e72f9279b5149bcb932d1b7.jpg', 0.4,
-       'Lãnh đạo bản thân và người khác mà không cần chức vụ.', '2010-02-01', 'ACTIVE', 3, 1),
+    (28000.00,'2002-03-01',150,0.15,1,'Lê Linh','ISBN-TDDV-001','Thần Đồng Đất Việt Tập 1',
+     'https://xo-cua-huyen-ne.s3.ap-southeast-1.amazonaws.com/SHAHAFA+Book+Store%2F38b8dcca-ca79-44b6-b083-0ca4b74fe105-image_112979.webp',
+     'Truyện tranh Việt Nam được yêu thích.','ACTIVE'),
 
-      (26, 'Dám Bị Ghét', 145000, 'ISBN-DBG-001', 'Koga Fumitake, Kishimi Ichiro', 80,
-       'https://i.pinimg.com/736x/91/48/08/914808e0f866a61f0b6f53bfe3d4e44f.jpg', 0.4,
-       'Triết lý sống can đảm theo trường phái Adler.', '2013-12-01', 'ACTIVE', 4, 1),
+    (28000.00,'2002-06-01',140,0.15,1,'Lê Linh','ISBN-TDDV-002','Thần Đồng Đất Việt Tập 2',
+     'https://i.pinimg.com/736x/0d/f7/e9/0df7e959f8c2b4585e92b5c1cbff1e38.jpg',
+     'Tiếp tục những câu chuyện hài hước của Tí, Sửu, Dần, Mẹo.','ACTIVE'),
 
-      (27, 'Totto-chan: Cô Bé Bên Cửa Sổ (Bản Màu)', 98000, 'ISBN-TTC-002', 'Tetsuko Kuroyanagi', 65,
-       'https://i.pinimg.com/736x/52/1e/4f/521e4f8ff85fa96092d0f14e861a8f1e.jpg', 0.3,
-       'Phiên bản minh họa màu đẹp mắt.', '2016-09-10', 'ACTIVE', 5, 2),
+    (115000.00,'2010-02-01',70,0.4,3,'Robin Sharma','ISBN-LD-001','Nhà Lãnh Đạo Không Chức Danh',
+     'https://xo-cua-huyen-ne.s3.ap-southeast-1.amazonaws.com/SHAHAFA+Book+Store%2F854ca0f8-b7da-44ef-a173-88a0757a96b3-8934974179184.jpg',
+     'Lãnh đạo bản thân và người khác mà không cần chức vụ.','ACTIVE'),
 
-      (28, 'Conan Tập 1', 32000, 'ISBN-CONAN-001', 'Aoyama Gosho', 200,
-       'https://i.pinimg.com/736x/08/f6/e3/08f6e3159f7943d4c0dd3ceb8c89c1d5.jpg', 0.18,
-       'Thám tử lừng danh Conan tập 1.', '1994-01-01', 'ACTIVE', 1, 1),
+    (145000.00,'2013-12-01',80,0.4,4,'Koga Fumitake, Kishimi Ichiro','ISBN-DBG-001','Dám Bị Ghét',
+     'https://xo-cua-huyen-ne.s3.ap-southeast-1.amazonaws.com/SHAHAFA+Book+Store%2F54213882-5da6-4214-bc04-9ec374731789-yho27ekd.webp',
+     'Triết lý sống can đảm theo trường phái Adler.','ACTIVE'),
 
-      (29, 'Conan Tập 2', 32000, 'ISBN-CONAN-002', 'Aoyama Gosho', 190,
-       'https://i.pinimg.com/736x/f0/5b/25/f05b257e7249d995772d4c2c563f4302.jpg', 0.18,
-       'Thám tử lừng danh Conan tập 2.', '1994-05-01', 'ACTIVE', 1, 1),
+    (98000.00,'2016-09-10',65,0.3,5,'Tetsuko Kuroyanagi','ISBN-TTC-002',
+     'Totto-chan: Cô Bé Bên Cửa Sổ (Bản Màu)',
+     'https://xo-cua-huyen-ne.s3.ap-southeast-1.amazonaws.com/SHAHAFA+Book+Store%2F54a1c70d-bf06-4c6e-aa5f-be3e26637f03-8935235241848.webp',
+     'Phiên bản minh họa màu đẹp mắt.','ACTIVE'),
 
-      (30, 'Nếu Biết Trăm Năm Là Hữu Hạn', 100000, 'ISBN-100N-001', 'Phạm Lữ Ân', 60,
-       'https://i.pinimg.com/736x/6f/7a/f6/6f7af6f2ab4ef64ea559fe934b1204aa.jpg', 0.35,
-       'Tản văn về tuổi trẻ, tình yêu và cuộc sống.', '2012-08-01', 'ACTIVE', 2, 2),
+    (32000.00,'1994-01-01',200,0.18,1,'Aoyama Gosho','ISBN-CONAN-001','Conan Tập 1',
+     'https://xo-cua-huyen-ne.s3.ap-southeast-1.amazonaws.com/SHAHAFA+Book+Store%2F6a0fd1fb-f7f1-4e99-8035-3541c121d49f-image_182222_1.webp',
+     'Thám tử lừng danh Conan tập 1.','ACTIVE'),
 
-      (31, 'Tuổi Thanh Xuân Mơ Hồ', 90000, 'ISBN-TTX-001', 'Lưu Đồng', 70,
-       'https://i.pinimg.com/736x/0b/66/23/0b66238e06411a9d1c7bbff2a30bb94e.jpg', 0.3,
-       'Những câu chuyện buồn vui tuổi thanh xuân.', '2013-05-01', 'ACTIVE', 2, 2),
+    (32000.00,'1994-05-01',190,0.18,1,'Aoyama Gosho','ISBN-CONAN-002','Conan Tập 2',
+     'https://xo-cua-huyen-ne.s3.ap-southeast-1.amazonaws.com/SHAHAFA+Book+Store%2Fc418eb4f-4872-4437-b85e-ab5c59a12220-tham-tu-lung-danh-conan---tap-2---tb-2023.jpg',
+     'Thám tử lừng danh Conan tập 2.','ACTIVE'),
 
-      (32, 'Vị Tu Sĩ Bán Chiếc Ferrari', 125000, 'ISBN-FERR-001', 'Robin Sharma', 65,
-       'https://i.pinimg.com/736x/c2/df/3b/c2df3be14c45f6915a51016a2160c081.jpg', 0.4,
-       'Câu chuyện truyền cảm hứng về ý nghĩa cuộc sống.', '1997-01-01', 'ACTIVE', 3, 1),
+    (100000.00,'2012-08-01',60,0.35,2,'Phạm Lữ Ân','ISBN-100N-001',
+     'Nếu Biết Trăm Năm Là Hữu Hạn',
+     'https://xo-cua-huyen-ne.s3.ap-southeast-1.amazonaws.com/SHAHAFA+Book+Store%2Fa2edc00e-e665-4a3b-ad60-d45ccf90f84d-8932000134749_1.webp',
+     'Tản văn về tuổi trẻ, tình yêu và cuộc sống.','ACTIVE'),
 
-      (33, 'Thiên Tài Bên Trái, Kẻ Điên Bên Phải', 140000, 'ISBN-TTBD-001', 'Cao Minh', 50,
-       'https://i.pinimg.com/736x/ea/77/0d/ea770d60563a88c897fa45af0de1a4e2.jpg', 0.45,
-       'Những cuộc đối thoại với bệnh nhân tâm thần.', '2014-03-01', 'ACTIVE', 4, 1),
+    (90000.00,'2013-05-01',70,0.3,2,'Lưu Đồng','ISBN-TTX-001',
+     'Tuổi Thanh Xuân Mơ Hồ',
+     'https://i.pinimg.com/736x/0b/66/23/0b66238e06411a9d1c7bbff2a30bb94e.jpg',
+     'Những câu chuyện buồn vui tuổi thanh xuân.','ACTIVE'),
 
-      (34, 'Đời Ngắn Đừng Ngủ Dài', 95000, 'ISBN-DN-001', 'Robin Sharma', 80,
-       'https://i.pinimg.com/736x/89/26/4d/89264d2be019994beb82bae841bacbb1.jpg', 0.35,
-       'Sống trọn vẹn từng ngày.', '2013-07-01', 'ACTIVE', 3, 1),
+    (125000.00,'1997-01-01',65,0.4,3,'Robin Sharma','ISBN-FERR-001',
+     'Vị Tu Sĩ Bán Chiếc Ferrari',
+     'https://xo-cua-huyen-ne.s3.ap-southeast-1.amazonaws.com/SHAHAFA+Book+Store%2Fb5e14cfe-bd09-48a9-8acf-b56c2b3d3cfd-image_195509_1_55840.webp',
+     'Câu chuyện truyền cảm hứng về ý nghĩa cuộc sống.','ACTIVE'),
 
-      (35, 'Tôi Thấy Hoa Hồng Trên Cỏ Xanh (Tranh Truyện)', 89000, 'ISBN-HVTT-001', 'Nguyễn Nhật Ánh', 75,
-       'https://i.pinimg.com/736x/d0/05/95/d00595a95f3b1c6e6235db6cac0c8a63.jpg', 0.28,
-       'Phiên bản tranh truyện dễ thương.', '2018-09-10', 'ACTIVE', 5, 2),
+    (140000.00,'2014-03-01',50,0.45,4,'Cao Minh','ISBN-TTBD-001',
+     'Thiên Tài Bên Trái, Kẻ Điên Bên Phải',
+     'https://xo-cua-huyen-ne.s3.ap-southeast-1.amazonaws.com/SHAHAFA+Book+Store%2Fa50bbb48-9c69-444d-9df2-1dfc87a3ce79-b_a-thi_n-t_i-b_n-tr_i-k_-_i_n-b_n-ph_i.webp',
+     'Những cuộc đối thoại với bệnh nhân tâm thần.','ACTIVE'),
 
-      (36, 'Spy X Family Tập 1', 35000, 'ISBN-SPY-001', 'Tatsuya Endo', 160,
-       'https://i.pinimg.com/736x/21/5e/5a/215e5a67ef177087d0af9f9ad788b705.jpg', 0.2,
-       'Gia đình điệp viên siêu lầy lội.', '2019-07-04', 'ACTIVE', 1, 1),
+    (95000.00,'2013-07-01',80,0.35,3,'Robin Sharma','ISBN-DN-001',
+     'Đời Ngắn Đừng Ngủ Dài',
+     'https://i.pinimg.com/736x/89/26/4d/89264d2be019994beb82bae841bacbb1.jpg',
+     'Sống trọn vẹn từng ngày.','ACTIVE'),
 
-      (37, 'Spy X Family Tập 2', 35000, 'ISBN-SPY-002', 'Tatsuya Endo', 150,
-       'https://i.pinimg.com/736x/ea/56/65/ea56655ea291b8a8e4ea9a8f05bd59e4.jpg', 0.2,
-       'Tập 2 tiếp tục những câu chuyện hài hước.', '2019-10-04', 'ACTIVE', 1, 1),
+    (89000.00,'2018-09-10',75,0.28,5,'Nguyễn Nhật Ánh','ISBN-HVTT-001',
+     'Tôi Thấy Hoa Hồng Trên Cỏ Xanh (Tranh Truyện)',
+     'https://xo-cua-huyen-ne.s3.ap-southeast-1.amazonaws.com/SHAHAFA+Book+Store%2Ffa98526f-0965-49a0-8961-1ccac945b1ce-nna-hvtcx.webp',
+     'Phiên bản tranh truyện dễ thương.','ACTIVE'),
 
-      (38, 'Thinking, Fast and Slow (Bản Tiếng Anh)', 220000, 'ISBN-TDNC-EN-001', 'Daniel Kahneman', 40,
-       'https://i.pinimg.com/736x/f6/53/46/f653460ff9cf539441053568833f87b8.jpg', 0.7,
-       'Bản tiếng Anh của Tư Duy Nhanh Và Chậm.', '2011-10-25', 'ACTIVE', 4, 1),
+    (35000.00,'2019-07-04',160,0.2,1,'Tatsuya Endo','ISBN-SPY-001',
+     'Spy X Family Tập 1',
+     'https://xo-cua-huyen-ne.s3.ap-southeast-1.amazonaws.com/SHAHAFA+Book+Store%2Fea5a1c7d-65c6-418c-ab5c-ab99e6be7d43-spy---family---tap-7-_b_a-1__1.webp',
+     'Gia đình điệp viên siêu lầy lội.','ACTIVE'),
 
-      (39, 'Sách Tô Màu Dành Cho Bé', 45000, 'ISBN-COLOR-001', 'Nhiều tác giả', 200,
-       'https://i.pinimg.com/736x/95/44/3e/95443edef5c9a6e0f7a59458cdc8e90d.jpg', 0.25,
-       'Sách tô màu giúp bé phát triển sáng tạo.', '2020-01-01', 'ACTIVE', 5, 2),
+    (35000.00,'2019-10-04',150,0.2,1,'Tatsuya Endo','ISBN-SPY-002',
+     'Spy X Family Tập 2',
+     'https://xo-cua-huyen-ne.s3.ap-southeast-1.amazonaws.com/SHAHAFA+Book+Store%2F2c17f08e-199e-4616-b1e3-1fce8f869d48-image-from-url.jpeg',
+     'Tập 2 tiếp tục những câu chuyện hài hước.','ACTIVE'),
 
-      (40, 'Combo Tự Học Tiếng Anh Giao Tiếp', 250000, 'ISBN-EN-001', 'Nhiều tác giả', 55,
-       'https://i.pinimg.com/736x/9e/07/9e/9e079e7e3e8ebefb5632c2c960f119f3.jpg', 0.9,
-       'Combo sách tự học tiếng Anh giao tiếp cơ bản.', '2019-03-15', 'ACTIVE', 5, 1);
+    (220000.00,'2011-10-25',40,0.7,4,'Daniel Kahneman','ISBN-TDNC-EN-001',
+     'Thinking, Fast and Slow (Bản Tiếng Anh)',
+     'https://xo-cua-huyen-ne.s3.ap-southeast-1.amazonaws.com/SHAHAFA+Book+Store%2Fd386dce6-66e1-4a42-a924-916f1255a9db-image-from-url.jpeg',
+     'Bản tiếng Anh của Tư Duy Nhanh Và Chậm.','ACTIVE'),
+
+    (45000.00,'2020-01-01',200,0.25,5,'Nhiều tác giả','ISBN-COLOR-001',
+     'Sách Tô Màu Dành Cho Bé',
+     'https://xo-cua-huyen-ne.s3.ap-southeast-1.amazonaws.com/SHAHAFA+Book+Store%2F3d6e4154-24b4-4984-8049-f7c6260568ea-image-from-url.webp',
+     'Sách tô màu giúp bé phát triển sáng tạo.','ACTIVE'),
+
+    (250000.00,'2019-03-15',55,0.9,5,'Nhiều tác giả','ISBN-EN-001',
+     'Combo Tự Học Tiếng Anh Giao Tiếp',
+     'https://xo-cua-huyen-ne.s3.ap-southeast-1.amazonaws.com/SHAHAFA+Book+Store%2Fdc7ad235-e695-4b8b-8b42-2fb834128bd3-image-from-url.jpeg',
+     'Combo sách tự học tiếng Anh giao tiếp cơ bản.','ACTIVE');
+
 
 INSERT INTO book_category (book_id, category_id) VALUES
 -- Atomic Habits, Deep Work: Kỹ năng sống + Kinh tế
-(21, 3), (21, 4),
-(22, 3), (22, 4),
+(1, 3),
+(2, 3),
 
 -- Thần Đồng Đất Việt: Truyện tranh + Thiếu nhi
-(23, 2), (23, 5),
-(24, 2), (24, 5),
+(3, 2),
+(4, 2),
 
 -- Nhà Lãnh Đạo Không Chức Danh: Kinh tế + Kỹ năng
-(25, 3), (25, 4),
+(5, 3),
 
 -- Dám Bị Ghét: Kỹ năng sống
-(26, 4),
+(6, 4),
 
 -- Totto-chan bản màu: Thiếu nhi
-(27, 5),
+(7, 5),
 
 -- Conan: Truyện tranh
-(28, 2),
-(29, 2),
+(8, 2),
+(9, 2),
 
 -- Nếu Biết Trăm Năm Là Hữu Hạn, Tuổi Thanh Xuân Mơ Hồ: Tiểu thuyết
-(30, 1),
-(31, 1),
+(10, 1),
+(11, 1),
 
 -- Vị Tu Sĩ Bán Chiếc Ferrari, Đời Ngắn Đừng Ngủ Dài: Kỹ năng sống
-(32, 4),
-(34, 4),
+(12, 4),
+(13, 4),
 
 -- Thiên Tài Bên Trái Kẻ Điên Bên Phải: Kỹ năng / tâm lý
-(33, 4),
+(14, 4),
 
 -- Hoa Vàng Trên Cỏ Xanh tranh truyện: Thiếu nhi
-(35, 5),
+(15, 5),
 
 -- Spy X Family: Truyện tranh
-(36, 2),
-(37, 2),
+(16, 2),
+(17, 2),
 
 -- Thinking Fast and Slow EN: Kinh tế + Kỹ năng
-(38, 3), (38, 4),
+(18, 3),
 
 -- Sách tô màu: Thiếu nhi
-(39, 5),
+(19, 5),
 
 -- Combo tiếng Anh: Kỹ năng sống
-(40, 4);
+(20, 4);
 
 
 
@@ -222,10 +243,10 @@ VALUES
 (3, 21, 2, 35000),
 
 
-INSERT INTO user (id, name, loyal_point, date_of_birth, gender, avatar_url)
+    INSERT INTO user (name, loyal_point, date_of_birth, gender, avatar_url)
 VALUES
-    (1, 'Nguyen Van A', 100, '1998-05-20', 'MALE', NULL),
-    (2, 'Tran Thi B', 50, '2000-08-15', 'FEMALE', NULL);
+    ('Nguyen Van A', 100, '1998-05-20', 'MALE', NULL),
+    ('Tran Thi B', 50, '2000-08-15', 'FEMALE', NULL);
 
 INSERT INTO orders (
     id, total_price, discount, shipping_fee,

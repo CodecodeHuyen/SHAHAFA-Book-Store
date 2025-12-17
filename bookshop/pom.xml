@@ -28,6 +28,7 @@
 	</scm>
 	<properties>
 		<java.version>21</java.version>
+        <tomcat.version>10.1.28</tomcat.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -79,7 +80,6 @@
             <artifactId>s3</artifactId>
             <version>2.25.41</version>
         </dependency>
-
     </dependencies>
 
 	<build>

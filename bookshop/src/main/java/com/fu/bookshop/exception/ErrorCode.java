@@ -4,22 +4,11 @@ import lombok.Getter;
 
 @Getter
 public enum ErrorCode {
-
-    // OTP_NOT_FOUND(1001, "OTP not found"),
     OTP_NOT_FOUND(1001, "Không tìm thấy mã OTP"),
-
-    // OTP_INVALID(1002, "Invalid OTP"),
     OTP_INVALID(1002, "Mã OTP không hợp lệ"),
-
-    // OTP_EXPIRED(1003, "OTP expired"),
     OTP_EXPIRED(1003, "Mã OTP đã hết hạn"),
-
-    // EMAIL_EXISTED(1004, "Email existed"),
     EMAIL_EXISTED(1004, "Email đã tồn tại"),
-
-    //
     ACCOUNT_DEACTIVATED(1005, "Tài khoản bị vô hiệu hóa bởi quản trị viên"),
-
     ROLE_NOT_FOUND(1006,"Role not found"),
     INVALID_FILE_URL(1007, "File URL is invalid"),
     FILE_DELETE_FAILED(1008, "File Delete Failed"),
@@ -29,8 +18,12 @@ public enum ErrorCode {
     ISBN_DUPLICATE(1012,"Sách đã tồn tại trong kho"),
     PUBLISHER_NOT_FOUND(1013,"PUBLISHER_NOT_FOUND"),
     FILE_UPLOAD_FAILED(1014,"Tải ảnh thất bại"),
-    INVALID_FILE_TYPE(1015, "Tai avatar that bai" ),
-    FILE_TOO_LARGE(1016, "File qua lon" );
+    PUBLISHER_ALREADY_EXISTS(1015,"Nhà xuất bản này đã tồn tại"),
+    BOOK_NOT_FOUND(1016,"Book not found"),
+    CART_EMPTY(1017,"Giỏ hàng trống"),
+    USER_NOT_FOUND(1018,"User not found"),
+    INVALID_FILE_TYPE(1019, "Tai avatar that bai" ),
+    FILE_TOO_LARGE(1020, "File qua lon" );
 
     private final int code;
     private final String message;

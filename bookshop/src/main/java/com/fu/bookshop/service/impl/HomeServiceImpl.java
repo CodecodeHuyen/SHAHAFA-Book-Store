@@ -39,9 +39,6 @@ public class HomeServiceImpl implements HomeService {
                 .price(book.getPrice())
                 .build();
     }
-
-
-
     @Override
     public Page<BookCardDTO> getActiveBooks(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -76,7 +73,6 @@ public class HomeServiceImpl implements HomeService {
         return bookRepository.findDistinctByCategories_IdIn(categoryIds, pageable)
                 .map(this::mapToCardDTO);
     }
-
     @Override
     public Page<BookCardDTO> getBooksByPublisher(Long publisherId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);

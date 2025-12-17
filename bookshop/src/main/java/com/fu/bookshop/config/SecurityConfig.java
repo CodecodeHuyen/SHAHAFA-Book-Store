@@ -29,7 +29,8 @@ public class SecurityConfig {
             "/auth/**",
             "/css/**",
             "/js/**",
-            "/home/**"
+            "/home/**",
+            "/books/**"
     };
 
 

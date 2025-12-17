@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title th:text="${book.title}">Chi tiết sách</title>
@@ -75,7 +75,7 @@
 
         <!-- RIGHT ACTIONS -->
         <div class="flex items-center gap-6 shrink-0 text-lg">
-            <a href="#" class="hover:opacity-80">Giỏ hàng</a>
+            <a th:href="@{/cart}" class="hover:opacity-80">Giỏ hàng</a>
 
             <a th:if="${currentUser == null}"
                th:href="@{/auth/login}"
@@ -119,11 +119,26 @@
                     </form>
                 </div>
 
+    </div>
+
+
+<!-- SUCCESS MESSAGE -->
+<div th:if="${success}"
+     class="mb-4 px-4 py-3 rounded border border-green-300
+            bg-green-50 text-green-700 text-sm">
+    <span th:text="${success}"></span>
+</div>
 
             </div>
         </div>
 
-    </div>
+<!-- ERROR MESSAGE -->
+<div th:if="${error}"
+     class="mb-4 px-4 py-3 rounded border border-red-300
+            bg-red-50 text-red-700 text-sm">
+    <span th:text="${error}"></span>
+</div>
+
 </header>
 
 <div class="max-w-7xl mx-auto p-6 bg-white mt-6 rounded-lg shadow">
@@ -143,35 +158,88 @@
 
             <h1 class="text-2xl font-bold" th:text="${book.title}"></h1>
 
-            <p class="text-gray-600">
-                Tác giả:
-                <span class="font-medium" th:text="${book.authors}"></span>
-            </p>
-
-            <p class="text-gray-600">
-                Nhà xuất bản:
-                <span class="font-medium" th:text="${book.publisherName}"></span>
-            </p>
-
-            <!-- PRICE -->
-            <div class="flex items-center gap-4">
-                <span class="text-3xl text-red-600 font-bold"
-                      th:text="${#numbers.formatDecimal(book.price,0,'COMMA',0,'POINT') + ' đ'}">
+            <!-- AUTHOR / PUBLISHER -->
+            <div class="space-y-1 text-gray-600">
+                <p>
+                    Tác giả:
+                    <span class="font-medium text-gray-800"
+                          th:text="${book.authors}">
                 </span>
+                </p>
 
-                <span th:if="${book.oldPrice != null}"
-                      class="line-through text-gray-400"
-                      th:text="${#numbers.formatDecimal(book.oldPrice,0,'COMMA',0,'POINT') + ' đ'}">
+                <p>
+                    Nhà xuất bản:
+                    <span class="font-medium text-gray-800"
+                          th:text="${book.publisherName}">
                 </span>
+                </p>
             </div>
 
-            <!-- BUTTON -->
-            <div class="flex gap-4 mt-4">
-                <button class="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700">
-                    Thêm vào giỏ hàng
-                </button>
+            <!-- EXTRA INFO: 2 COLUMNS -->
+            <div class="grid grid-cols-2 gap-x-10 gap-y-3 text-sm text-gray-700">
 
-                <button class="border border-red-600 text-red-600 px-6 py-3 rounded-lg hover:bg-red-50">
+                <div>
+                    <span class="text-gray-500">ISBN:</span>
+                    <span class="font-medium"
+                          th:text="${book.isbn != null ? book.isbn : '—'}">
+                </span>
+                </div>
+
+                <div>
+                    <span class="text-gray-500">Thể loại:</span>
+                    <span class="font-medium"
+                          th:text="${book.categoryNames}">
+                </span>
+                </div>
+
+                <div>
+                    <span class="text-gray-500">Ngày xuất bản:</span>
+                    <span class="font-medium"
+                          th:text="${book.publicationDate != null
+                          ? #temporals.format(book.publicationDate, 'dd/MM/yyyy')
+                          : 'Đang cập nhật'}">
+                </span>
+                </div>
+
+                <div>
+                    <span class="text-gray-500">Khối lượng:</span>
+                    <span class="font-medium"
+                          th:text="${book.weight != null ? book.weight + ' g' : '—'}">
+                </span>
+                </div>
+
+            </div>
+
+            <!-- PRICE -->
+            <div class="flex items-center gap-4 pt-2">
+            <span class="text-3xl text-red-600 font-bold"
+                  th:text="${#numbers.formatDecimal(book.price,0,'COMMA',0,'POINT') + ' đ'}">
+            </span>
+            </div>
+
+            <!-- ACTION BUTTONS -->
+            <div class="flex gap-4 pt-2">
+
+                <!--  USER ĐÃ LOGIN -->
+                <form sec:authorize="isAuthenticated()"
+                      th:action="@{/cart/add}"
+                      method="post"
+                      id="addToCartForm">
+
+                    <input type="hidden" name="bookId" th:value="${book.id}">
+                    <input type="hidden" name="quantity" value="1">
+
+                    <button type="submit"
+                            id="addToCartBtn"
+                            class="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition">
+                        Thêm vào giỏ hàng
+                    </button>
+                </form>
+
+
+                <!-- Mua ngay (tuỳ bạn xử lý giống Add Cart) -->
+                <button
+                        class="border border-red-600 text-red-600 px-6 py-3 rounded-lg hover:bg-red-50 transition">
                     Mua ngay
                 </button>
             </div>

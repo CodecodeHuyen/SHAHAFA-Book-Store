@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Chi tiết sách</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-50 min-h-screen">
+
+<div class="flex min-h-screen">
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="w-64 bg-white border-r p-4">
+        <h2 class="text-lg font-bold text-sky-600">BookShop Admin</h2>
+        <p class="text-xs text-gray-500 mb-6">Business Manager Panel</p>
+
+        <nav class="space-y-2 text-sm">
+            <a href="/books"
+               class="block px-3 py-2 rounded hover:bg-gray-100">
+                📚 Quản lý Sách
+            </a>
+        </nav>
+
+        <a href="/logout"
+           class="block mt-10 text-red-600 px-3 py-2 border border-red-200 rounded hover:bg-red-50">
+            🚪 Logout
+        </a>
+    </aside>
+
+    <!-- ===== MAIN ===== -->
+    <main class="flex-1 p-6">
+
+        <div class="max-w-5xl mx-auto bg-white border rounded-xl shadow-sm p-6 space-y-8">
+
+            <!-- ===== HEADER ===== -->
+            <div>
+                <h1 class="text-xl font-semibold text-slate-800">
+                    Chi tiết sách
+                </h1>
+                <p class="text-sm text-gray-500">
+                    Xem và chỉnh sửa thông tin sách
+                </p>
+            </div>
+
+            <!-- ===== BOOK INFO (READ ONLY) ===== -->
+            <div class="grid grid-cols-3 gap-6">
+
+                <!-- IMAGE -->
+                <img id="preview"
+                     th:src="${book.image}"
+                     class="w-full h-72 object-cover rounded border"/>
+
+                <!-- INFO -->
+                <div class="col-span-2 grid grid-cols-2 gap-4">
+
+                    <div>
+                        <label class="text-sm text-gray-600">Tên sách</label>
+                        <input type="text"
+                               th:value="${book.title}"
+                               readonly
+                               class="border rounded w-full px-3 py-2 bg-gray-100"/>
+                    </div>
+
+                    <div>
+                        <label class="text-sm text-gray-600">Tác giả</label>
+                        <input type="text"
+                               th:value="${book.authors}"
+                               readonly
+                               class="border rounded w-full px-3 py-2 bg-gray-100"/>
+                    </div>
+
+                    <div>
+                        <label class="text-sm text-gray-600">ISBN</label>
+                        <input type="text"
+                               th:value="${book.isbn}"
+                               readonly
+                               class="border rounded w-full px-3 py-2 bg-gray-100"/>
+                    </div>
+
+                    <div>
+                        <label class="text-sm text-gray-600">Ngày xuất bản</label>
+                        <input type="date"
+                               th:value="${book.publicationDate}"
+                               readonly
+                               class="border rounded w-full px-3 py-2 bg-gray-100"/>
+                    </div>
+
+                    <div>
+                        <label class="text-sm text-gray-600">Khối lượng (g)</label>
+                        <input type="number"
+                               th:value="${book.weight}"
+                               readonly
+                               class="border rounded w-full px-3 py-2 bg-gray-100"/>
+                    </div>
+
+                    <div>
+                        <label class="text-sm text-gray-600">Nhà xuất bản</label>
+                        <input type="text"
+                               th:value="${book.publisherName}"
+                               readonly
+                               class="border rounded w-full px-3 py-2 bg-gray-100"/>
+                    </div>
+
+                    <div class="col-span-2">
+                        <label class="text-sm text-gray-600">Thể loại</label>
+                        <input type="text"
+                               th:value="${book.categoryNames}"
+                               readonly
+                               class="border rounded w-full px-3 py-2 bg-gray-100"/>
+                    </div>
+
+
+                    <span th:if="${book.status == 'ACTIVE'}"
+                          class="inline-block px-3 py-1 bg-green-100 text-green-700 rounded text-sm">
+                            Còn hàng
+                            </span>
+
+                    <span th:if="${book.status == 'OUT_OF_STOCK'}"
+                          class="inline-block px-3 py-1 bg-red-100 text-red-700 rounded text-sm">
+                            Hết hàng
+                    </span>
+
+
+                </div>
+            </div>
+
+            <!-- ===== EDIT FORM ===== -->
+            <div class="border-t pt-6">
+                <h2 class="text-lg font-semibold mb-4">Chỉnh sửa thông tin</h2>
+
+                <form th:action="@{/books/{id}/edit(id=${book.id})}"
+                      th:object="${bookUpdate}"
+                      method="post"
+                      enctype="multipart/form-data"
+                      class="grid grid-cols-3 gap-6">
+
+                    <!-- PRICE -->
+                    <div>
+                        <label class="font-medium">Giá (VNĐ)</label>
+                        <input type="number" step="0.01"
+                               th:field="*{price}"
+                               class="border rounded w-full px-3 py-2 mt-1">
+                        <p class="text-red-500 text-sm"
+                           th:errors="*{price}"></p>
+                    </div>
+
+                    <!-- QUANTITY -->
+                    <div>
+                        <label class="font-medium">Số lượng</label>
+                        <input type="number"
+                               th:field="*{stock}"
+                               class="border rounded w-full px-3 py-2 mt-1">
+                        <p class="text-red-500 text-sm"
+                           th:errors="*{stock}"></p>
+                    </div>
+
+                    <!-- IMAGE -->
+
+                    <div class="col-span-1 space-y-2">
+                        <label class="font-medium">Ảnh sách</label>
+
+                        <!-- FILE -->
+                        <input type="file"
+                               name="image"
+                               id="imageFile"
+                               accept="image/*"
+                               onchange="onFileChange(this)"
+                               class="block w-full text-sm">
+
+                        <!-- URL -->
+                        <input type="text"
+                               name="imageUrl"
+                               id="imageUrl"
+                               placeholder="Hoặc dán URL ảnh tại đây"
+                               oninput="onUrlChange(this)"
+                               class="border rounded w-full px-3 py-2 text-sm">
+
+                        <p class="text-xs text-gray-500">
+                            * Chỉ chọn 1 ảnh (upload hoặc URL)
+                        </p>
+                    </div>
+
+
+
+                    <!-- DESCRIPTION -->
+                    <div class="col-span-3">
+                        <label class="font-medium">Mô tả</label>
+                        <textarea rows="4"
+                                  th:field="*{description}"
+                                  class="border rounded w-full px-3 py-2 mt-1"></textarea>
+                        <p class="text-red-500 text-sm"
+                           th:errors="*{description}"></p>
+                    </div>
+
+
+                    <!-- ACTION -->
+                    <div class="col-span-3 flex justify-end gap-3 pt-4">
+                        <a href="/books"
+                           class="px-4 py-2 border rounded hover:bg-gray-100">
+                            Quay lại
+                        </a>
+                        <button type="submit"
+                                class="bg-sky-500 text-white px-5 py-2 rounded hover:bg-sky-600">
+                            Lưu thay đổi
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+
+    </main>
+</div>
+<script>
+    const preview = document.getElementById("preview");
+    const fileInput = document.getElementById("imageFile");
+    const urlInput = document.getElementById("imageUrl");
+
+    /* ===== Khi chọn FILE ===== */
+    function onFileChange(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = e => preview.src = e.target.result;
+            reader.readAsDataURL(input.files[0]);
+
+            // clear URL
+            urlInput.value = "";
+        }
+    }
+
+    /* ===== Khi nhập URL ===== */
+    async function onUrlChange(input) {
+        const url = input.value.trim();
+        if (!url.startsWith("http")) return;
+
+        try {
+            // 1. fetch ảnh từ URL
+            const response = await fetch(url);
+            const blob = await response.blob();
+
+            // 2. tạo File từ Blob
+            const file = new File(
+                [blob],
+                "image-from-url." + blob.type.split("/")[1],
+                { type: blob.type }
+            );
+
+            // 3. gán File vào input type=file
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            fileInput.files = dataTransfer.files;
+
+            // 4. preview
+            preview.src = URL.createObjectURL(blob);
+
+        } catch (err) {
+            alert("Không tải được ảnh từ URL");
+            input.value = "";
+        }
+    }
+
+    /* ===== Drag & Drop ảnh online ===== */
+    preview.addEventListener("dragover", e => e.preventDefault());
+
+    preview.addEventListener("drop", async e => {
+        e.preventDefault();
+        const url = e.dataTransfer.getData("text/plain");
+        if (url && url.startsWith("http")) {
+            document.getElementById("imageUrl").value = url;
+            await onUrlChange(document.getElementById("imageUrl"));
+        }
+    });
+</script>
+
+</body>
+</html>

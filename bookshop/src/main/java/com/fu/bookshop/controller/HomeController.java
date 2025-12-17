@@ -49,7 +49,6 @@ public class HomeController {
         }
 
 
-
         model.addAttribute("bestSellerBooks", bestSellerBooks);
 
        List<Publisher> publishers =
@@ -107,12 +106,5 @@ public class HomeController {
         return homeService.getActiveBooks(page, size);
     }
 
-//    @GetMapping("/book/{id}")
-//    public String bookDetail(@PathVariable Long id, Model model){
-//        BookCardDTO book = homeService.getBookDetail(id);
-//        model.addAttribute("book", book);
-//
-//        return "home/book-detail";
-//    }
 
 }
