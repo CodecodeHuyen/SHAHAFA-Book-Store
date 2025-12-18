@@ -24,7 +24,8 @@ public enum ErrorCode {
     USER_NOT_FOUND(1018,"User not found"),
     INVALID_FILE_TYPE(1019, "Tai avatar that bai" ),
     FILE_TOO_LARGE(1020, "File qua lon" ),
-    ADMIN_ACCOUNT_CANNOT_DELETE(1030, "Không thể xoá Role Admin");
+    ADMIN_ACCOUNT_CANNOT_DELETE(1030, "Không thể xoá Role Admin"),
+    BOOK_ALREADY_DELETED(1031,"Book already Deleted"),;
 
     private final int code;
     private final String message;

@@ -13,6 +13,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import java.util.List;
 
 @Controller
@@ -137,6 +139,18 @@ public class BookController {
         return "redirect:/manager/detail/" + id;
     }
 
+    @GetMapping("/delete/{id}")
+    public String deleteBook(@PathVariable Long id,
+                             RedirectAttributes redirectAttributes) {
+
+            bookService.deleteBook(id);
+            redirectAttributes.addFlashAttribute(
+                    "successMessage",
+                    "Xoá sách thành công");
+
+
+        return "redirect:/manager";
+    }
 
 
 

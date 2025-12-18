@@ -23,7 +23,6 @@ public class CustomSuccessHandler extends SavedRequestAwareAuthenticationSuccess
                 .collect(Collectors.toSet());
 
         if (roles.contains("ROLE_MANAGER")) {
-            // Nếu là Manager, ép buộc vào trang quản lý books
             getRedirectStrategy().sendRedirect(request, response, "/manager");
         } else if (roles.contains("ROLE_ADMIN")) {
             getRedirectStrategy().sendRedirect(request, response, "/admin/account");

@@ -33,4 +33,7 @@ public interface BookService {
             BookUpdateRequest req,
             MultipartFile image
     );
+
+    @Transactional
+    void deleteBook(Long id);
 }

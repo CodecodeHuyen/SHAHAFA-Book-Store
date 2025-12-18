@@ -256,4 +256,22 @@ public class BookServiceImpl implements BookService {
         bookRepository.save(book);
     }
 
+    @Transactional
+    @Override
+    public void deleteBook(Long id) {
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new SystemException(ErrorCode.BOOK_NOT_FOUND));
+
+        if (book.getStatus() == BookStatus.DELETED) {
+            throw new SystemException(ErrorCode.BOOK_ALREADY_DELETED);
+        }
+
+        //  Xóa ảnh trên S3 (nếu có)
+        s3Service.delete(book.getUrlImage());
+
+        // Soft delete
+        book.setStatus(BookStatus.DELETED);
+        bookRepository.save(book);
+    }
+
 }
