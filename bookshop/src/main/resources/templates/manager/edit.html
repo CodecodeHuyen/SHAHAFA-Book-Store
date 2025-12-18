@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Edit Shop</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+<header class="bg-red-600 text-white p-4 shadow">
+    <h1 class="text-xl font-bold">Quản lý Shop</h1>
+</header>
+
+<main class="max-w-4xl mx-auto mt-8 bg-white p-6 rounded-xl shadow">
+    <h2 class="text-lg font-semibold mb-4">Chỉnh sửa thông tin Shop</h2>
+
+    <div th:if="${successMessage}" class="mb-4 p-3 bg-green-100 text-green-800 rounded">
+        <span th:text="${successMessage}"></span>
+    </div>
+
+    <!-- Truyen data html len controller -->
+    <form th:action="@{/manager/shop/edit(id=${shop.id})}" th:object="${shop}" method="post">
+    <!-- Name -->
+        <div class="mb-4">
+            <label class="block font-medium mb-1">Tên shop</label>
+            <input type="text" th:field="*{name}" class="w-full p-2 border rounded"/>
+        </div>
+
+        <!-- Address -->
+        <div class="mb-4">
+            <label class="block font-medium mb-1">Địa chỉ</label>
+            <input type="text" th:field="*{address}" class="w-full p-2 border rounded"/>
+        </div>
+
+        <!-- Logo URL -->
+        <div class="mb-4">
+            <label class="block font-medium mb-1">Logo URL</label>
+            <input type="text" th:field="*{logoUrl}" class="w-full p-2 border rounded"/>
+            <div class="mt-2">
+                <img th:src="*{logoUrl}" alt="Logo" class="w-24 h-24 object-contain border"/>
+            </div>
+        </div>
+
+        <!-- Description -->
+        <div class="mb-4">
+            <label class="block font-medium mb-1">Mô tả</label>
+            <textarea th:field="*{description}" class="w-full p-2 border rounded" rows="4"></textarea>
+        </div>
+
+        <!-- Email -->
+        <div class="mb-4">
+            <label class="block font-medium mb-1">Email</label>
+            <input type="email" th:field="*{email}" class="w-full p-2 border rounded"/>
+        </div>
+
+        <!-- Hotline -->
+        <div class="mb-4">
+            <label class="block font-medium mb-1">Hotline</label>
+            <input type="text" th:field="*{hotline}" class="w-full p-2 border rounded"/>
+        </div>
+
+        <!-- Banners -->
+        <div class="mb-4">
+            <label class="block font-medium mb-2">Banners</label>
+
+
+                <div id="bannerContainer" class="space-y-2">
+                    <div th:each="banner, iterStat : *{banners}" class="flex items-center gap-2">
+                        <input type="text" name="banners" th:value="${banner}" class="flex-1 p-2 border rounded"/>
+
+                        <button type="button" class="bg-red-500 text-white px-2 py-1 rounded"
+                                onclick="removeBanner(this)">Xóa</button>
+                    </div>
+                </div>
+
+                <button type="button" class="mt-2 px-4 py-2 bg-green-600 text-white rounded" onclick="addBanner()">Thêm banner</button>
+
+        </div>
+
+        <button type="submit" class="px-6 py-2 bg-red-600 text-white rounded">Lưu thay đổi</button>
+    </form>
+</main>
+
+<script>
+    function addBanner() {
+    const container = document.getElementById('bannerContainer');
+    const div = document.createElement('div');
+    div.className = "flex items-center gap-2 mb-1";
+
+    const input = document.createElement('input');
+    input.type = "text";
+    input.name = "banners"; // dùng name chung
+    input.className = "flex-1 p-2 border rounded";
+
+    const btn = document.createElement('button');
+    btn.type = "button";
+    btn.className = "bg-red-500 text-white px-2 py-1 rounded";
+    btn.innerText = "Xóa";
+    btn.onclick = () => div.remove();
+
+    div.appendChild(input);
+    div.appendChild(btn);
+    container.appendChild(div);
+}
+
+function removeBanner(button) {
+    button.parentElement.remove();
+}
+
+</script>
+
+
+</body>
+</html>

@@ -34,6 +34,11 @@ public class Shop {
 
 //    @OneToMany(mappedBy = "shop")
 //    private List<Book> books;
+@ElementCollection
+@CollectionTable(name = "shop_banners", joinColumns = @JoinColumn(name = "shop_id"))
+@Column(name = "banner_url", nullable = false)
+private List<String> banners;
+
 
     @Column(nullable = false)
     private String email;

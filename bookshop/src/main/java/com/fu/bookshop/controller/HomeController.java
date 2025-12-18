@@ -4,14 +4,18 @@ package com.fu.bookshop.controller;
 import com.fu.bookshop.dto.BookCardDTO;
 import com.fu.bookshop.entity.Category;
 import com.fu.bookshop.entity.Publisher;
+import com.fu.bookshop.entity.Shop;
+import com.fu.bookshop.service.EditShopService;
 import com.fu.bookshop.service.HomeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Collections;
 import java.util.List;
@@ -22,7 +26,9 @@ import java.util.Optional;
 @RequestMapping("/home")
 public class HomeController {
     private final HomeService homeService;
-    
+    private final EditShopService shopService;
+
+
     @GetMapping()
     public String home(
             @RequestParam(name = "page", defaultValue = "0") int page,
@@ -105,6 +111,17 @@ public class HomeController {
 
         return homeService.getActiveBooks(page, size);
     }
-
+//    @PostMapping("/update-banners")
+//    public String updateBanners(@RequestParam List<String> banners,
+//                                RedirectAttributes redirectAttributes) {
+//        Shop shop = shopService.getShop(1L)
+//                .orElseThrow(() -> new RuntimeException("Shop not found"));
+//
+//        shop.setBanners(banners);
+//        shopService.updateShop(shop.getId(), shop);
+//
+//        redirectAttributes.addFlashAttribute("successMessage", "Cập nhật banner thành công!");
+//        return "redirect:/home";
+//    }
 
 }

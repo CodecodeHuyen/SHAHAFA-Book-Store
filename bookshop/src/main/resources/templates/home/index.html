@@ -6,6 +6,15 @@
 
     <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Swiper CSS -->
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"
+    />
+
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+
 
     <style>
         /* Fake slider arrows */
@@ -134,32 +143,46 @@
     </div>
 </header>
 
-
-
-<!--  BANNER  -->
+<!-- BANNER + Form edit -->
 <section class="max-w-7xl mx-auto mt-6 relative px-4">
-    <div class="relative">
-        <img src="https://i.pinimg.com/1200x/31/d9/cd/31d9cd7741c933fa82529bd68d27d0af.jpg" class="rounded-xl shadow w-full">
-
-        <!-- Fake arrows -->
-        <div
-                class="flex items-center justify-center bg-white/70 hover:bg-white w-10 h-10 rounded-full shadow cursor-pointer absolute top-1/2 -left-4">
-            &#10094;
-        </div>
-        <div
-                class="flex items-center justify-center bg-white/70 hover:bg-white w-10 h-10 rounded-full shadow cursor-pointer absolute top-1/2 -right-4">
-            &#10095;
+    <!-- Banner carousel -->
+    <div class="swiper bannerSwiper rounded-xl shadow h-64 md:h-96">
+        <div class="swiper-wrapper">
+            <div th:each="banner : ${shop.banners}" class="swiper-slide">
+                <img th:src="${banner}" class="w-full h-full object-cover rounded-xl" />
+            </div>
         </div>
 
-
-        <!-- Fake dots -->
-        <div class="flex gap-2 absolute bottom-4 left-1/2 -translate-x-1/2">
-            <div class="w-3 h-3 bg-white rounded-full"></div>
-            <div class="w-3 h-3 bg-gray-300 rounded-full"></div>
-            <div class="w-3 h-3 bg-gray-300 rounded-full"></div>
-        </div>
+        <!-- Navigation buttons -->
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+        <!-- Pagination dots -->
+        <div class="swiper-pagination"></div>
     </div>
 </section>
+
+
+<!-- Script khởi tạo Swiper -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const swiper = new Swiper('.bannerSwiper', {
+        loop: true,
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+    });
+});
+
+</script>
 
 <!-- than-->
 <section class="max-w-7xl mx-auto mt-10 px-4">
